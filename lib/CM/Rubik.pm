@@ -29,6 +29,17 @@ logic of the rotations:
 
 
 
+=head1 comb(string)
+
+This will give you the permutation which results from multiplying the sequence of transformations in the string.
+It returns a CM::Permutation object.
+OBS: you can also find the order(the number of times you make those moves until the cube returns to the position before you started them)
+using the order() method on the result, so for example:
+
+	my $r = CM::Rubik->new;
+	print $r->comb('FURBL');
+
+	252
 
 
 
