@@ -36,7 +36,7 @@
 MODULE = SJT		PACKAGE = SJT		
 
 
-int get(self,index)
+IV get(self,index)
 	SV* self
 	int index
 	CODE:
@@ -51,7 +51,7 @@ int get(self,index)
 
 		HV* q = (HV *)SvRV(hv);
 
-		array = *hv_fetch(q,"permutation",11,FALSE);
+		array = SvRV(*hv_fetch(q,"permutation",11,FALSE));
 
 		if(array==NULL) {
 			printf("array not found in self...\n");
@@ -70,7 +70,7 @@ int get(self,index)
 
 		
 		
-		IV a = SvIV(SvRV(*res));
+		IV a = SvIV(*res);
 		printf("right before return\n");
 		RETVAL = a;//SvIV(*av_fetch(array,index,FALSE));
 
