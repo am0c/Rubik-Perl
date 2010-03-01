@@ -119,10 +119,11 @@ my $z = p(3,2,5,1,4);
 ok( ($y % $x)      == ($x % $y)**-1              , 'commutator 1');
 ok( ($x * $y) % $z == (($x % $z)^$y) * ($y % $z) , 'commutator 2'  );
 ok( ($x % ($y*$z)) == ($x % $z)*( ($x % $y)^$z)  , 'commutator 3'  );
-ok( $x % ($y**-1)  == (($y % $x)^($y**-1))         , 'commutator 4'  ); # if I don't enclose the RHS in parenthesis here I'll get inf
-                                                                        # and overflow from the result on RHS although that's not a
-                                                                        # operation that could ever overflow considering I'm dealing with
-                                                                        # permutations.
+ok( $x % ($y**-1)  == (($y % $x)^($y**-1))       , 'commutator 4'  ); # if I don't enclose the RHS in parenthesis here I'll get inf
+                                                                      # and overflow from the result on RHS although that's not a
+                                                                      # operation that could ever overflow considering I'm dealing with
+                                                                      # permutations and I define my own operations(needs further
+								      # investigation).
 
 
 ok( p({
@@ -191,7 +192,9 @@ my $q1 = CM::Permutation->new({
 
 
 
-
-
+my $pbig = p(2,3,1,4,14,8,9,7,5,12,15,6,13,10,11);
+#$pbig->print_cycles;
+my $exponent = 140;
+ok($pbig ** $exponent == $pbig->power_fast($exponent) , "** and power_fast do the same thing");
 
 

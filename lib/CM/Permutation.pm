@@ -119,9 +119,10 @@ sub stringify {
 sub power {
     #for now supports powers -1 and >=1
     my ($self,$power) = @_;
-    return $self->inverse if $power == -1;
-    
+    return $self->inverse                               if $power == -1;
+    return CM::Permutation->new(1..max(@{$self->perm})) if $power ==  0;
 
+    # should replace this with reduce
     my $r = $self;
     while(--$power) {
         my $n = $r * $self;
@@ -129,6 +130,27 @@ sub power {
     };
     return $r;
 }
+
+sub power_fast {
+	my ($self,$power) = @_;
+
+	reduce { $a * $b }
+	map { $_ ** ($power % $_->order); }
+	$self->get_cycles;
+}
+
+sub print_cycles {
+	my ($self) = @_;
+
+	print "\n";
+	print
+	join(
+		'',
+		map { "$_\n" } 
+		($self->get_cycles)
+	);
+}
+
 
 sub inverse {
     my ($self) = @_;
