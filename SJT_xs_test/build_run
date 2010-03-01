@@ -1,0 +1,2 @@
+make clean; perl Makefile.PL ; make &&
+perl -Iblib/arch/auto/SJT -Ilib t/SJT.t  -Ilib t/SJT.t
