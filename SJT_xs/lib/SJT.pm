@@ -33,7 +33,9 @@ XSLoader::load('SJT', $VERSION);
 
 sub new {
 	my ($class) = @_;
-	return bless {},$class;
+	return bless {
+		permutation => [2,2,2,2,2,2,2,2,2,2,2],
+	},$class;
 }
 
 

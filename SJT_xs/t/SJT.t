@@ -5,13 +5,14 @@
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
+use Devel::Peek;
+use Data::Dumper;
 use Test::More tests => 1;
 BEGIN {
 	use_ok('SJT'); 
 	my $s1 = SJT->new;
-	print "HERE be 3:".$s1->get(3)."\n";
-	$s1->set(3,3);
-	print "HERE be 3 from another:".SJT->new->get(3)."\n";
+	Dump($s1);
+	print "HERE be 3:".$s1->get(1)."\n";
 	print "\n";
 };
 

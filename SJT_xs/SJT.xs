@@ -4,8 +4,32 @@
 
 #include "ppport.h"
 
-
-int test[10] = {10,9,8,7,6,5,4,3,2,1};
+/*
+ *
+ * REM:
+ *
+ * stash - symbol table hash
+ * AV - array variable
+ *
+ *
+ * References
+ *
+ * Extending and embedding Perl
+ *
+ * pages 101-105 -> Tied scalar and objects
+ *
+ * pages 106-107 -> Arrays
+ *
+ * pages 107-111 -> Hashes
+ *
+ *
+ *
+ * Functions
+ *
+ * pages 152 -> Array functions  av_* and *_av
+ *
+ *
+ */
 
 
 
@@ -16,7 +40,40 @@ int get(self,index)
 	SV* self
 	int index
 	CODE:
-		RETVAL = self->test[index];
+		char* key = "permutation";
+		AV* array;
+		SV* hv = self;
+		if(sv_isobject(hv)) {
+			printf("self is object,moving on...\n");
+		} else {
+			printf("SJT::get was expecting self to be an object");
+		};
+
+		HV* q = (HV *)SvRV(hv);
+
+		array = *hv_fetch(q,"permutation",11,FALSE);
+
+		if(array==NULL) {
+			printf("array not found in self...\n");
+			exit(-1);
+		}else {
+			printf("array found in self %X\n",array);
+		};
+
+		SV** res = av_fetch(array,index,FALSE);
+		if(res==NULL) {
+			printf("item not found in array...\n");
+			exit(-1);
+		}else {
+			printf("also found item in array at: %X\n",res);
+		};
+
+		
+		
+		IV a = SvIV(SvRV(*res));
+		printf("right before return\n");
+		RETVAL = a;//SvIV(*av_fetch(array,index,FALSE));
+
 	OUTPUT:
 		RETVAL
 
@@ -26,7 +83,4 @@ set(self,index,value)
 	int index;
 	int value;
 	CODE:
-		test[index] = self->value;
 	OUTPUT:
-		index
-
