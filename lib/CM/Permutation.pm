@@ -380,7 +380,7 @@ CM::Permutation - Module for manipulating permutations
 
 =head1 DESCRIPTION
 
-The module was written for carrying out permutation operations.
+The module was written for carrying out permutation operations. This module treats permutations as bijections on finite sets.
 The module is not written for generating permutations or counting them(to that end you can use L<Algorithm::Permute> or L<Math::Counting>)
 
 At the moment the following are implemented(any feature that is currently listed as implemented has tests proving it):
