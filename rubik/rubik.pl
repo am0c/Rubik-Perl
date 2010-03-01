@@ -48,7 +48,7 @@ my $iter=0;
 
 
 
-#$model->scramble;
+#$model->scramble; # make a random series of moves to scramble the cube
 
 #       - add tests
 
