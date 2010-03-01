@@ -24,7 +24,7 @@ The order of the group is 43_252_003_274_489_856_000 , yeah, that's :
 Forty-three quintillion two hundred fifty-two quadrillion three trillion two hundred seventy-four billion four hundred eighty-nine  
 million eight hundred fifty-six thousand. But at least it's not infinite right ? :)
 
-There's also a simulation of Rubik's cube written using OpenGL and Perl, using CM::Permutation and CM::Rubik in order to implement the 
+There's also a simulator of Rubik's cube written using OpenGL and Perl, using CM::Permutation and CM::Rubik in order to implement the 
 logic of the rotations:
 
 

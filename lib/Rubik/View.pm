@@ -6,7 +6,7 @@ use OpenGL;
 
 =head1 NAME
 
-Rubik::View - The view module for Rubik's cube simulation
+Rubik::View - The view module for Rubik's cube simulator
 
 =head1 DESCRIPTION
 

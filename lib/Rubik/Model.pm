@@ -245,8 +245,8 @@ sub valid {
 
 
 sub move {
-    # because games are not a simulation but are meant to be fun, we don't actually move the cubies, we just
-    # permute the faces of the cubies so as to give the illusion that the rotation has really occured
+    # because games are not perfect simulations but are meant to be fun, we don't actually move the cubies, we just
+    # permute the faces of the cubies so as to give the illusion that the rotation really persisted
 
     my ($self,$move) = @_;
     confess 'only moves are F,B,U,D,R,L and their inverses' unless $self->valid($move);
