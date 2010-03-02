@@ -36,6 +36,12 @@ sub new {
 	},$class;
 }
 
+sub print_perm {
+	my ($self) = @_;
+	print join(",",@{$self->{permutation}});
+	print "\n";
+}
+
 
 # Preloaded methods go here.
 

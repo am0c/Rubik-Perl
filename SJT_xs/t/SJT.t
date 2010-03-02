@@ -48,6 +48,14 @@ BEGIN {
 	ok($s1->get_n()==4,"get_n() works properly");
 
 
+	my $s2 = SJT->new(4);
+
+	for(1..24){
+		$s2->next_perm;
+		$s2->print_perm;
+	};
+
+
 	print "\n";
 	done_testing();
 };

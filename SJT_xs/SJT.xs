@@ -82,6 +82,12 @@ SV* g__(SV* self,int index,char* key) { // used for get_permut and get_direct to
 		return ret;
 }
 
+// dereference to UV
+
+UV df(SV* param) { 
+	return SvUV(param);
+}
+
 // UV works with signed and unsigned integers, IV just with signed
 
 void xchg__(SV* self,SV* i,SV* j) {
@@ -100,6 +106,15 @@ void xchg2__(SV* self,SV* i,SV* j) {
 }
 
 
+// invert direction at position i
+
+void invert_direct(SV* self,int i) {
+		SV* adr = direct(i);
+		UV val = df(adr);
+		sv_setuv(adr,-val);
+}
+
+
 // get n attribute of class
 
 UV getn(SV* self) {
@@ -113,13 +128,6 @@ UV getn(SV* self) {
 
 
 
-// dereference to UV
-
-UV df(SV* param) { 
-	return SvUV(param);
-}
-
-
 // checks if at pos there is a mobile integer
 bool mobile(SV *self,int pos) {
 	if(p(pos) > getn(self) || p(pos)==0)
@@ -127,8 +135,9 @@ bool mobile(SV *self,int pos) {
 	return df(permut(p(pos))) < df(permut(pos));
 }
 
-// gets the biggest mobile integer if any
 
+
+// gets the biggest mobile integer if any
 int emobile(SV *self) {
 	int maxpos = 0;
 	int max    = 0;
@@ -149,22 +158,22 @@ int emobile(SV *self) {
 }
 
 // make permutation arrayref the next permutation
-/*
 int nextperm(SV *self) {
 	int k = emobile(self);
 	int max_mob = df(permut(k));
+	int n = getn(self);
+	int i;
 
 	if(k==0)
 		return 0;
-	xchg(k,p(k));
 
-	for(int i=1;i<=n;i++){
-		if(permut[i]>max_mob)
-			//changes direction of mobile integer
-			direct[i]*=-1;
-	};
+	xchg2__(self,k,p(k)); // exchange positions k and p(k)
+
+	//invert direction of mobile integers
+	for(i=1;i<=n;i++)
+		if(df(permut(i))>max_mob)
+			invert_direct(self,i);
 }
-*/
 
 
 MODULE = SJT		PACKAGE = SJT		
@@ -250,5 +259,15 @@ get_n(self)
 	CODE:
 		UV result = getn(self);
 		RETVAL = result;
+	OUTPUT:
+		RETVAL
+
+
+UV
+next_perm(self)
+	SV* self
+	CODE:
+		nextperm(self);
+		RETVAL = 1;
 	OUTPUT:
 		RETVAL
