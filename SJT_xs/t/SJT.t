@@ -10,7 +10,7 @@ use Data::Dumper;
 use Test::More tests => 1;
 BEGIN {
 	use_ok('SJT'); 
-	my $s1 = SJT->new;
+	my $s1 = SJT->new(4);
 	Dump($s1);
 	print "HERE be 3:".$s1->get(1)."\n";
 	print "\n";
