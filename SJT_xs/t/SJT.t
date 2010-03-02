@@ -12,21 +12,29 @@ BEGIN {
 	use_ok('SJT'); 
 	my $s1 = SJT->new(4); # 4 permutations
 
+	#Dump($s1);
+
 	my $a = 123;
 	my $b = 321;
 	ok($s1->deref($a)==123,"deref() works fine");
 	$s1->xchg($a,$b);
+
 	ok($a==321 && $b==123,"xchg() works fine");
 
 	ok($s1->deref($s1->get_permut(2))==2,"get_permut() and deref working fine");
+	$s1->xchg2(2,3);#exchange position 2 and 3
+	my @aref = @{$s1->{permutation}};
+	ok(	$aref[0]==0&&
+		$aref[1]==1&&
+		$aref[2]==3&&
+		$aref[3]==2&&
+		$aref[4]==4,
+		"checked array after swap"
+	);
+
 
 	print "\n";
 	done_testing();
 };
 
-
-#########################
-
-# Insert your test code below, the Test::More module is use()ed here so read
-# its man page ( perldoc Test::More ) for help writing this test script.
 
