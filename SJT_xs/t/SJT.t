@@ -21,16 +21,29 @@ BEGIN {
 
 	ok($a==321 && $b==123,"xchg() works fine");
 
-	ok($s1->deref($s1->get_permut(2))==2,"get_permut() and deref working fine");
+	ok($s1->get_permut(2)==2,"get_permut() and deref working fine");
+	ok($s1->get_direct(2)==-1,"get_direct() and deref working fine");
+
+	$s1->{direction}->[2]=3;
+	$s1->{direction}->[3]=2;
+
 	$s1->xchg2(2,3);#exchange position 2 and 3
+
 	my @aref = @{$s1->{permutation}};
 	ok(	$aref[0]==0&&
 		$aref[1]==1&&
 		$aref[2]==3&&
 		$aref[3]==2&&
 		$aref[4]==4,
-		"checked array after swap"
+		"checked permutation array after swap"
 	);
+
+	@aref = @{$s1->{direction}};
+
+	ok(
+		$aref[2]==2 && $aref[3]==3,
+		"checked direction array after swap"
+   	);
 
 
 	print "\n";

@@ -1,0 +1,4 @@
+echo "write:"
+echo "break SJT.xs:<linenumber>"
+echo "run -Iblib/arch/auto/SJT -Ilib t/SJT.t  -Ilib t/SJT.t"
+gdb debugperl

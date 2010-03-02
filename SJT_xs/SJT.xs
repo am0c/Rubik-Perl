@@ -2,6 +2,7 @@
 #include "perl.h"
 #include "XSUB.h"
 #include "ppport.h"
+#include <string.h>
 
 /*
  * Mon 01 Mar 2010 10:09:22 PM EST
@@ -40,36 +41,38 @@
 
 //used for debugging
 #define print_sv(w)   printf("SV at line __LINE__ :%x\n",w);
+#define permut(i) g__(self,i,"permutation")
+#define direct(i) g__(self,i,"direction")
 
 SV* g__(SV* self,int index,char* key) { // used for get_permut and get_direct to get elements of permutation and direction attributes(arefs)
 		AV* array;
 		SV* hv = self;
 		if(sv_isobject(hv)) {
-			printf("self is object,moving on...\n");
+			//printf("self is object,moving on...\n");
 		} else {
-			printf("SJT::get was expecting self to be an object");
+			//printf("SJT::get was expecting self to be an object");
 		};
 
 		HV* q = (HV *)SvRV(hv);
 
-		array = SvRV(*hv_fetch(q,"permutation",11,FALSE));
+		array = SvRV(*hv_fetch(q,key,strlen(key),FALSE));
 
 		if(array==NULL) {
-			printf("array not found in self...\n");
+			//printf("array not found in self...\n");
 			exit(-1);
 		}else {
-			printf("array found in self %X\n",array);
+			//printf("array found in self %X\n",array);
 		};
 
 		SV** res = av_fetch(array,index,FALSE);
 		if(res==NULL) {
-			printf("item not found in array...\n");
+			//printf("item not found in array...\n");
 			exit(-1);
 		}else {
-			printf("also found item in array at: %X\n",res);
+			//printf("also found item in array at: %X\n",res);
 		};
 
-		print_sv(*res);
+		//print_sv(*res);
 
 
 		SV *ret=*res;
@@ -80,10 +83,11 @@ SV* g__(SV* self,int index,char* key) { // used for get_permut and get_direct to
 
 
 void xchg__(SV* self,SV* i,SV* j) {
-		IV ival = SvIV(i);
-		IV jval = SvIV(j);
-		sv_setiv(i,jval);
-		sv_setiv(j,ival);
+		printf("in xchg__\n");
+		UV ival = SvUV(i);
+		UV jval = SvUV(j);
+		sv_setuv(i,jval);
+		sv_setuv(j,ival);
 }
 
 #// get_permut, gets the SV* at index index in the permutation arrayref of the object
@@ -100,7 +104,7 @@ SV* get_permut(self,index)
 	SV* self
 	int index
 	CODE:
-		SV *ret=g__(self,index,"permutation");
+		SV *ret=permut(index);
 		//T_PTROBJ could be used to store pointers to userdefined data structures
 		RETVAL=ret;
 
@@ -114,6 +118,7 @@ SV* get_direct(self,index)
 	int index
 	CODE:
 		SV *ret=g__(self,index,"direction");
+		#direct(index);
 		//T_PTROBJ could be used to store pointers to userdefined data structures
 		RETVAL=ret;
 	OUTPUT:
@@ -121,12 +126,12 @@ SV* get_direct(self,index)
 
 #//dereference a SV* to a SvIV (integer)
 
-IV deref(self,adr)
+UV deref(self,adr)
 	SV* self
 	SV* adr
 	CODE:
 		#IV a = 1;
-		IV a = SvIV(adr);
+		UV a = SvIV(adr);
 		RETVAL = a;
 	OUTPUT:
 		RETVAL
@@ -157,23 +162,10 @@ xchg2(self,i,j)
 	int j
 	SV* self
 	CODE:
-		xchg__(	self,
-		   	g__(self,i,"permutation"),
-			g__(self,j,"permutation")
-			);
+		xchg__(	self,permut(i),permut(j) );
+		xchg__(	self,direct(i),direct(j) );
+
 		RETVAL = 1;
 	OUTPUT:
 		RETVAL
 
-
-
-
-IV
-set(self,index,value)
-	SV* self
-	int index;
-	int value;
-	CODE:
-		RETVAL = 1;
-	OUTPUT:
-		RETVAL
