@@ -119,12 +119,11 @@ SV* get_direct(self,index)
 			printf("also found item in array at: %X\n",res);
 		};
 
+		SV *ret=*res;
+		SvREFCNT_inc(ret); //increase the reference count of this because it suffered premature deallocation
 		
 		//T_PTROBJ could be used to store pointers to userdefined data structures
-		//IV a = SvIV(*res);
-		//RETVAL = a
-		RETVAL = *res;
-
+		RETVAL=ret;
 	OUTPUT:
 		RETVAL
 
@@ -150,11 +149,10 @@ IV xchg(self,i,j)
 	SV* j
 	SV* self
 	CODE:
-		SV* temp;
-		temp  = newSVpv("     0",6);
-		*temp = *i                  ;
-		*i    = *j                  ;
-		*j    = *temp               ;
+		IV ival = SvIV(i);
+		IV jval = SvIV(j);
+		sv_setiv(i,jval);
+		sv_setiv(j,ival);
 
 		RETVAL = 1;
 	OUTPUT:
