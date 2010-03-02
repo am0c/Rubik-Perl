@@ -1,0 +1,1 @@
+perl -Iblib/arch/auto/SJT -Ilib benchmark.pl 
