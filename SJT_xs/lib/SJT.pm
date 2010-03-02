@@ -30,6 +30,7 @@ sub new {
 	confess "expected number" unless $n =~ /^\d+$/;
 
 	return bless {
+		n		=> $n,
 		permutation 	=> [0..$n     ] ,
 		direction 	=> [0,(-1)x$n  ] ,
 	},$class;

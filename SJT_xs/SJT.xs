@@ -43,6 +43,7 @@
 #define print_sv(w)   printf("SV at line __LINE__ :%x\n",w);
 #define permut(i) g__(self,i,"permutation")
 #define direct(i) g__(self,i,"direction")
+#define p(x) ( x + SvUV(direct(x)) )
 
 SV* g__(SV* self,int index,char* key) { // used for get_permut and get_direct to get elements of permutation and direction attributes(arefs)
 		AV* array;
@@ -50,7 +51,7 @@ SV* g__(SV* self,int index,char* key) { // used for get_permut and get_direct to
 		if(sv_isobject(hv)) {
 			//printf("self is object,moving on...\n");
 		} else {
-			//printf("SJT::get was expecting self to be an object");
+			printf("SJT::get was expecting self to be an object");
 		};
 
 		HV* q = (HV *)SvRV(hv);
@@ -58,7 +59,7 @@ SV* g__(SV* self,int index,char* key) { // used for get_permut and get_direct to
 		array = SvRV(*hv_fetch(q,key,strlen(key),FALSE));
 
 		if(array==NULL) {
-			//printf("array not found in self...\n");
+			printf("array not found in self...\n");
 			exit(-1);
 		}else {
 			//printf("array found in self %X\n",array);
@@ -66,7 +67,7 @@ SV* g__(SV* self,int index,char* key) { // used for get_permut and get_direct to
 
 		SV** res = av_fetch(array,index,FALSE);
 		if(res==NULL) {
-			//printf("item not found in array...\n");
+			printf("item not found in array...\n");
 			exit(-1);
 		}else {
 			//printf("also found item in array at: %X\n",res);
@@ -81,16 +82,90 @@ SV* g__(SV* self,int index,char* key) { // used for get_permut and get_direct to
 		return ret;
 }
 
+// UV works with signed and unsigned integers, IV just with signed
 
 void xchg__(SV* self,SV* i,SV* j) {
 		printf("in xchg__\n");
+
 		UV ival = SvUV(i);
 		UV jval = SvUV(j);
+
 		sv_setuv(i,jval);
 		sv_setuv(j,ival);
 }
 
-#// get_permut, gets the SV* at index index in the permutation arrayref of the object
+void xchg2__(SV* self,SV* i,SV* j) {
+		xchg__(	self,permut(i),permut(j) );
+		xchg__(	self,direct(i),direct(j) );
+}
+
+
+// get n attribute of class
+
+UV getn(SV* self) {
+	SV* hv = self;
+	HV* q = (HV *)SvRV(hv);
+	SV* result = *hv_fetch(q,"n",1,FALSE);
+
+	UV ret = SvUV(result);
+	return ret;
+}
+
+
+
+// dereference to UV
+
+UV df(SV* param) { 
+	return SvUV(param);
+}
+
+
+// checks if at pos there is a mobile integer
+bool mobile(SV *self,int pos) {
+	if(p(pos) > getn(self) || p(pos)==0)
+		return 0;
+	return df(permut(p(pos))) < df(permut(pos));
+}
+
+// gets the biggest mobile integer if any
+
+int emobile(SV *self) {
+	int maxpos = 0;
+	int max    = 0;
+	int n = getn(self);
+	int i;
+	for(i=1;i<=n;i++) {
+		if(!mobile(self,i))
+			continue;
+		int perm = df(permut(i));
+		if(perm > max) {
+			maxpos = i;
+			max    = perm;
+			if(max == n) {
+				return maxpos;
+			}
+		};
+	}
+}
+
+// make permutation arrayref the next permutation
+/*
+int nextperm(SV *self) {
+	int k = emobile(self);
+	int max_mob = df(permut(k));
+
+	if(k==0)
+		return 0;
+	xchg(k,p(k));
+
+	for(int i=1;i<=n;i++){
+		if(permut[i]>max_mob)
+			//changes direction of mobile integer
+			direct[i]*=-1;
+	};
+}
+*/
+
 
 MODULE = SJT		PACKAGE = SJT		
 
@@ -99,6 +174,7 @@ MODULE = SJT		PACKAGE = SJT
 
 
 
+#// get_permut, gets the SV* at index index in the permutation arrayref of the object
 
 SV* get_permut(self,index)
 	SV* self
@@ -131,14 +207,13 @@ UV deref(self,adr)
 	SV* adr
 	CODE:
 		#IV a = 1;
-		UV a = SvIV(adr);
+		UV a = SvUV(adr);
 		RETVAL = a;
 	OUTPUT:
 		RETVAL
 
 
 #// xchg swaps 2 entries of a arrayref filled with scalars(preferably numbers)
-
 
 
 
@@ -162,10 +237,18 @@ xchg2(self,i,j)
 	int j
 	SV* self
 	CODE:
-		xchg__(	self,permut(i),permut(j) );
-		xchg__(	self,direct(i),direct(j) );
+		xchg2__(self,i,j);
 
 		RETVAL = 1;
 	OUTPUT:
 		RETVAL
 
+
+UV
+get_n(self)
+	SV* self
+	CODE:
+		UV result = getn(self);
+		RETVAL = result;
+	OUTPUT:
+		RETVAL

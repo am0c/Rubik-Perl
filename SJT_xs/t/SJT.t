@@ -45,6 +45,8 @@ BEGIN {
 		"checked direction array after swap"
    	);
 
+	ok($s1->get_n()==4,"get_n() works properly");
+
 
 	print "\n";
 	done_testing();
