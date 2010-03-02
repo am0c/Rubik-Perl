@@ -1,9 +1,9 @@
 package SJT;
-
 use 5.010000;
 use strict;
 use warnings;
 use Carp;
+use List::AllUtils qw/zip/;
 
 require Exporter;
 
@@ -38,7 +38,10 @@ sub new {
 
 sub print_perm {
 	my ($self) = @_;
-	print join(",",@{$self->{permutation}});
+	my @a = @{$self->{permutation}};
+	my @b = map { $_ < 0 ?'<':'>' } @{$self->{direction}};
+
+	print join(' ',zip @b,@a);
 	print "\n";
 }
 

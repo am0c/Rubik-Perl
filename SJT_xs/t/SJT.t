@@ -45,16 +45,53 @@ BEGIN {
 		"checked direction array after swap"
    	);
 
+	$s1->{direction}->[2]=-1;
+	$s1->{direction}->[3]=-1;
+
+	$s1->xchg2(2,3);
+	@aref = @{$s1->{direction}};
+
+	ok( $aref[2]==-1 && $aref[3]==-1, "swapped negative numbers");
+
+
+
 	ok($s1->get_n()==4,"get_n() works properly");
 
 
-	my $s2 = SJT->new(4);
+	my $s2 = SJT->new(3);
+	
+	my $run_perm_tests = 0;
 
-	for(1..24){
-		$s2->next_perm;
-		$s2->print_perm;
-	};
+	sub test_p {# test if permutation in $s2 is @p
+		return unless $run_perm_tests;
+		my (@p) = @_;
+		my (@p1) = @{$s2->{permutation}};
+		unshift(@p,0);
 
+		ok(	$p[1]==$p1[1]&&
+			$p[2]==$p1[2]&&
+			$p[3]==$p1[3],
+			"expected [@p] ; got [@p1]"
+		);
+	}
+
+	test_p(1,2,3);
+	$s2->print_perm;
+	$s2->next_perm;
+	test_p(1,3,2);
+	$s2->print_perm;
+	$s2->next_perm;
+	test_p(3,1,2);
+	$s2->print_perm;
+	$s2->next_perm;
+	test_p(3,2,1);
+	$s2->print_perm;
+	$s2->next_perm;
+	test_p(2,3,1);
+	$s2->print_perm;
+	$s2->next_perm;
+	test_p(2,1,3);
+	$s2->print_perm;
 
 	print "\n";
 	done_testing();

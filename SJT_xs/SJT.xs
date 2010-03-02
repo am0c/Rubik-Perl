@@ -43,7 +43,7 @@
 #define print_sv(w)   printf("SV at line __LINE__ :%x\n",w);
 #define permut(i) g__(self,i,"permutation")
 #define direct(i) g__(self,i,"direction")
-#define p(x) ( x + SvUV(direct(x)) )
+#define p(x) ( x + df(direct(x)) )
 
 SV* g__(SV* self,int index,char* key) { // used for get_permut and get_direct to get elements of permutation and direction attributes(arefs)
 		AV* array;
@@ -84,20 +84,20 @@ SV* g__(SV* self,int index,char* key) { // used for get_permut and get_direct to
 
 // dereference to UV
 
-UV df(SV* param) { 
-	return SvUV(param);
+IV df(SV* param) { 
+	return SvIV(param);
 }
 
-// UV works with signed and unsigned integers, IV just with signed
+// UV are unsigned ints and IV are signed ints
 
 void xchg__(SV* self,SV* i,SV* j) {
-		printf("in xchg__\n");
+		//printf("in xchg__\n");
 
-		UV ival = SvUV(i);
-		UV jval = SvUV(j);
+		IV ival = df(i);
+		IV jval = df(j);
 
-		sv_setuv(i,jval);
-		sv_setuv(j,ival);
+		sv_setiv(i,jval);
+		sv_setiv(j,ival);
 }
 
 void xchg2__(SV* self,SV* i,SV* j) {
@@ -111,18 +111,19 @@ void xchg2__(SV* self,SV* i,SV* j) {
 void invert_direct(SV* self,int i) {
 		SV* adr = direct(i);
 		UV val = df(adr);
-		sv_setuv(adr,-val);
+		val*=-1;
+		sv_setuv(adr,val);
 }
 
 
 // get n attribute of class
 
-UV getn(SV* self) {
+IV getn(SV* self) {
 	SV* hv = self;
 	HV* q = (HV *)SvRV(hv);
 	SV* result = *hv_fetch(q,"n",1,FALSE);
 
-	UV ret = SvUV(result);
+	IV ret = SvIV(result);
 	return ret;
 }
 
@@ -164,6 +165,8 @@ int nextperm(SV *self) {
 	int n = getn(self);
 	int i;
 
+	printf("mobile integer on position: %d with value:%d\n",k,max_mob);
+
 	if(k==0)
 		return 0;
 
@@ -171,8 +174,10 @@ int nextperm(SV *self) {
 
 	//invert direction of mobile integers
 	for(i=1;i<=n;i++)
-		if(df(permut(i))>max_mob)
+		if(df(permut(i))>max_mob) {
+			//printf("value %d\n",df(permut(i)));
 			invert_direct(self,i);
+		};
 }
 
 
@@ -211,12 +216,12 @@ SV* get_direct(self,index)
 
 #//dereference a SV* to a SvIV (integer)
 
-UV deref(self,adr)
+IV deref(self,adr)
 	SV* self
 	SV* adr
 	CODE:
 		#IV a = 1;
-		UV a = SvUV(adr);
+		IV a = SvIV(adr);
 		RETVAL = a;
 	OUTPUT:
 		RETVAL
