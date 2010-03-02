@@ -7,13 +7,21 @@
 
 use Devel::Peek;
 use Data::Dumper;
-use Test::More tests => 1;
+use Test::More 'no_plan';
 BEGIN {
 	use_ok('SJT'); 
-	my $s1 = SJT->new(4);
-	Dump($s1);
-	print "HERE be 3:".$s1->get(1)."\n";
+	my $s1 = SJT->new(4); # 4 permutations
+
+	my $a = 123;
+	my $b = 321;
+	ok($s1->deref($a)==123,"deref() works fine");
+	$s1->xchg($a,$b);
+	ok($a==321 && $b==123,"xchg() works fine");
+
+	ok($s1->deref($s1->get_permut(2))==2,"get_permut() and deref working fine");
+
 	print "\n";
+	done_testing();
 };
 
 

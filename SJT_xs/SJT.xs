@@ -4,16 +4,19 @@
 #include "ppport.h"
 
 /*
- *
+ * Mon 01 Mar 2010 10:09:22 PM EST
+ * 
  * REM:
  *
  * stash - symbol table hash
  * AV - array variable
+ * HV - hash variable
+ * SV - scalar variable
  *
  *
  * References
  *
- * Extending and embedding Perl
+ * Book: Extending and embedding Perl , perldoc: perlxs,perlapi,perlxstut
  *
  * pages 101-105 -> Tied scalar and objects
  *
@@ -120,6 +123,21 @@ SV* get_direct(self,index)
 	OUTPUT:
 		RETVAL
 
+
+
+#//dereference a SV* to a SvIV (integer)
+
+IV deref(self,adr)
+	SV* self
+	SV* adr
+	CODE:
+		#IV a = 1;
+		IV a = SvIV(adr);
+		RETVAL = a;
+	OUTPUT:
+		RETVAL
+
+
 #// xchg swaps 2 entries of a arrayref filled with scalars(preferably numbers)
 
 IV xchg(self,i,j)
@@ -127,11 +145,10 @@ IV xchg(self,i,j)
 	SV* j
 	SV* self
 	CODE:
-		SV* temp;
-		temp  = newSVpv("     0",6) ;
-		*temp = *i                  ;
-		*i    = *j                  ;
-		*j    = *temp               ;
+		SV temp        ;
+		temp    = *i   ;
+		*i      = *j   ;
+		*j      = temp ;
 
 		RETVAL = 1;
 	OUTPUT:
@@ -154,6 +171,7 @@ xchg2(self,i,j)
 		RETVAL
 
 
+#// not yet implemented
 
 
 IV

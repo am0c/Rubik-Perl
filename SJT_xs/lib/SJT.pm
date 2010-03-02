@@ -29,7 +29,7 @@ sub new {
 	# should use Params::Validate
 	confess "expected number" unless $n =~ /^\d+$/;
 	return bless {
-		permutation 	=> [0,1..$n   ] ,
+		permutation 	=> [0..$n     ] ,
 		direction 	=> [0,(-1)x$n ] ,
 	},$class;
 }
