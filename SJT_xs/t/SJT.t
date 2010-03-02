@@ -60,7 +60,7 @@ BEGIN {
 
 	my $s2 = SJT->new(3);
 	
-	my $run_perm_tests = 0;
+	my $run_perm_tests = 1;
 
 	sub test_p {# test if permutation in $s2 is @p
 		return unless $run_perm_tests;
@@ -76,22 +76,24 @@ BEGIN {
 	}
 
 	test_p(1,2,3);
-	$s2->print_perm;
+#	$s2->print_perm;
 	$s2->next_perm;
 	test_p(1,3,2);
-	$s2->print_perm;
+#	$s2->print_perm;
 	$s2->next_perm;
 	test_p(3,1,2);
-	$s2->print_perm;
+#	$s2->print_perm;
 	$s2->next_perm;
 	test_p(3,2,1);
-	$s2->print_perm;
+#	$s2->print_perm;
 	$s2->next_perm;
 	test_p(2,3,1);
-	$s2->print_perm;
+#	$s2->print_perm;
 	$s2->next_perm;
 	test_p(2,1,3);
-	$s2->print_perm;
+#	$s2->print_perm;
+
+	ok($s2->next_perm==0,"no more permutations");
 
 	print "\n";
 	done_testing();

@@ -110,7 +110,7 @@ void xchg2__(SV* self,SV* i,SV* j) {
 
 void invert_direct(SV* self,int i) {
 		SV* adr = direct(i);
-		UV val = df(adr);
+		IV val = df(adr);
 		val*=-1;
 		sv_setuv(adr,val);
 }
@@ -130,7 +130,7 @@ IV getn(SV* self) {
 
 
 // checks if at pos there is a mobile integer
-bool mobile(SV *self,int pos) {
+int mobile(SV *self,int pos) {
 	if(p(pos) > getn(self) || p(pos)==0)
 		return 0;
 	return df(permut(p(pos))) < df(permut(pos));
@@ -156,6 +156,7 @@ int emobile(SV *self) {
 			}
 		};
 	}
+	return maxpos;
 }
 
 // make permutation arrayref the next permutation
@@ -165,7 +166,7 @@ int nextperm(SV *self) {
 	int n = getn(self);
 	int i;
 
-	printf("mobile integer on position: %d with value:%d\n",k,max_mob);
+	//printf("mobile integer on position: %d with value:%d\n",k,max_mob);
 
 	if(k==0)
 		return 0;
@@ -258,21 +259,20 @@ xchg2(self,i,j)
 		RETVAL
 
 
-UV
+IV
 get_n(self)
 	SV* self
 	CODE:
-		UV result = getn(self);
+		IV result = getn(self);
 		RETVAL = result;
 	OUTPUT:
 		RETVAL
 
 
-UV
+IV
 next_perm(self)
 	SV* self
 	CODE:
-		nextperm(self);
-		RETVAL = 1;
+		RETVAL = nextperm(self);
 	OUTPUT:
 		RETVAL
