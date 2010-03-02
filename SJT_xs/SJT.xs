@@ -34,6 +34,9 @@
  */
 
 
+#define print_sv(w)   printf("SV at line __LINE__ :%x\n",w);
+
+
 #// get_permut, gets the SV* at index index in the permutation arrayref of the object
 
 MODULE = SJT		PACKAGE = SJT		
@@ -70,12 +73,14 @@ SV* get_permut(self,index)
 			printf("also found item in array at: %X\n",res);
 		};
 
+		print_sv(*res);
+
+
+		SV *ret=*res;
+		SvREFCNT_inc(ret); //increase the reference count of this because it suffered premature deallocation
 		
 		//T_PTROBJ could be used to store pointers to userdefined data structures
-		//IV a = SvIV(*res);
-		//printf("right before return\n");
-		//RETVAL = a;//SvIV(*av_fetch(array,index,FALSE));
-		RETVAL=*res;
+		RETVAL=ret;
 
 	OUTPUT:
 		RETVAL
@@ -145,10 +150,11 @@ IV xchg(self,i,j)
 	SV* j
 	SV* self
 	CODE:
-		SV temp        ;
-		temp    = *i   ;
-		*i      = *j   ;
-		*j      = temp ;
+		SV* temp;
+		temp  = newSVpv("     0",6);
+		*temp = *i                  ;
+		*i    = *j                  ;
+		*j    = *temp               ;
 
 		RETVAL = 1;
 	OUTPUT:
@@ -171,7 +177,6 @@ xchg2(self,i,j)
 		RETVAL
 
 
-#// not yet implemented
 
 
 IV
