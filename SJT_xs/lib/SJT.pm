@@ -57,11 +57,24 @@ SJT - Perl XS implementation of Steinhaus Johnson Trotter algorithm
 
 =head1 SYNOPSIS
 
-  use SJT;
-  blah blah blah
+	use SJT;
+
+	my $s = SJT->new(3);
+	while($s->next_perm()){
+		#@{$s->{permutation}};
+		$s->print_perm;
+	};
+
+	1 2 3
+	1 3 2
+	3 1 2
+	3 2 1
+	2 3 1
+	2 1 3
 
 =head1 DESCRIPTION
 
+SJT is pretty fast because it requires just one transposition to get to the next permutation.
 
 =head1 SEE ALSO
 

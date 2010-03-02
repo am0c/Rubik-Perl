@@ -175,10 +175,8 @@ int nextperm(SV *self) {
 
 	//invert direction of mobile integers
 	for(i=1;i<=n;i++)
-		if(df(permut(i))>max_mob) {
-			//printf("value %d\n",df(permut(i)));
+		if(df(permut(i))>max_mob)
 			invert_direct(self,i);
-		};
 }
 
 
