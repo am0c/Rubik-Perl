@@ -57,7 +57,7 @@ sub make_orderings
 cmpthese(
 	$iter,
 	{
-		'Algorithm::Permute' => sub {
+		'A::P' => sub {
 			use Algorithm::Permute;
 			my $p = new Algorithm::Permute([1..$n], $n);
 			while (my @res = $p->next) {
@@ -71,14 +71,14 @@ cmpthese(
 				#$s->print_perm;
 			};
 		},
-		'tye\'s permutation generator' => sub {
+		'tye' => sub {
 
 
 			my @w= (1..$n);
 			do {
 			} while( nextPermute(@w) );
 		},
-		'drangonchild\'s perm generator' => sub {
+		'dchld' => sub {
 			my $i = make_orderings($n);
 			while(my @a = $i->()){
 			};

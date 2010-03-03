@@ -3,7 +3,8 @@ use Moose;
 use lib './lib';
 use CM::Rubik;
 use Rubik::Cubie;
-use List::AllUtils qw/reduce/;
+#use Data::Match;
+use List::AllUtils qw/reduce firstidx/;
 
 
 =head1 NAME
@@ -103,8 +104,22 @@ has cubies => (
         $C;
     },
     required => 0,
-    lazy => 1,
+    lazy     => 1,
 );
+
+has state       => (
+	isa      => 'CM::Permutation',
+	is       => 'rw',
+	default  => sub { 
+		my ($self) = @_;
+		$self->rubik->I ;
+	},
+	required => 0,
+	lazy     => 1,
+);
+
+
+# centers are invariant to this scrambling 
 
 sub scramble {
     my ($self) = @_;
@@ -165,10 +180,70 @@ sub scramble {
 
 
 
+# returns if facelets $a,$b belong to the same face
+sub same_face {
+	my ($self,$a,$b) = @_;
+	return	$self->belongs_to($a) eq 
+		$self->belongs_to($b);
+}
+
+
+# returns the face to which a facelet should belong to
+
+sub should_belong_to {
+	my ($self,$n) = @_;
+	return 'R' if $n >= 28 && $n <=36;
+	return 'F' if $n >= 1  && $n <=9;
+	return 'D' if $n >= 10 && $n <=18;
+	return 'B' if $n >= 37 && $n <=45;
+	return 'L' if $n >= 46 && $n <=54;
+	return 'U' if $n >= 19 && $n <=27;
+}
+
+# the face that facelet $n belongs to is the should_belong_to of the index of the position which indicates to it
+# (it sounds weird, but just think a moment about it ...)
+# TODO:add a more clear explanation
+
+sub belongs_to {
+	my ($self,$n) = @_;
+	$self->should_belong_to(
+
+		firstidx 
+		{$self->state->perm->[$_] == $n } 
+		(1..54)
+
+	);
+}
+
+sub is_center {
+	my ($self,$n) = @_;
+	return 1 if $n ~~ (5,50,41,32,14,23);
+	return 0;
+}
+
+sub is_corner   {
+	my ($self,$n) = @_;
+	return 1 if $n ~~ (
+		48 , 54 , 52 , 46 ,
+		21 , 27 , 25 , 19 ,
+		7  , 9  , 3  , 1  ,
+		36 , 30 , 28 , 34 ,
+		18 , 12 , 10 , 16 ,
+		37 , 39 , 43 , 45
+	);
+	return 0;
+}
+
+sub is_edge	{
+	my ($self,$n) = @_;
+	return !($self->is_center($n)||$self->is_corner($n));
+}
+
 
 # we're mapping the set [1..54] onto each of the visible faces of the 3x3x3 cubies that compose the
 # rubik's cube, this is what this function does. I'm sure it could have more elegantly written with a good
 # formula to map them ... however this will do for the moment
+
 
 sub getColor {
     my($self,$n,$c) = @_;
@@ -235,12 +310,49 @@ sub move_perm { #move according to a given permutation
     confess "not the same number of colours returned" unless ~~@new_colors == ~~@old_colors;
 
     $self->setColor($_,$new_colors[$_]) for (0..-1+@new_colors);
+    
+    $self->state($self->state * $perm);
 }
 
+
+
+sub move_until {
+	my ($self,$what_move,$until) = @_;
+	while(1) {
+		$self->move->$what_move;
+		last if $until->();
+	};
+}
+
+
+
+sub solve_cross {
+	my ($self) = @_;
+
+	# 14 is the center of the down face .. which we want to make a cross on
+	
+}
 
 sub valid {
     my ($self,$move) = @_;
     return $move =~ /^[FBUDRL]i?$/;
+}
+
+sub valid_moves {
+	my ($self,$moves) = @_;
+	return $moves =~ /^([FBUDRL]i?)+$/;
+}
+
+sub moves {
+    my ($self,$moves) = @_;
+
+    confess "parameter moves undefined or empty" unless $moves;
+    confess "invalid move syntax" unless $self->valid_moves($moves);
+
+    while(my ($move) = $moves =~ s/^([FBUDRL]i?)//) {
+	    $self->move($move);
+    };
+
 }
 
 
@@ -252,13 +364,16 @@ sub move {
     confess 'only moves are F,B,U,D,R,L and their inverses' unless $self->valid($move);
     
 
+    my $pmove = $self->rubik->$move;# permutation associated with this move
 
     my @old_colors = map { $self->getColor($_-1) } (1..54);
-    my @new_colors = $self->rubik->$move->apply( @old_colors ); # apply permutation to them and put them in new_colors
+    my @new_colors = $pmove->apply( @old_colors ); # apply permutation to them and put them in new_colors
 
     confess "not the same number of colours returned" unless ~~@new_colors == ~~@old_colors;
 
     $self->setColor($_,$new_colors[$_]) for (0..-1+@new_colors);
+
+    $self->state($self->state * $pmove);
 }
 
 sub BUILD {
