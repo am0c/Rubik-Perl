@@ -41,20 +41,22 @@
 
 //used for debugging
 #define print_sv(w)   printf("SV at line __LINE__ :%x\n",w);
+//used to get a pointer to the ith element of permutation array
 #define permut(i) g__(self,i,"permutation")
+//used to get a pointer to the ith element of direction array
 #define direct(i) g__(self,i,"direction")
+//used to get a the index in the direction indicated by direct(x) relative to x
 #define p(x) ( x + df(direct(x)) )
 
 SV* g__(SV* self,int index,char* key) { // used for get_permut and get_direct to get elements of permutation and direction attributes(arefs)
 		AV* array;
-		SV* hv = self;
-		if(sv_isobject(hv)) {
+		if(sv_isobject(self)) {
 			//printf("self is object,moving on...\n");
 		} else {
 			printf("SJT::get was expecting self to be an object");
 		};
 
-		HV* q = (HV *)SvRV(hv);
+		HV* q = (HV *)SvRV(self);
 
 		array = SvRV(*hv_fetch(q,key,strlen(key),FALSE));
 

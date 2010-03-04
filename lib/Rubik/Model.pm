@@ -1,10 +1,13 @@
 package Rubik::Model;
+use strict;
+use warnings;
 use Moose;
 use lib './lib';
 use CM::Rubik;
 use Rubik::Cubie;
 #use Data::Match;
 use List::AllUtils qw/reduce firstidx/;
+use overload  '""' => 'stringify'; 
 
 
 =head1 NAME
@@ -120,7 +123,6 @@ has state       => (
 
 
 # centers are invariant to this scrambling 
-
 sub scramble {
     my ($self) = @_;
     my @pmoves = qw/F B U D R L/;
@@ -180,11 +182,27 @@ sub scramble {
 
 
 
-# returns if facelets $a,$b belong to the same face
+# returns if facelets @many should be on the same face
+sub should_be_same_face {
+	my ($self,@many) = @_;
+	confess "at least 2 arguments needed" unless @many >= 2;
+	reduce { $a && $b }
+	map {
+		$self->should_be_belongs_to($many[$_   ] ) eq
+		$self->should_bebelongs_to($many[$_+1 ] );
+	} (0..@many-2);
+}
+
+
+# returns if facelets @many are on the same face
 sub same_face {
-	my ($self,$a,$b) = @_;
-	return	$self->belongs_to($a) eq 
-		$self->belongs_to($b);
+	my ($self,@many) = @_;
+	confess "at least 2 arguments needed" unless @many >= 2;
+	reduce { $a && $b }
+	map {
+		$self->belongs_to($many[$_   ] ) eq
+		$self->belongs_to($many[$_+1 ] );
+	} (0..@many-2);
 }
 
 
@@ -217,21 +235,21 @@ sub belongs_to {
 
 sub is_center {
 	my ($self,$n) = @_;
-	return 1 if $n ~~ (5,50,41,32,14,23);
-	return 0;
+	my @a = (5,50,41,32,14,23);
+	return $n ~~ @a;
 }
 
 sub is_corner   {
 	my ($self,$n) = @_;
-	return 1 if $n ~~ (
-		48 , 54 , 52 , 46 ,
-		21 , 27 , 25 , 19 ,
-		7  , 9  , 3  , 1  ,
-		36 , 30 , 28 , 34 ,
-		18 , 12 , 10 , 16 ,
-		37 , 39 , 43 , 45
+	my @a = (
+		4 , 8 , 5 , 4 , 5 , 2 , 4 , 6 ,
+		2 , 1 , 2 , 7 , 2 , 5 , 1 , 9 ,
+		7 , 9 , 3 , 1 ,
+		3 , 6 , 3 , 0 , 2 , 8 , 3 , 4 ,
+		1 , 8 , 1 , 2 , 1 , 0 , 1 , 6 ,
+		3 , 7 , 3 , 9 , 4 , 3 , 4 , 5
 	);
-	return 0;
+	return $n ~~ @a;
 }
 
 sub is_edge	{
@@ -374,6 +392,12 @@ sub move {
     $self->setColor($_,$new_colors[$_]) for (0..-1+@new_colors);
 
     $self->state($self->state * $pmove);
+}
+
+sub stringify {
+	my ($self) = @_;
+	my $p = $self->state;
+	return "$p";
 }
 
 sub BUILD {

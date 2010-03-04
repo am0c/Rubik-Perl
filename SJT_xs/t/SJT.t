@@ -1,9 +1,3 @@
-# Before `make install' is performed this script should be runnable with
-# `make test'. After `make install' it should work as `perl SJT.t'
-
-#########################
-
-# change 'tests => 1' to 'tests => last_test_to_print';
 
 use Devel::Peek;
 use Data::Dumper;
@@ -76,24 +70,18 @@ BEGIN {
 		);
 	}
 
-#	$s2->print_perm;
-	ok($s2->next_perm_obj->isa('CM::Permutation'),"is a permutation");
+	isa_ok($s2->next_perm_obj,'CM::Permutation');
 	test_p(1,2,3);
-#	$s2->print_perm;
-	ok($s2->next_perm_obj->isa('CM::Permutation'),"is a permutation");
+	isa_ok($s2->next_perm_obj,'CM::Permutation');
 	test_p(1,3,2);
-#	$s2->print_perm;
-	ok($s2->next_perm_obj->isa('CM::Permutation'),"is a permutation");
+	isa_ok($s2->next_perm_obj,'CM::Permutation');
 	test_p(3,1,2);
-#	$s2->print_perm;
-	ok($s2->next_perm_obj->isa('CM::Permutation'),"is a permutation");
+	isa_ok($s2->next_perm_obj,'CM::Permutation');
 	test_p(3,2,1);
-#	$s2->print_perm;
-	ok($s2->next_perm_obj->isa('CM::Permutation'),"is a permutation");
+	isa_ok($s2->next_perm_obj,'CM::Permutation');
 	test_p(2,3,1);
-	ok($s2->next_perm_obj->isa('CM::Permutation'),"is a permutation");
+	isa_ok($s2->next_perm_obj,'CM::Permutation');
 	test_p(2,1,3);
-#	$s2->print_perm;
 
 	ok($s2->next_perm==0,"no more permutations");
 

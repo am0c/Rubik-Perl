@@ -4,7 +4,7 @@
 ;   
 ; Steinhaus - Johnson - Trotter algorithm for generating permutations
 ; 
-; Purpose: Will use Inline::ASM and use this to replace Algorithm::Permute from Perl
+; Purpose: Will use this from witin XS code inside SJT_xs
 
 %define PERM_SIZE 100 ; don't think we'll have permutations of more than 100 numbers to generate..
 %define NEW_LINE 10
