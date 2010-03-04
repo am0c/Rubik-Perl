@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use Carp;
 use List::AllUtils qw/zip/;
+use lib '../lib';
+use CM::Permutation;
 
 require Exporter;
 
@@ -33,7 +35,25 @@ sub new {
 		n		=> $n,
 		permutation 	=> [0..$n     ] ,
 		direction 	=> [0,(-1)x$n  ] ,
+		perm_idx	=> 0,
 	},$class;
+}
+
+
+
+
+
+
+sub next_perm_obj {
+	my ($self) = @_;
+	if($self->{perm_idx}++) {
+		return	$self->next_perm
+			? CM::Permutation->new( @{$self->{permutation}}[1..$self->{n}])
+			: undef;
+	}else {
+		return CM::Permutation->new(1..$self->{n});
+	};
+	return undef;
 }
 
 sub print_perm {

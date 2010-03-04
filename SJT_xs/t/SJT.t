@@ -8,6 +8,7 @@
 use Devel::Peek;
 use Data::Dumper;
 use Test::More 'no_plan';
+
 BEGIN {
 	use_ok('SJT'); 
 	my $s1 = SJT->new(4); # 4 permutations
@@ -75,21 +76,22 @@ BEGIN {
 		);
 	}
 
+#	$s2->print_perm;
+	ok($s2->next_perm_obj->isa('CM::Permutation'),"is a permutation");
 	test_p(1,2,3);
 #	$s2->print_perm;
-	$s2->next_perm;
+	ok($s2->next_perm_obj->isa('CM::Permutation'),"is a permutation");
 	test_p(1,3,2);
 #	$s2->print_perm;
-	$s2->next_perm;
+	ok($s2->next_perm_obj->isa('CM::Permutation'),"is a permutation");
 	test_p(3,1,2);
 #	$s2->print_perm;
-	$s2->next_perm;
+	ok($s2->next_perm_obj->isa('CM::Permutation'),"is a permutation");
 	test_p(3,2,1);
 #	$s2->print_perm;
-	$s2->next_perm;
+	ok($s2->next_perm_obj->isa('CM::Permutation'),"is a permutation");
 	test_p(2,3,1);
-#	$s2->print_perm;
-	$s2->next_perm;
+	ok($s2->next_perm_obj->isa('CM::Permutation'),"is a permutation");
 	test_p(2,1,3);
 #	$s2->print_perm;
 
