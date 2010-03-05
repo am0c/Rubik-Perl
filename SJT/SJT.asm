@@ -341,7 +341,7 @@ just_exit:
 ;   n - number of integers to print out (at ebp+12 on stack)
 
 segment .data
-OutputFormat    db   "%u,", 0 
+OutputFormat    db   "%-3u,", 0 
 empty_line	db   "",NEW_LINE,0
 
 segment .text
