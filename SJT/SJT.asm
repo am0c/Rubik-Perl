@@ -6,6 +6,11 @@
 ; 
 ; Purpose: Will use this from witin XS code inside SJT_xs
 
+; code was compiled on Linux using nasm(not sure if the syntax is compatible with any other compilers)
+; TODO:
+;	- the single thing callable outside will be next_perm, C should be able to read the array
+;	- 
+
 %define PERM_SIZE 100 ; don't think we'll have permutations of more than 100 numbers to generate..  just allocate space for these
 %define NEW_LINE 10
 
@@ -20,10 +25,6 @@ segment .data
 Message         db      "Permutation: ",13,10, 0
 
 
-
-
-
-
 segment .text
         extern  puts, printf, scanf, dump_line
 	global asm_main
@@ -33,14 +34,16 @@ asm_main:
         enter   0,0               ; setup routine
         pusha
 
-
-
-
 ;#########################################################
 ; init array
+; this code should be rougly equivalent to the C     for(int i=1;i<=5;i++)permutation[i]=i
 
 	mov ecx,1
 	mov ebx,permutation ; we print starting at permutation[1]
+
+
+	
+
 
 init_array_loop:
 	mov [ebx + 4*ecx],ecx
@@ -50,6 +53,13 @@ init_array_loop:
 ;#########################################################
 
 
+
+
+; exchanging permutation[1] and permutation[2]
+	mov ecx,[ebx+4];put value at address eax in ecx
+	mov edx,[ebx+8];put value at address eax in edx
+	mov [ebx+4],edx;rewrite them back to memory
+	mov [ebx+8],ecx
 
 
 
@@ -67,13 +77,18 @@ init_array_loop:
 	add	esp,8
 ;#########################################################
 
+	jmp just_exit
 
+
+
+
+just_exit:
         popa
         mov     eax, 0            ; return back to C
         leave                     
         ret
 
-;
+;#########################################################
 ; routine print_array
 ; C-callable routine that prints out elements of a double word array as
 ; signed integers.
@@ -121,4 +136,11 @@ print_loop:
         pop     esi
         leave
         ret
+
+
+
+
+
+
+
 
