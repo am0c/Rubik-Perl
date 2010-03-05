@@ -5,8 +5,8 @@
 ; Steinhaus - Johnson - Trotter algorithm for generating permutations
 ; 
 ; Purpose: Will use this from witin XS code inside SJT_xs
-
-; code was compiled on Linux using nasm(not sure if the syntax is compatible with any other compilers)
+;
+; Code was compiled on Linux using nasm(not sure if the syntax is compatible with any other compilers)
 ;
 ; TODO:
 ;	- the single thing callable outside will be next_perm, C should be able to read the array
@@ -18,6 +18,10 @@
 ;	  pack/unpack(use perldoc to find out more about those) on it in order to get the needed data
 ;	- write tests .. in assembly , or maybe Perl ?  :)
 ;
+;
+; Note: this code was written and tested on linux, I do not plan to port it to any other platform
+;
+
 
 %define PERM_SIZE 100 ; don't think we'll have permutations of more than 100 numbers to generate..  just allocate space for these
 %define NEW_LINE 10
@@ -34,7 +38,13 @@ dbg1         db      "------end of loop---------",13,10, 0
 N            dd	    9 ; number of elements to permute
 max	     dd	    0
 maxpos	     dd	    0
-permutation resd PERM_SIZE
+neighbour1   dd	    0
+neighbour2   dd     0
+
+;permutation resd PERM_SIZE ; this would be the normal definition but we'll use something else for testing
+permutation  dd  0,1,2,3,4,5,6,7,8,9
+dbg_array    dd  0,0  ; array with neighbours to be swapped
+
 segment .text
         extern  puts, printf, scanf, dump_line
 	global asm_main
@@ -55,14 +65,14 @@ asm_main:
 	mov ecx,1
 	mov ebx,permutation ; we print starting at permutation[1]
 
-init_array_loop:
+;init_array_loop:
 
-	mov edx,ecx
+	;mov edx,ecx
 
-	mov [ebx + 4*ecx],edx
-	inc ecx
-	cmp ecx,[N]
-	jbe init_array_loop
+	;mov [ebx + 4*ecx],edx
+	;inc ecx
+	;cmp ecx,[N]
+	;jbe init_array_loop
 ;#########################################################
 
 
@@ -123,6 +133,25 @@ next_perm:
 ;		};
 ;	}
 ;	return maxpos;
+;}
+
+;int nextperm(SV *self) {
+;	int k = emobile(self);
+;	int max_mob = df(permut(k));
+;	int n = getn(self);
+;	int i;
+;
+;	//printf("mobile integer on position: %d with value:%d\n",k,max_mob);
+;
+;	if(k==0)
+;		return 0;
+;
+;	xchg2__(self,k,p(k)); // exchange positions k and p(k)
+;
+;	//invert direction of mobile integers
+;	for(i=1;i<=n;i++)
+;		if(df(permut(i))>max_mob)
+;			invert_direct(self,i);
 ;}
 
 
@@ -186,6 +215,7 @@ emobile_loop:
 
 
 	add ebx,eax
+	mov [neighbour1],ebx
 	shl ebx,2
 	mov edx,ebx
 	add edx,permutation; edx = permutation + 4*(eax+ebx)
@@ -197,7 +227,15 @@ emobile_loop:
 	; edx has the following structure 
 	; [ 16 bits          | dh-8 bits | dl-8 bits]
 	xor dh,dh; we're not interested in the direction any more,just the number
-	mov ebx,[permutation+4*eax]
+
+
+
+	mov ebx,eax
+	shl ebx,2
+	add ebx,permutation; ebx = permutation + 4*ebx
+	mov [neighbour2],eax
+
+	mov ebx,[ebx]
 	xor bh,bh; only interested in the number again
 	; after this ebx and edx are neighbours and we're on ebx right now
 
@@ -242,15 +280,41 @@ emobile_loop:
 
 
 
+	cmp dword [maxpos],0   ; if(k==0) return 0
+	je finish_next_permute
+
+
+swap: ; tried to store in neighbours just addresses(need to look more on this)
+
+	;xchg2
+	push eax
+	push ebx
+		mov ecx,[neighbour1]
+		shl ecx,2
+		add ecx,permutation
+
+		mov edx,[neighbour2]
+		shl edx,2
+		add edx,permutation
+
+		mov eax,[ecx]
+		mov ebx,[edx]
+		mov [ecx],ebx
+		mov [edx],eax
+	pop ebx
+	pop eax
+	;swapped the neighbours
+
+
+
+
 
 ; exchanging permutation[1] and permutation[2]
-	mov ecx,[permutation+4];put value at address eax in ecx
-	mov edx,[permutation+8];put value at address eax in edx
-	mov [permutation+4],edx;rewrite them back to memory
-	mov [permutation+8],ecx
 
 
 
+
+finish_next_permute:
 
 
 	popf
