@@ -6,16 +6,17 @@
 ; 
 ; Purpose: Will use this from witin XS code inside SJT_xs
 
-%define PERM_SIZE 100 ; don't think we'll have permutations of more than 100 numbers to generate..
+%define PERM_SIZE 100 ; don't think we'll have permutations of more than 100 numbers to generate..  just allocate space for these
 %define NEW_LINE 10
 
-segment .data
-Message         db      "Permutation: ", 0
-
-
 segment .bss
-N            dd	    4               ; number of elements to permute
+N            dd	    6  ; number of elements to permute
+
 permutation  resd   PERM_SIZE
+segment .data
+Message         db      "Permutation: ",13,10, 0
+
+
 
 
 
@@ -33,10 +34,13 @@ asm_main:
         mov     eax,  Message
         call    print_string
 
-	mov	ebx, 4
+
+
+	
+	mov	ebx, 5
 	push 	ebx
         push    dword permutation
-        call    print_array           ; print first 10 elements of array
+        call    print_array           
 	add	esp,8
 
 
@@ -57,11 +61,14 @@ asm_main:
 ;   n - number of integers to print out (at ebp+12 on stack)
 
 segment .data
-OutputFormat    db   "%-5d %5d", NEW_LINE, 0
+OutputFormat    db   "%d,", 0
+empty_line	db   "",NEW_LINE,0
 
 segment .text
         global  print_array
 print_array:
+	; ebp is the stack pointer so we need to refer to it if we're going to take elements off the stack
+	; (pop could be equivalently used)
         enter   0,0
         push    esi
         push    ebx
@@ -73,14 +80,19 @@ print_loop:
         push    ecx                       ; printf might change ecx!
 
         push    dword [ebx + 4*esi]       ; push array[esi]
-        push    esi
+        ;push    esi
         push    dword OutputFormat
         call    printf
-        add     esp, 12                   ; remove parameters (leave ecx!)
+        add     esp, 8                  ; remove parameters (leave ecx!)
 
         inc     esi
         pop     ecx
         loop    print_loop
+
+
+
+	push	dword empty_line
+	call	printf
 
         pop     ebx
         pop     esi
