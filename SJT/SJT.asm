@@ -30,6 +30,7 @@ segment .bss
 
 segment .data
 Message         db      "Permutation: ",13,10, 0
+dbg1         db      "------end of loop---------",13,10, 0
 N            dd	    9 ; number of elements to permute
 max	     dd	    0
 maxpos	     dd	    0
@@ -202,13 +203,19 @@ emobile_loop:
 	mobile:
 
 
+	push edx       ; print the mobile integer
+	call print_int
+
 
 	jmp after_mobility_check
 	not_mobile:
-
+	
 	after_mobility_check:
 
 
+
+	mov eax,dbg1
+	call print_string
 
 	inc eax
 	cmp eax,[N]
