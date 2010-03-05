@@ -13,6 +13,9 @@ segment .bss
 N            dd	    6  ; number of elements to permute
 
 permutation  resd   PERM_SIZE
+; how do I initialize permutation with numbers ?
+
+
 segment .data
 Message         db      "Permutation: ",13,10, 0
 
@@ -31,18 +34,38 @@ asm_main:
         pusha
 
 
+
+
+;#########################################################
+; init array
+
+	mov ecx,1
+	mov ebx,permutation ; we print starting at permutation[1]
+
+init_array_loop:
+	mov [ebx + 4*ecx],ecx
+	inc ecx
+	cmp ecx,5
+	jbe init_array_loop
+;#########################################################
+
+
+
+
+
+
+;#########################################################
+; print first 5 elements of array
         mov     eax,  Message
         call    print_string
 
-
-
-	
 	mov	ebx, 5
 	push 	ebx
-        push    dword permutation
+        push    dword permutation + 4 ; we just don't print permutation[0]
         call    print_array           
-	add	esp,8
 
+	add	esp,8
+;#########################################################
 
 
         popa

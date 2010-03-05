@@ -7,7 +7,7 @@
 
 AS=nasm
 ASFLAGS= -f elf
-CFLAGS= 
+CFLAGS= -g
 CC=gcc
 CXX=g++
 CXXFLAGS=
