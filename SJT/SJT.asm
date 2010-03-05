@@ -19,7 +19,8 @@
 ;	- write tests .. in assembly , or maybe Perl ?  :)
 ;
 ;
-; Note: this code was written and tested on linux, I do not plan to port it to any other platform
+; Note: this code was written and tested on x86 linux, I do not plan to port it to any other platform/architecture
+;	(at least not in the near future)
 ;
 
 
@@ -76,6 +77,8 @@ asm_main:
 ;#########################################################
 
 
+	call next_perm
+	call print_nl
 	call next_perm
 
 
@@ -249,8 +252,11 @@ emobile_loop:
 	jg new_max
 	jmp jump_over4
 	new_max:
-		mov [max],ebx   
-		mov [maxpos],eax
+		push ebx
+			xor bh,bh
+			mov [max],ebx   
+			mov [maxpos],eax
+		pop ebx
 	jump_over4:
 
 
@@ -287,30 +293,43 @@ emobile_loop:
 swap: ; tried to store in neighbours just addresses(need to look more on this)
 
 	;xchg2
-	push eax
-	push ebx
-		mov ecx,[neighbour1]
-		shl ecx,2
-		add ecx,permutation
+	mov ecx,[neighbour1]
+	shl ecx,2
+	add ecx,permutation
 
-		mov edx,[neighbour2]
-		shl edx,2
-		add edx,permutation
+	mov edx,[neighbour2]
+	shl edx,2
+	add edx,permutation
 
-		mov eax,[ecx]
-		mov ebx,[edx]
-		mov [ecx],ebx
-		mov [edx],eax
-	pop ebx
-	pop eax
+	mov eax,[ecx]
+	mov ebx,[edx]
+	mov [ecx],ebx
+	mov [edx],eax
 	;swapped the neighbours
 
 
+; next we'll flip direction for the positions which are greater than [max]
+
+	mov ecx,[N]
+	mov edx,[max]
+flip_dir_loop:
+
+
+	cmp dword [permutation+ecx*4],edx
+	jbe skip_flip
+
+		mov eax,[permutation+ecx*4]
+		not ah
+		mov [permutation+ecx*4],eax
+
+	skip_flip:
+
+
+	loop flip_dir_loop
 
 
 
 ; exchanging permutation[1] and permutation[2]
-
 
 
 
@@ -341,7 +360,7 @@ just_exit:
 ;   n - number of integers to print out (at ebp+12 on stack)
 
 segment .data
-OutputFormat    db   "%-3u,", 0 
+OutputFormat    db   "%-6u,", 0 
 empty_line	db   "",NEW_LINE,0
 
 segment .text
