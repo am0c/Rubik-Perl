@@ -34,4 +34,4 @@ SJT.o : asm_io.inc
 driver.o : driver.c
 
 clean :
-	rm *.o
+	rm *.o SJT

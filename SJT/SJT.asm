@@ -58,7 +58,6 @@ asm_main:
 init_array_loop:
 
 	mov edx,ecx
-	;add edx,0		; i + (1<<8)
 
 	mov [ebx + 4*ecx],edx
 	inc ecx
@@ -129,6 +128,8 @@ next_perm:
 
 
 
+
+
 	xor eax,eax
 	xor ebx,ebx
 	xor ecx,ecx
@@ -187,9 +188,9 @@ emobile_loop:
 	add ebx,eax
 	shl ebx,2
 	mov edx,ebx
-	add edx,permutation
+	add edx,permutation; edx = permutation + 4*(eax+ebx)
 	
-	; edx = permutation + 4*(eax+ebx)
+	
 	; edx will be the neighbour of permutation[eax] in the appropriate direction
 	mov edx,[edx]
 
@@ -198,6 +199,7 @@ emobile_loop:
 	xor dh,dh; we're not interested in the direction any more,just the number
 	mov ebx,[permutation+4*eax]
 	xor bh,bh; only interested in the number again
+	; after this ebx and edx are neighbours and we're on ebx right now
 
 	cmp dl,bl
 	jge not_mobile
@@ -205,8 +207,17 @@ emobile_loop:
 	mobile:
 
 
+	cmp ebx,[max]
+	jg new_max
+	jmp jump_over4
+	new_max:
+		mov [max],ebx   
+		mov [maxpos],eax
+	jump_over4:
+
+
 	push eax
-		mov eax,edx
+		mov eax,ebx
 		call print_int; print the mobile integer
 	pop eax
 
