@@ -6,7 +6,7 @@
 .SUFFIXES: .o .asm .cpp .c
 
 AS=nasm
-ASFLAGS= -f elf
+ASFLAGS= -g -f elf
 CFLAGS= -g
 CC=gcc
 CXX=g++

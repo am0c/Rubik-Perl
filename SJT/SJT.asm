@@ -193,18 +193,23 @@ emobile_loop:
 	; edx will be the neighbour of permutation[eax] in the appropriate direction
 	mov edx,[edx]
 
+	; edx has the following structure 
+	; [ 16 bits          | dh-8 bits | dl-8 bits]
 	xor dh,dh; we're not interested in the direction any more,just the number
 	mov ebx,[permutation+4*eax]
 	xor bh,bh; only interested in the number again
 
-	cmp dh,bh
+	cmp dl,bl
 	jge not_mobile
 
 	mobile:
 
 
-	push edx       ; print the mobile integer
-	call print_int
+	push eax
+		mov eax,edx
+		call print_int; print the mobile integer
+	pop eax
+
 
 
 	jmp after_mobility_check
@@ -214,15 +219,15 @@ emobile_loop:
 
 
 
-	mov eax,dbg1
-	call print_string
+
+	push eax
+		mov eax,dbg1
+		call print_string
+	pop eax
 
 	inc eax
 	cmp eax,[N]
 	jbe emobile_loop
-
-
-
 
 
 
