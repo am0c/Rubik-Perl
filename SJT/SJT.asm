@@ -2,7 +2,7 @@
 ;
 ; Petrea Stefan
 ;   
-; Steinhaus - Johnson - Trotter algorithm for generating permutations
+; Steinhaus-Johnson-Trotter algorithm for generating permutations
 ; 
 ; Purpose: Will use this from witin XS code inside SJT_xs
 ;
@@ -36,11 +36,9 @@ segment .bss
 segment .data
 Message         db      "Permutation: ",13,10, 0
 dbg1         db      "------end of loop---------",13,10, 0
-N            dd	    9 ; number of elements to permute
+N            dd	    4 ; number of elements to permute
 max	     dd	    0
 maxpos	     dd	    0
-neighbour1   dd	    0
-neighbour2   dd     0
 
 ;permutation resd PERM_SIZE ; this would be the normal definition but we'll use something else for testing
 permutation  dd  0,1,2,3,4,5,6,7,8,9
@@ -157,22 +155,18 @@ next_perm:
 ;			invert_direct(self,i);
 ;}
 
-
-
-
-
-
 	xor eax,eax
 	xor ebx,ebx
 	xor ecx,ecx
 	xor edx,edx
 
 	mov eax,1 ; i
+	mov dword [max],0    ;max = 0
+	mov dword [maxpos],0 ;maxpos = 0
+
 emobile_loop:
 	; here we'll find if permutation[eax] is a mobile integer and if so we'll store eax in maxpos
 
-	mov dword [max],0    ;max = 0
-	mov dword [maxpos],0 ;maxpos = 0
 
 
 	mov ebx,eax
@@ -217,8 +211,7 @@ emobile_loop:
 
 
 
-	add ebx,eax
-	mov [neighbour1],ebx
+	add ebx,eax ; ebx = direction + position (aka neighbour)
 	shl ebx,2
 	mov edx,ebx
 	add edx,permutation; edx = permutation + 4*(eax+ebx)
@@ -226,34 +219,34 @@ emobile_loop:
 	
 	; edx will be the neighbour of permutation[eax] in the appropriate direction
 	mov edx,[edx]
+	xor dh,dh; we're not interested in the direction any more,just the number
 
 	; edx has the following structure 
 	; [ 16 bits          | dh-8 bits | dl-8 bits]
-	xor dh,dh; we're not interested in the direction any more,just the number
-
-
 
 	mov ebx,eax
 	shl ebx,2
 	add ebx,permutation; ebx = permutation + 4*ebx
-	mov [neighbour2],eax
 
 	mov ebx,[ebx]
 	xor bh,bh; only interested in the number again
+
 	; after this ebx and edx are neighbours and we're on ebx right now
 
-	cmp dl,bl
+	cmp edx,ebx     ; if it's bigger than its neighbour then it's mobile
 	jge not_mobile
 
 	mobile:
 
+	mov edx,[max]
+	xor dh,dh
 
-	cmp ebx,[max]
-	jg new_max
+
+	cmp edx,ebx
+	jb new_max
 	jmp jump_over4
 	new_max:
 		push ebx
-			xor bh,bh
 			mov [max],ebx   
 			mov [maxpos],eax
 		pop ebx
@@ -283,29 +276,52 @@ emobile_loop:
 	inc eax
 	cmp eax,[N]
 	jbe emobile_loop
+	;eax can be used again as we want...we aren't using it
+	;any more as a loop counter from here on
 
 
 
-	cmp dword [maxpos],0   ; if(k==0) return 0
+	cmp dword [max],0   ; if(k==0) return 0
 	je finish_next_permute
 
 
 swap: ; tried to store in neighbours just addresses(need to look more on this)
 
-	;xchg2
-	mov ecx,[neighbour1]
-	shl ecx,2
-	add ecx,permutation
+	
 
-	mov edx,[neighbour2]
+
+	;xchg2
+	mov ecx,[maxpos]
+	shl ecx,2
+	add ecx,permutation; ecx is pointer to position where max is located
+
+
+	;edx will be its neighbour
+	mov edx,ecx
+	mov edx,[edx]
+	shr edx,8
+
+	cmp edx,LEFT    
+	jne jump_over6
+	sub edx,1
+	jump_over6:; so edx is -1 if direction of neighbour is LEFT and +1 if RIGHT
+
+	add edx,[maxpos]
 	shl edx,2
-	add edx,permutation
+	add edx,permutation ; edx points to neighbour
+
 
 	mov eax,[ecx]
 	mov ebx,[edx]
 	mov [ecx],ebx
 	mov [edx],eax
 	;swapped the neighbours
+
+	call print_int
+	call print_nl
+	mov eax, ebx
+	call print_int
+	call print_nl
 
 
 ; next we'll flip direction for the positions which are greater than [max]
