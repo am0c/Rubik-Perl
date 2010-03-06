@@ -74,30 +74,23 @@ asm_main:
 	;jbe init_array_loop
 ;#########################################################
 
+	mov ecx,2 ; 24 permutations in total
 
-	call next_perm
-	call print_nl
-	call next_perm
-	call print_nl
-	call next_perm
-	call print_nl
-	call next_perm
+	perm_loop:
+		call next_perm
+	;#########################################################
+	; print first N elements of array
 
+		mov	ebx, [N]
+		push 	ebx
+		push    dword permutation + 4 ; we just don't print permutation[0] , we just skip it with +4
+		call    print_array           
+	;#########################################################
+	loop perm_loop
+	
 
-
-
-;#########################################################
-; print first 5 elements of array
-        mov     eax,  Message
-        call    print_string
-
-	mov	ebx, [N]
-	push 	ebx
-        push    dword permutation + 4 ; we just don't print permutation[0] , we just skip it with +4
-        call    print_array           
 
 	add	esp,8
-;#########################################################
 
 	jmp just_exit
 
