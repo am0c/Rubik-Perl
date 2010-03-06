@@ -78,6 +78,10 @@ asm_main:
 	call next_perm
 	call print_nl
 	call next_perm
+	call print_nl
+	call next_perm
+	call print_nl
+	call next_perm
 
 
 
@@ -253,10 +257,10 @@ emobile_loop:
 	jump_over4:
 
 
-	push eax
-		mov eax,ebx
-		call print_int; print the mobile integer
-	pop eax
+	;push eax
+		;mov eax,ebx
+		;call print_int; print the mobile integer
+	;pop eax
 
 
 
@@ -268,10 +272,10 @@ emobile_loop:
 
 
 
-	push eax
-		mov eax,dbg1
-		call print_string
-	pop eax
+	;push eax
+		;mov eax,dbg1
+		;call print_string
+	;pop eax
 
 	inc eax
 	cmp eax,[N]
@@ -308,20 +312,14 @@ swap: ; tried to store in neighbours just addresses(need to look more on this)
 
 	add edx,[maxpos]
 	shl edx,2
-	add edx,permutation ; edx points to neighbour
+	add edx,permutation ; edx points to neighbour of max
 
 
 	mov eax,[ecx]
 	mov ebx,[edx]
 	mov [ecx],ebx
 	mov [edx],eax
-	;swapped the neighbours
-
-	call print_int
-	call print_nl
-	mov eax, ebx
-	call print_int
-	call print_nl
+	;swapped max and its neighbour
 
 
 ; next we'll flip direction for the positions which are greater than [max]
@@ -394,7 +392,13 @@ print_array:
 print_loop:
         push    ecx                       ; printf might change ecx!
 
-        push    dword [ebx + 4*esi]       ; push array[esi]
+        ;push    dword [ebx + 4*esi] (this is the esi-th position of the array,
+	;			      but we don't need the direction so we xor it)
+
+	mov     eax, [ebx+4*esi]
+	xor ah,ah
+	push eax
+
         ;push    esi
         push    dword OutputFormat
         call    printf
@@ -411,11 +415,4 @@ print_loop:
         pop     esi
         leave
         ret
-
-
-
-
-
-
-
 
