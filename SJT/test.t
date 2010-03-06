@@ -1,6 +1,4 @@
 use Test::More;
-
-
 my $out=`./SJT`;
 
 my @lines = split /\n/,$out;
@@ -36,11 +34,12 @@ my @tests = qw/
 
 
 while(1) {
-  ok(	
-	$lines[$i] eq $tests[$i] , 
-	"expected $tests[$i] , got $lines[$i]"
-    );
-  $i++;
-  last if $i==24;
+	last unless ok(	
+		$lines[$i] eq $tests[$i] , 
+		"expected $tests[$i] , got $lines[$i]"
+	);
+	$i++;
+	last if $i==24;
 }
 
+done_testing();

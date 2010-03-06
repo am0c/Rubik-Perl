@@ -6,7 +6,7 @@
 ; 
 ; Purpose: Will use this from witin XS code inside SJT_xs
 ;
-; Code was compiled on Linux using nasm(not sure if the syntax is compatible with any other compilers)
+; Code was assembled on Linux using nasm(not sure if the syntax is compatible with any other assemblers)
 ;
 ; TODO:
 ;	- the single thing callable outside will be next_perm, C should be able to read the array
@@ -16,11 +16,14 @@
 ;	  write the data at, instead of using "permutation" from the .data section,or find a way of telling C
 ;	  that the data resides at the pointer "permutation" in the .data section so it can hand it to Perl which will
 ;	  pack/unpack(use perldoc to find out more about those) on it in order to get the needed data
+;	- further optimizations would include taking advantage of the fact that inside a 32bit
+;	  register I can fit two 8-bit integers with their directions also, so I can store the
+;	  max and its neighbour
 ;	- write tests .. in assembly , or maybe Perl ?  :)
 ;
 ;
 ; Note: this code was written and tested on x86 linux, I do not plan to port it to any other platform/architecture
-;	(at least not in the near future)
+;	(at least not very soon)
 ;
 
 
@@ -55,6 +58,7 @@ asm_main:
 
 ;#########################################################
 ; init array
+;
 ; 
 ; DDDDDDDDNNNNNNNN
 ; in first 8 bits we store direction, next 8 bits we store the number
@@ -83,12 +87,12 @@ asm_main:
 	push    dword permutation + 4 ; we just don't print permutation[0] , we just skip it with +4
 	call    print_array           
 	add	esp,8
-	call    print_nl           
+	call    print_nl ; this was the identical permutation
 
 
 
 
-	mov ecx,23 ; 24 permutations in total
+	mov ecx,5 ; 24 permutations in total
 	perm_loop:
 		call next_perm
 		;#########################################################
@@ -189,7 +193,7 @@ emobile_loop:
 
 
 
-	;next we'll determin if permutation[eax] is mobile or not
+	;next we'll determine if permutation[eax] is mobile or not
 	mov ebx,[ecx] ; ebx = permutation[eax]
 	shr ebx,8     ; ebx now contains the direction of the integer
 
