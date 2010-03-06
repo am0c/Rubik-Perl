@@ -94,7 +94,7 @@ asm_main:
 	loop perm_loop
 
 	the_bug:
-		call_next_perm
+		call next_perm
 	
 
 
