@@ -78,8 +78,17 @@ asm_main:
 
 
 
+	mov	ebx, [N]
+	push 	ebx
+	push    dword permutation + 4 ; we just don't print permutation[0] , we just skip it with +4
+	call    print_array           
+	add	esp,8
+	call    print_nl           
 
-	mov ecx,4 ; 24 permutations in total
+
+
+
+	mov ecx,23 ; 24 permutations in total
 	perm_loop:
 		call next_perm
 		;#########################################################
@@ -333,7 +342,7 @@ flip_dir_loop:
 	jbe skip_flip
 
 		mov eax,[permutation+ecx*4]
-		not ah
+		xor ah,1
 		mov [permutation+ecx*4],eax
 
 	skip_flip:
@@ -374,7 +383,7 @@ just_exit:
 ;   n - number of integers to print out (at ebp+12 on stack)
 
 segment .data
-OutputFormat    db   "%-6u,", 0 
+OutputFormat    db   "%u,", 0 
 empty_line	db   "",NEW_LINE,0
 
 segment .text
