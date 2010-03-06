@@ -61,9 +61,11 @@ asm_main:
 ; this code should be rougly equivalent to the C     
 ; for(int i=1;i<=5;i++)permutation[i]= i + (0<<8) // writing that to indicate that direction if equivalent to LEFT initially
 
-	mov ecx,1
-	mov ebx,permutation ; we print starting at permutation[1]
 
+
+
+	;mov ecx,1
+	;mov ebx,permutation ; we print starting at permutation[1]
 ;init_array_loop:
 
 	;mov edx,ecx
@@ -72,25 +74,30 @@ asm_main:
 	;inc ecx
 	;cmp ecx,[N]
 	;jbe init_array_loop
-;#########################################################
 
-	mov ecx,2 ; 24 permutations in total
 
+
+
+
+	mov ecx,4 ; 24 permutations in total
 	perm_loop:
 		call next_perm
-	;#########################################################
-	; print first N elements of array
-
+		;#########################################################
+		; print first N elements of array
 		mov	ebx, [N]
 		push 	ebx
 		push    dword permutation + 4 ; we just don't print permutation[0] , we just skip it with +4
 		call    print_array           
-	;#########################################################
+		add	esp,8
+		call    print_nl           
+		;#########################################################
 	loop perm_loop
+
+	the_bug:
+		call_next_perm
 	
 
 
-	add	esp,8
 
 	jmp just_exit
 
@@ -378,6 +385,7 @@ print_array:
         enter   0,0
         push    esi
         push    ebx
+        push    ecx
 
         xor     esi, esi                  ; esi = 0
         mov     ecx, [ebp+12]             ; ecx = n
@@ -401,9 +409,8 @@ print_loop:
         pop     ecx
         loop    print_loop
 
-	push	dword empty_line
-	call	printf
 
+        pop     ecx
         pop     ebx
         pop     esi
         leave
