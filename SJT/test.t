@@ -1,5 +1,9 @@
+use strict;
+use warnings;
 use Test::More;
 my $out=`./SJT`;
+
+my $stop_at_first_failed = !$ARGV[0]; # if any first argument is used
 
 my @lines = split /\n/,$out;
 
@@ -34,12 +38,17 @@ my @tests = qw/
 
 
 while(1) {
-	last unless ok(	
+	last if !defined($tests[$i]);
+	my $good = ok(	
 		$lines[$i] eq $tests[$i] , 
 		"expected $tests[$i] , got $lines[$i]"
 	);
-	$i++;
-	last if $i==24;
+	last if ($stop_at_first_failed && !$good) ||
+		++$i==@tests;
+}
+
+if($i<@tests-1) {
+	warn "Wanted to run more tests but didn't get enough output from program!";
 }
 
 done_testing();
