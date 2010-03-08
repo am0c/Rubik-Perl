@@ -29,7 +29,7 @@
 
 %define PERM_SIZE 100 ; don't think we'll have permutations of more than 100 numbers to generate..  just allocate space for these
 %define NEW_LINE 10
-%define ITERATIONS 5 ; this will be removed after testing is over
+%define ITERATIONS 23 ; this will be removed after testing is over
 %define LEFT  0
 %define RIGHT 1
 
@@ -342,8 +342,9 @@ swap: ; tried to store in neighbours just addresses(need to look more on this)
 	mov edx,[max]
 flip_dir_loop:
 
-
-	cmp dword [permutation+ecx*4],edx
+	mov ebx,[permutation+ecx*4]
+	xor bh,bh 
+	cmp ebx,edx ; we compare just the numbers and not use the direction
 	jbe skip_flip
 
 		mov eax,[permutation+ecx*4]
@@ -353,7 +354,7 @@ flip_dir_loop:
 	skip_flip:
 
 
-	loop flip_dir_loop
+	loop flip_dir_loop ; breaks when ecx becomes negative
 
 
 
@@ -411,6 +412,7 @@ print_loop:
 	;			      but we don't need the direction so we xor it)
 
 	mov     eax, [ebx+4*esi]
+
 	push eax
 		shr eax,8
 
@@ -419,15 +421,14 @@ print_loop:
 			inc eax
 		skip_increase
 
-		add eax,0x3C
+		add eax,0x3C  ; at the end of this eax contains '<' if LEFT and '>' if RIGHT was in AH
 
-		call print_char
+		call print_char 
 	pop eax
 
 	xor ah,ah
 	push eax
 
-        ;push    esi
         push    dword OutputFormat
         call    printf
 
