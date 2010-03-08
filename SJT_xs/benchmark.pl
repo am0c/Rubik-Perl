@@ -6,6 +6,7 @@ use SJT;
 
 my $n = 10; # objects to permute
 my $iter=5;
+my $p = new Algorithm::Permute([1..$n], $n);
 
 sub nextPermute(\@)
 {
@@ -58,32 +59,33 @@ cmpthese(
 	$iter,
 	{
 		'A::P' => sub {
-			use Algorithm::Permute;
-			my $p = new Algorithm::Permute([1..$n], $n);
+
 			while (my @res = $p->next) {
 				#print join(", ", @res), "\n";
 			}
+
 		},
-		'SJT_XS'                => sub {
+		'SJT_XS'=> sub {
+
 			my $s = SJT->new($n);
 			while($s->next_perm()){
 				my @p = @{$s->{permutation}};
-				#$s->print_perm;
 			};
+
 		},
 		'tye' => sub {
-
 
 			my @w= (1..$n);
 			do {
 			} while( nextPermute(@w) );
+
 		},
 		'dchld' => sub {
 			my $i = make_orderings($n);
 			while(my @a = $i->()){
 			};
 		},
-		'asm'	=> sub {
+		'SJT_asm' => sub {
 			`./../SJT/SJT_for_benchmark`;
 		},
 		'C++_STL' => sub {
