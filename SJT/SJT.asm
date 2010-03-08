@@ -410,13 +410,27 @@ print_loop:
 	;			      but we don't need the direction so we xor it)
 
 	mov     eax, [ebx+4*esi]
+	push eax
+		shr eax,8
+
+		cmp eax,RIGHT
+		jne skip_increase
+			inc eax
+		skip_increase
+
+		add eax,0x3C
+
+		call print_char
+	pop eax
+
 	xor ah,ah
 	push eax
 
         ;push    esi
         push    dword OutputFormat
         call    printf
-        add     esp, 8                  ; remove parameters (leave ecx!)
+
+        add     esp,8                  ; remove parameters (leave ecx!)
 
         inc     esi
         pop     ecx

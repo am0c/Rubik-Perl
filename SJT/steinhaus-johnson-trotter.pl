@@ -17,7 +17,7 @@ use Test::More ;
 my $LEFT = -1;
 my $RIGHT= 1;
 
-my $n = 3;
+my $n = 4;
 
 
 # the first one is the number , second is direction
