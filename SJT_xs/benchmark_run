@@ -1,1 +1,1 @@
-perl -Iblib/arch/auto/SJT -Ilib benchmark.pl 
+perl -Iblib/arch/auto/SJT -Ilib benchmark.pl  | tee > benchmark_results

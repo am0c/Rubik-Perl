@@ -4,8 +4,8 @@ use Benchmark qw/cmpthese timethese/;
 use Algorithm::Permute;
 use SJT;
 
-my $n = 8; # objects to permute
-my $iter=4;
+my $n = 10; # objects to permute
+my $iter=5;
 
 sub nextPermute(\@)
 {
@@ -64,7 +64,7 @@ cmpthese(
 				#print join(", ", @res), "\n";
 			}
 		},
-		'SJT'                => sub {
+		'SJT_XS'                => sub {
 			my $s = SJT->new($n);
 			while($s->next_perm()){
 				my @p = @{$s->{permutation}};
@@ -82,6 +82,12 @@ cmpthese(
 			my $i = make_orderings($n);
 			while(my @a = $i->()){
 			};
+		},
+		'asm'	=> sub {
+			`./../SJT/SJT_for_benchmark`;
+		},
+		'C++_STL' => sub {
+			`./../SJT/perm_cpp_stl`;
 		},
 	}
 );

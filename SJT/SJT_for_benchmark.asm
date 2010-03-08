@@ -29,13 +29,10 @@
 
 %define PERM_SIZE 100 ; don't think we'll have permutations of more than 100 numbers to generate..  just allocate space for these
 %define NEW_LINE 10
-%define ITERATIONS 3628800; this will be removed after testing is over
 %define LEFT  0
 %define RIGHT 1
 
 segment .bss
-
-
 
 segment .data
 Message         db      "Permutation: ",13,10, 0
@@ -92,8 +89,16 @@ asm_main:
 
 
 
+	mov ecx,[N]
+	mov eax,1
+	factorial:
+		mul ecx
+		dec ecx
+		cmp ecx,1
+	jne factorial; at the end of this eax = N!
 
-	mov ecx,ITERATIONS ; 24 permutations in total
+
+	mov ecx,eax ; 24 permutations in total
 	perm_loop:
 		call next_perm
 		;#########################################################
@@ -108,10 +113,6 @@ asm_main:
 
 		;#########################################################
 	loop perm_loop
-
-	the_bug:
-		call next_perm
-	
 
 
 
