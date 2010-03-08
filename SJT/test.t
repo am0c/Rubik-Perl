@@ -38,7 +38,7 @@ my @tests = qw/
 
 
 while(1) {
-	last if !defined($tests[$i]);
+	last unless defined($lines[$i]);
 	my $good = ok(	
 		$lines[$i] eq $tests[$i] , 
 		"expected $tests[$i] , got $lines[$i]"
