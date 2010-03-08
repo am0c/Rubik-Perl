@@ -354,7 +354,7 @@ flip_dir_loop:
 	skip_flip:
 
 
-	loop flip_dir_loop ; breaks when ecx becomes negative
+	loop flip_dir_loop
 
 
 
