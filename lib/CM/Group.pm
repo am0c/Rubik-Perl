@@ -1,4 +1,5 @@
 package CM::Group;
+use Moose::Util q/apply_all_roles/;
 use MooseX::Role::Parameterized;
 use Acme::AsciiArt2HtmlTable;
 use Math::Polynomial;
@@ -6,6 +7,7 @@ use List::AllUtils qw/all first zip/;
 use Carp;
 use GraphViz;
 use Text::Table;
+use CM::Tuple;
 use strict;
 use warnings;
 requires '_builder_order';
@@ -13,6 +15,8 @@ requires 'compute_elements';
 requires 'operation'; # wrapper function over operation of elements , REM : whenever I do  * in a group method
                       # I should replace that with  $self->operation($arg1,$arg2)
 parameter 'element_type' => ( isa   => 'Str' );
+
+use overload    "*" => \&multiply;
 
 
 =head1 NAME
@@ -309,6 +313,69 @@ role {
         }
         $table->load( @for_table );
         return "$table";
+    };
+    
+    
+    
+    #cartesian product of 2 groups
+    method multiply => sub {
+	    my ($G,$H) = @_;
+
+	    # some nice info on this here as well
+	    # http://stackoverflow.com/questions/1758884/how-can-i-access-the-meta-class-of-the-module-my-moose-role-is-being-applied-to
+	    
+	    my $typeGe = ref($G->elements->[0]); # type of the elements of G
+	    my $typeHe = ref($H->elements->[0]); # type of the elements of H
+	    my $tuple_type = 'CM::Tuple::'.$typeGe.'_'.$typeHe;
+
+	    my @GH_elements;
+
+	    for my $g (@{$G->elements}) {
+		    for my $h (@{$H->elements}) {
+			    # see http://search.cpan.org/~flora/Moose-0.99/lib/Moose/Meta/Class.pm
+			    # for details
+			    my $tuple_instance = Moose::Meta::Class->create(
+				    $tuple_type,
+				    superclasses => ['Moose'], # not sure here yet
+			    );
+			    # found out that I can do this from [page 63]
+			    # http://sartak.org/talks/yapc-asia-2009/(parameterized)-roles/(parameterized)-roles.pdf
+
+			    # or do CM::Tuple->meta->apply($tuple_instance) instead , but can I pass the parameters
+			    # to the parameterized role ?
+
+			    CM::Tuple->meta->apply($tuple_instance);
+
+			    apply_all_roles($tuple_instance,__PACKAGE__,
+				    		{
+					    		first_element => $typeGe,
+							second_element=> $typeHe,
+						}
+					    );
+			    push @GH_elements,$tuple_instance;
+		    }
+	    };
+
+	    my ($typeG) = ref($G) =~ /::([^:]*)$/;
+	    my ($typeH) = ref($H) =~ /::([^:]*)$/;
+	    my $cardG = $G->n;
+	    my $cardH = $H->n;
+
+	    my $product_group = Moose::Meta::Class->create(
+		    "CM::Group::$typeG$cardG\*$typeH$cardH",
+		    superclasses => ['Moose'], # not sure here yet
+	    );
+
+	    # TODO: need to pass parameters of parametrized role
+
+
+	    # or use __PACKAGE__->meta->apply instead ?
+	    apply_all_roles(	$product_group,
+		    		__PACKAGE__,
+				{ element_type => $tuple_type }
+			   ); # apply CM::Group to the newly created group
+
+	    return $product_group;
     };
 
     # #this would be a general method so I could overload the CM::Group role to provide the "*" operator for "multiplying" groups
