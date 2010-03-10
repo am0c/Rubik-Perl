@@ -6,12 +6,19 @@ use overload
 "*"  => \&multiply,
 "==" => \&equal;
 
+#
+# Problem : the operation wrapper from CM::Group should apply to the * of each of the elements when inside the
+# overloaded "*" operator , but it doesn't because CM::Tuple is not dependent on anything from CM::Group.
+# This will be a problem for ModuloMultiplication for example which relies on this..
+#
 
-has label => (
+
+
+has $_ => (
 	isa=> 'Int',
 	is => 'rw',
-	default => undef,
-);
+	default => 1,
+) for qw/label tlabel/;
 
 
 # maybe these 2 should be ro

@@ -16,8 +16,6 @@ requires 'operation'; # wrapper function over operation of elements , REM : when
                       # I should replace that with  $self->operation($arg1,$arg2)
 parameter 'element_type' => ( isa   => 'Str' );
 
-use overload    "*" => \&multiply;
-
 
 =head1 NAME
 
@@ -63,6 +61,9 @@ Stefan Petrea, C<< <stefan.petrea at gmail.com> >>
 role {
     my $p = shift;
 
+    my %args = @_;
+    my $consumer = $args{consumer};
+
     my $T = $p->element_type;
 
     has n => (              # this will be related to the order of the group
@@ -75,9 +76,10 @@ role {
 
     # only used for assigning labels
     has tlabel  => (
-        isa     => 'Int',
-        is      => 'rw',
-        default => 1,
+	    isa     => 'Int',
+	    is      => 'rw',
+	    default => 1,
+	    lazy    => 1,
     );
 
     has order   => (
@@ -105,7 +107,6 @@ role {
         default  => 0,
     );
 
-
     # generating polynomial of group
     # Adventures in Group Theory - David Joyner 2nd edition
     method gen_polynomial => sub {
@@ -119,13 +120,21 @@ role {
 
     method add_to_elements => sub {
         my ($self,$newone) = @_;
-        $newone->label($self->tlabel);
+
+	confess "undefined passed" unless $newone;
+	my $tlabel = $consumer->find_method_by_name('tlabel');
+
+	my $tlabel_val =  $self->tlabel;
+
+	$newone->label($tlabel_val);
         unshift @{$self->elements},$newone;
 
         croak "not all elements have labels"
         unless( all { defined($_->label) }(@{ $self->elements }) );
 
-        $self->tlabel( $self->tlabel + 1 );
+	$self->tlabel($self->tlabel() + 1);
+
+	#$tlabel->execute( $tlabel->execute() + 1 );
     };
 
     method perm2label => sub {
@@ -315,46 +324,11 @@ role {
         return "$table";
     };
     
-    
-    
-    #cartesian product of 2 groups
-    method multiply => sub {
+    method group_product => sub {
 	    my ($G,$H) = @_;
 
 	    # some nice info on this here as well
 	    # http://stackoverflow.com/questions/1758884/how-can-i-access-the-meta-class-of-the-module-my-moose-role-is-being-applied-to
-	    
-	    my $typeGe = ref($G->elements->[0]); # type of the elements of G
-	    my $typeHe = ref($H->elements->[0]); # type of the elements of H
-	    my $tuple_type = 'CM::Tuple::'.$typeGe.'_'.$typeHe;
-
-	    my @GH_elements;
-
-	    for my $g (@{$G->elements}) {
-		    for my $h (@{$H->elements}) {
-			    # see http://search.cpan.org/~flora/Moose-0.99/lib/Moose/Meta/Class.pm
-			    # for details
-			    my $tuple_instance = Moose::Meta::Class->create(
-				    $tuple_type,
-				    superclasses => ['Moose'], # not sure here yet
-			    );
-			    # found out that I can do this from [page 63]
-			    # http://sartak.org/talks/yapc-asia-2009/(parameterized)-roles/(parameterized)-roles.pdf
-
-			    # or do CM::Tuple->meta->apply($tuple_instance) instead , but can I pass the parameters
-			    # to the parameterized role ?
-
-			    CM::Tuple->meta->apply($tuple_instance);
-
-			    apply_all_roles($tuple_instance,__PACKAGE__,
-				    		{
-					    		first_element => $typeGe,
-							second_element=> $typeHe,
-						}
-					    );
-			    push @GH_elements,$tuple_instance;
-		    }
-	    };
 
 	    my ($typeG) = ref($G) =~ /::([^:]*)$/;
 	    my ($typeH) = ref($H) =~ /::([^:]*)$/;
@@ -362,37 +336,77 @@ role {
 	    my $cardH = $H->n;
 
 	    my $product_group = Moose::Meta::Class->create(
-		    "CM::Group::$typeG$cardG\*$typeH$cardH",
-		    superclasses => ['Moose'], # not sure here yet
+		    __PACKAGE__,#"CM::Group::Product::$typeG$cardG$typeH$cardH",
+		    #superclasses => ['Moose'], # not sure here yet
+
 	    );
 
-	    # TODO: need to pass parameters of parametrized role
 
+	    $product_group->meta->make_mutable;
+	    # store these inside the group so he can access them when he needs to 
+	    # compute the elements. (could have used a closure but prefered not to)
+
+	    $product_group->meta->add_attribute("prod_groups"=>(
+			    default => sub{ [$G,$H] },
+			    isa => 'Any',
+			    is => 'rw',
+			    reader  => 'prod_groups',
+			    lazy => 1,
+		    ));
+
+	    apply_all_roles(
+		    $product_group,
+		    'CM::Group',
+		    { element_type => "CM::Tuple" }
+	    ); # apply CM::Group to the newly created group
+
+	    #confess "cannot find tlabel" unless $product_group->tlabel;
+	    #exit;
+
+
+	    $product_group->meta->add_method(
+		    compute_elements => sub {
+			    my ($self) = @_;
+			    my @elements;
+
+			    my $add_to = $consumer->find_method_by_name('add_to_elements');
+			    #print ref $add_to;
+			    #$add_to->execute('CM::Group','asdasd');
+			    #exit;
+
+			    confess "undefined prod_groups" unless $self->prod_groups;
+
+			    $self->prod_groups->[0]->compute_elements
+			    if(!@{$self->prod_groups->[0]->elements});
+
+			    $self->prod_groups->[1]->compute_elements
+			    if(!@{$self->prod_groups->[1]->elements});
+
+			    for my $g (@{$self->prod_groups->[0]->elements}) {
+				    for my $h (@{$self->prod_groups->[1]->elements}) {
+					    my $to_add = CM::Tuple->new({
+								    first=>$g,
+								    second=>$h
+							    }
+						   	 );
+					    confess 'one was undef' unless defined $to_add;
+					    $add_to->execute(
+						    $to_add
+					    );
+				    };
+			    };
+		    }
+	    );
 
 	    # or use __PACKAGE__->meta->apply instead ?
-	    apply_all_roles(	$product_group,
-		    		__PACKAGE__,
-				{ element_type => $tuple_type }
-			   ); # apply CM::Group to the newly created group
 
 	    return $product_group;
     };
 
-    # #this would be a general method so I could overload the CM::Group role to provide the "*" operator for "multiplying" groups
-    #
-    # so we could have stuff like Z_2 x Z_2 x Z_2  isomorphic to D_2n x Z_2
-    # 
-    # method direct_product => sub {
-    #   my ($self,$othergroup) = @_;
-    #   # not YET implemented
-    #
-    #   #make list of all 2-tuples like (x,y) with x from $self->elements and
-    #   #                                          y from $othergroup->elements
-    #   #need to define another type called CM::Tuple , need to overload in CM::Tuple the "*" operator to do product by components
+   
+    
+    #cartesian product of 2 groups
+
+
     #   #http://en.wikipedia.org/wiki/Direct_product
-    #   #order will have its own order() subroutine
-    #
-    #   #the new group created will be injected with the role CM::Group instantiated with type CM::Tuple
-    #   
-    # }
 }
