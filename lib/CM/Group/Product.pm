@@ -56,6 +56,15 @@ sub compute_elements {
 	};
 };
 
+sub identity {
+	my ($self) = @_;
+
+	return CM::Tuple->new({
+			first => $self->groupG->identity,
+			second=> $self->groupH->identity,
+		});
+};
+
 
 
 1;

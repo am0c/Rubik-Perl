@@ -18,6 +18,7 @@ $r->compute->elements;
 
 
 ok(~~@{$r->elements}== (~~@{$g->elements})*(~~@{$d->elements}),'number of elements checked');
+$r->draw_asciitable("table_product.html");
 
 done_testing();
 
