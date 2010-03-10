@@ -21,5 +21,6 @@ ok(!$model->same_face(@pair2),"now they are no more because we rotated");
 ok($model->same_face(@pair3),"but now these are on the same face");
 
 
+done_testing;
 
 #print $model;

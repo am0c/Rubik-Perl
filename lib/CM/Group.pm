@@ -121,12 +121,12 @@ role {
     method add_to_elements => sub {
         my ($self,$newone) = @_;
 
-	confess "undefined passed" unless $newone;
-	my $tlabel = $consumer->find_method_by_name('tlabel');
+	print (defined($newone)?'1':'0');
+	print "\n";
 
-	my $tlabel_val =  $self->tlabel;
+	###confess "undefined passed" unless $newone->isa("CM::Tuple");
 
-	$newone->label($tlabel_val);
+	$newone->label($self->tlabel);
         unshift @{$self->elements},$newone;
 
         croak "not all elements have labels"
@@ -134,7 +134,6 @@ role {
 
 	$self->tlabel($self->tlabel() + 1);
 
-	#$tlabel->execute( $tlabel->execute() + 1 );
     };
 
     method perm2label => sub {
@@ -354,22 +353,17 @@ role {
 			    lazy => 1,
 		    ));
 
-	    apply_all_roles(
-		    $product_group,
-		    'CM::Group',
-		    { element_type => "CM::Tuple" }
-	    ); # apply CM::Group to the newly created group
-
-	    #confess "cannot find tlabel" unless $product_group->tlabel;
-	    #exit;
-
+	    # ->meta->add_method used   get_method('add_to_elements') which in turn needed to be executed with
+	    # ->body->(args) or ->execute(args) none of which passed the args properly along the way
+	    #
+	    # BUG... add_method doesn't work properly
 
 	    $product_group->meta->add_method(
 		    compute_elements => sub {
 			    my ($self) = @_;
 			    my @elements;
 
-			    my $add_to = $consumer->find_method_by_name('add_to_elements');
+			    my $add_to = $consumer->get_method('add_to_elements');
 			    #print ref $add_to;
 			    #$add_to->execute('CM::Group','asdasd');
 			    #exit;
@@ -385,18 +379,29 @@ role {
 			    for my $g (@{$self->prod_groups->[0]->elements}) {
 				    for my $h (@{$self->prod_groups->[1]->elements}) {
 					    my $to_add = CM::Tuple->new({
-								    first=>$g,
-								    second=>$h
-							    }
-						   	 );
-					    confess 'one was undef' unless defined $to_add;
-					    $add_to->execute(
-						    $to_add
+							    first=>$g,
+							    second=>$h
+						    }
 					    );
+
+					    confess 'parameter to method was undefined' 
+					    unless defined $to_add->isa('CM::Tuple');
+					    $add_to->body->($to_add);
 				    };
 			    };
 		    }
 	    );
+
+	    apply_all_roles(
+		    $product_group,
+		    'CM::Group',
+		    { element_type => "CM::Tuple" }
+	    ); # apply CM::Group to the newly created group
+
+	    #confess "cannot find tlabel" unless $product_group->tlabel;
+	    #exit;
+
+
 
 	    # or use __PACKAGE__->meta->apply instead ?
 

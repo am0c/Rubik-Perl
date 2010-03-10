@@ -11,6 +11,8 @@ my $d = CM::Group::Dihedral->new({n=> 4});
 
 my $r = $g->group_product($d);
 $r->compute_elements;
+
+ok(~~@{$r->elements}== (~~@{$g->elements})*(~~@{$d->elements}),'number of elements checked');
 #print Dumper $r;
 print "Aaaaaaaaaa";
 

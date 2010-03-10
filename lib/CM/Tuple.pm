@@ -14,11 +14,18 @@ use overload
 
 
 
-has $_ => (
+has label => (
 	isa=> 'Int',
 	is => 'rw',
 	default => 1,
-) for qw/label tlabel/;
+);
+
+has tlabel => (
+	isa=> 'Int',
+	is => 'rw',
+	default => 1,
+);
+
 
 
 # maybe these 2 should be ro

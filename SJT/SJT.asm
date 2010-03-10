@@ -124,54 +124,7 @@ next_perm:
 	pusha
 	pushf
 
-; The C code which we'll be porting :
-;int mobile(SV *self,int pos) {
-;	if(p(pos) > getn(self) || p(pos)==0)
-;		return 0;
-;	return df(permut(p(pos))) < df(permut(pos));
-;}
-;
-;
-;
-;// gets the biggest mobile integer if any
-;int emobile(SV *self) {
-;	int maxpos = 0;
-;	int max    = 0;
-;	int n = getn(self);
-;	int i;
-;	for(i=1;i<=n;i++) {
-;		if(!mobile(self,i))
-;			continue;
-;		int perm = df(permut(i));
-;		if(perm > max) {
-;			maxpos = i;
-;			max    = perm;
-;			if(max == n) {
-;				return maxpos;
-;			}
-;		};
-;	}
-;	return maxpos;
-;}
 
-;int nextperm(SV *self) {
-;	int k = emobile(self);
-;	int max_mob = df(permut(k));
-;	int n = getn(self);
-;	int i;
-;
-;	//printf("mobile integer on position: %d with value:%d\n",k,max_mob);
-;
-;	if(k==0)
-;		return 0;
-;
-;	xchg2__(self,k,p(k)); // exchange positions k and p(k)
-;
-;	//invert direction of mobile integers
-;	for(i=1;i<=n;i++)
-;		if(df(permut(i))>max_mob)
-;			invert_direct(self,i);
-;}
 
 	xor eax,eax
 	xor ebx,ebx
