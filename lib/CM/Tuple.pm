@@ -6,6 +6,16 @@ use overload
 "*"  => \&multiply,
 "==" => \&equal;
 
+
+=head1 DESCRIPTION
+
+CM::Tuple is used to describe a tuple of 2 elements.
+The composition operation is on components.
+This is written in order to facilitate the construction of direct products of groups.
+
+=cut
+
+
 #
 # Problem : the operation wrapper from CM::Group should apply to the * of each of the elements when inside the
 # overloaded "*" operator , but it doesn't because CM::Tuple is not dependent on anything from CM::Group.
@@ -14,11 +24,18 @@ use overload
 
 
 
-has $_ => (
+has label => (
 	isa=> 'Int',
 	is => 'rw',
 	default => 1,
-) for qw/label tlabel/;
+);
+
+has tlabel => (
+	isa=> 'Int',
+	is => 'rw',
+	default => 1,
+);
+
 
 
 # maybe these 2 should be ro

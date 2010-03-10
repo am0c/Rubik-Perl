@@ -2,6 +2,12 @@
 
 int PRE_CDECL asm_main( void ) POST_CDECL;
 
+
+void next
+
+
+
+
 int main()
 {
   int ret_status;

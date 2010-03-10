@@ -122,18 +122,13 @@ role {
     method add_to_elements => sub {
         my ($self,$newone) = @_;
 
-	confess "undefined passed" unless $newone;
-	my $tlabel = $consumer->find_method_by_name('tlabel');
-
-	my $tlabel_val =  $self->tlabel;
-
-	$newone->label($tlabel_val);
+	$newone->label($self->tlabel);
         unshift @{$self->elements},$newone;
 
         croak "not all elements have labels"
         unless( all { defined($_->label) }(@{ $self->elements }) );
 
-	$self->tlabel($self->tlabel() + 1);
+	$self->tlabel($self->tlabel + 1);
 
 	#$tlabel->execute( $tlabel->execute() + 1 );
     };
@@ -325,68 +320,10 @@ role {
         return "$table";
     };
     
-    method group_product => sub {
-	    my ($G,$H) = @_;
-
-	    # some nice info on this here as well
-	    # http://stackoverflow.com/questions/1758884/how-can-i-access-the-meta-class-of-the-module-my-moose-role-is-being-applied-to
-
-	    my ($typeG) = ref($G) =~ /::([^:]*)$/;
-	    my ($typeH) = ref($H) =~ /::([^:]*)$/;
-	    my $cardG = $G->n;
-	    my $cardH = $H->n;
-
-	    my $product_group = Moose::Meta::Class->create(
-		    __PACKAGE__,#"CM::Group::Product::$typeG$cardG$typeH$cardH",
-		    #superclasses => ['Moose'], # not sure here yet
-
-	    );
-
-	    my $subref = sub {
-		    my ($self) = @_;
-		    print $G->n;
-		    print ref($self);
-		    my $add = $product_group->get_attribute('elements');
-		    my @elements;
-		    $G->compute_elements unless @{$G->elements};
-		    $H->compute_elements unless @{$H->elements};
-
-		    my $ilabel = 1;
-		    for my $g (@{$G->elements}) {
-			    for my $h (@{$H->elements}) {
-				    my $new_element = CM::Tuple->new({
-						    first =>$g,
-						    second=>$h,
-					    });
-				    $new_element->label($ilabel++);
-				    push @elements,$new_element;
-			    };
-		    };
-		    $add->writer(\@elements);
-	    };
-
-
-	    $product_group->meta->make_mutable;
-	    # store these inside the group so he can access them when he needs to 
-	    # compute the elements. (could have used a closure but prefered not to)
-	    apply_all_roles(
-		    $product_group,
-		    'CM::Group',
-		    { element_type => "CM::Tuple" }
-	    ); # apply CM::Group to the newly created group
-
-	    #confess "cannot find tlabel" unless $product_group->tlabel;
-	    #exit;
-
-
-	    $product_group->meta->add_method(
-		    compute_elements => $subref
-	    );
-
-	    # or use __PACKAGE__->meta->apply instead ?
-
-	    return $product_group;
-    };
+#    method group_product => sub {
+#	    my ($G,$H) = @_;
+#	    return {};
+#    };
 
    
     
