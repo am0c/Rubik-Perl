@@ -10,8 +10,13 @@ my $g = CM::Group::Sym->new({n=> 3});
 my $d = CM::Group::Dihedral->new({n=> 4});
 
 my $r = $g->group_product($d);
+
+
+print "aaaA";
 $r->compute_elements;
 #print Dumper $r;
-print "Aaaaaaaaaa";
+
 
 done_testing();
+
+

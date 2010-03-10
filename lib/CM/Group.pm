@@ -56,7 +56,8 @@ Stefan Petrea, C<< <stefan.petrea at gmail.com> >>
 
 
 
-# parametrized roles are a lot like C++ templates
+# parametrized roles are a lot like C++ templates, 
+# update Wed Mar 10 06:17:44 2010 -> except they're not C++ templates and Perl is not C++
 
 role {
     my $p = shift;
@@ -341,19 +342,33 @@ role {
 
 	    );
 
+	    my $subref = sub {
+		    my ($self) = @_;
+		    print $G->n;
+		    print ref($self);
+		    my $add = $product_group->get_attribute('elements');
+		    my @elements;
+		    $G->compute_elements unless @{$G->elements};
+		    $H->compute_elements unless @{$H->elements};
+
+		    my $ilabel = 1;
+		    for my $g (@{$G->elements}) {
+			    for my $h (@{$H->elements}) {
+				    my $new_element = CM::Tuple->new({
+						    first =>$g,
+						    second=>$h,
+					    });
+				    $new_element->label($ilabel++);
+				    push @elements,$new_element;
+			    };
+		    };
+		    $add->writer(\@elements);
+	    };
+
 
 	    $product_group->meta->make_mutable;
 	    # store these inside the group so he can access them when he needs to 
 	    # compute the elements. (could have used a closure but prefered not to)
-
-	    $product_group->meta->add_attribute("prod_groups"=>(
-			    default => sub{ [$G,$H] },
-			    isa => 'Any',
-			    is => 'rw',
-			    reader  => 'prod_groups',
-			    lazy => 1,
-		    ));
-
 	    apply_all_roles(
 		    $product_group,
 		    'CM::Group',
@@ -365,37 +380,7 @@ role {
 
 
 	    $product_group->meta->add_method(
-		    compute_elements => sub {
-			    my ($self) = @_;
-			    my @elements;
-
-			    my $add_to = $consumer->find_method_by_name('add_to_elements');
-			    #print ref $add_to;
-			    #$add_to->execute('CM::Group','asdasd');
-			    #exit;
-
-			    confess "undefined prod_groups" unless $self->prod_groups;
-
-			    $self->prod_groups->[0]->compute_elements
-			    if(!@{$self->prod_groups->[0]->elements});
-
-			    $self->prod_groups->[1]->compute_elements
-			    if(!@{$self->prod_groups->[1]->elements});
-
-			    for my $g (@{$self->prod_groups->[0]->elements}) {
-				    for my $h (@{$self->prod_groups->[1]->elements}) {
-					    my $to_add = CM::Tuple->new({
-								    first=>$g,
-								    second=>$h
-							    }
-						   	 );
-					    confess 'one was undef' unless defined $to_add;
-					    $add_to->execute(
-						    $to_add
-					    );
-				    };
-			    };
-		    }
+		    compute_elements => $subref
 	    );
 
 	    # or use __PACKAGE__->meta->apply instead ?
