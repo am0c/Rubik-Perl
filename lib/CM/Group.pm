@@ -122,6 +122,7 @@ role {
     method add_to_elements => sub {
         my ($self,$newone) = @_;
 
+
 	$newone->label($self->tlabel);
         unshift @{$self->elements},$newone;
 
@@ -130,7 +131,6 @@ role {
 
 	$self->tlabel($self->tlabel + 1);
 
-	#$tlabel->execute( $tlabel->execute() + 1 );
     };
 
     method perm2label => sub {
@@ -325,10 +325,8 @@ role {
 #	    return {};
 #    };
 
-   
-    
     #cartesian product of 2 groups
-
-
     #   #http://en.wikipedia.org/wiki/Direct_product
-}
+};
+
+1;

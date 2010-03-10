@@ -37,7 +37,6 @@ has tlabel => (
 );
 
 
-
 # maybe these 2 should be ro
 has first => (
 	isa	=> 'Any',
