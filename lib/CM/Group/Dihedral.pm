@@ -85,6 +85,18 @@ You can also see a coloured Cayley table(the labels of the permutations are asso
 =begin html
 
 <p><center><img src="http://perlhobby.googlecode.com/svn/trunk/scripturi_perl_teste/cm-permutation/cpan/CM-Permutation/Dihedral_colour.PNG" /></center></p>
+
+=end html
+
+=cut
+
+
+=begin
+
+This is the Cayley graph of D_5:
+
+=begin html
+
 <p><center><img src="http://perlhobby.googlecode.com/svn/trunk/scripturi_perl_teste/cm-permutation/cpan/CM-Permutation/dihedral.gif" /></center></p>
 
 =end html

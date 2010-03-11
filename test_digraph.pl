@@ -14,18 +14,18 @@ $g->compute;
 
 
 
-$g->cayley_digraph('bla.gif',
-    [p(2,1,3,4),p(1,3,2,4),p(1,2,4,3)]);
+#$g->cayley_digraph('bla.gif',
+    #[p(2,1,3,4),p(1,3,2,4),p(1,2,4,3)]);
 
 
-my $d = CM::Group::Dihedral->new({n=>5});
+my $d = CM::Group::Dihedral->new({n=>10});
 $d->compute;
 
 $d->cayley_digraph('bla2.gif',
     [$d->Rgen,$d->Sgen]);
 
 
-my $g = CM::Group::Sym->new({n=>5});
-$g->compute;
-$g->cayley_digraph('/tmp/bla2.gif',
-    [p(2,1,5,3,4),p(1,3,2,4,5),p(1,2,4,3,5)]);
+#my $g = CM::Group::Sym->new({n=>5});
+#$g->compute;
+#$g->cayley_digraph('/tmp/bla2.gif',
+    #[p(2,1,5,3,4),p(1,3,2,4,5),p(1,2,4,3,5)]);

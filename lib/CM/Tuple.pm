@@ -15,7 +15,7 @@ use overload
 
 CM::Tuple is used to describe a tuple of 2 elements.
 The composition operation is on components.
-This is written in order to facilitate the construction of direct products of groups.
+This is written in order to facilitate the construction of direct products of groups whose elements are these tuples.
 
 =cut
 
@@ -81,7 +81,7 @@ sub equal {
 
 sub stringify {
 	my ($self) = @_;
-	return sprintf("[%s,%s]",$self->first,$self->second);
+	return sprintf("[%s|%s]",$self->first,$self->second);
 }
 
 sub order {
