@@ -9,13 +9,12 @@ use CM::Permutation;
 use Data::Dumper;
 use Math::BigInt qw/blcm/;
 
-my $g = CM::Group::Sym->new({n=> 3});
-my $d = CM::Group::Dihedral->new({n=> 4});
+my $g = CM::Group::Sym->new({n=> 3}); # S_3
+my $d = CM::Group::Dihedral->new({n=> 4});# D_4
 
-
-
-my $p = CM::Group::Product->new({n=>1,groupG=>$g,groupH=>$d}); # the n here doesn't matter since it won't be used as the order
-							       # will depend solely on groupG and groupH
+# the n here doesn't matter since it won't be used as the order
+# will depend solely on groupG and groupH
+my $p = CM::Group::Product->new({n=>1,groupG=>$g,groupH=>$d});  # S_3 x D_4
 
 
 $p->compute_elements;
@@ -23,17 +22,17 @@ $p->compute_elements;
 
 ok($d->identity == CM::Permutation->new(1,2,3,4) , 'identity verified for dihedral group');
 
-ok(~~@{$p->elements}== (~~@{$g->elements})*(~~@{$d->elements}),'number of elements checked');
+ok(~~@{$p->elements}== (~~@{$g->elements})*(~~@{$d->elements}),'number of elements checked'); 
 
 #print $r->stringify;
 
-my $p1 =CM::Group::Product->new({n=>1,groupG=>$p,groupH=>$d});
+my $p1 =CM::Group::Product->new({n=>1,groupG=>$p,groupH=>$d});# S_3 x D_4 x D_4
 
 $p1->compute_elements;
 
 
-ok(~~@{$p1->elements}== (~~@{$p->elements})*(~~@{$d->elements}),'number of elements checked 2');
-ok(~~@{$p1->elements}== (~~@{$g->elements})*(~~@{$d->elements})*(~~@{$d->elements}),'number of elements checked 3');
+ok(~~@{$p1->elements}== (~~@{$p->elements})*(~~@{$d->elements}),'number of elements checked 2'); # |S_3 x D_4 x D_4|=|S_3|*|D_4|^2= 384
+ok(~~@{$p1->elements}== (~~@{$g->elements})*(~~@{$d->elements})*(~~@{$d->elements}),'number of elements checked 3');#same
 
 
 
@@ -44,7 +43,7 @@ for my $pelem (@{$p->elements}) {
 	$check++;
 }
 
-
-
-
 done_testing();
+
+
+
