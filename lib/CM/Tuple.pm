@@ -4,7 +4,8 @@ use strict;
 use warnings;
 use overload
 "*"  => \&multiply,
-"==" => \&equal;
+"==" => \&equal,
+'""' => 'stringify'; 
 
 
 =head1 DESCRIPTION
@@ -69,6 +70,11 @@ sub equal {
 	$op1->first  == $op2->first &&
 	$op2->second == $op2->second;
 };
+
+sub stringify {
+	my ($self) = @_;
+	return sprintf("[%s,%s]",$self->first,$self->second);
+}
 
 
 1;

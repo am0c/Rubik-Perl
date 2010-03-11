@@ -1,7 +1,9 @@
 #!/usr/local/bin/perl
 
 # Thu 18 Feb 2010 06:14:49 PM EST
-
+# Stefan Petrea 
+#
+# simulation of Rubik's cube using OpenGL
 
 package main;
 use OpenGL;

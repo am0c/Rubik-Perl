@@ -20,11 +20,13 @@ my $p2 = TestType->new({
 		second=> 9,
 	});
 
+
 isa_ok($p1,'TestType');
 isa_ok($p2,'TestType');
 my $r = $p1 * $p2;
 isa_ok($r,'TestType');
 is($r->first,24,'first arged multipied ok');
 is($r->second,72,'second arged multipied ok');
+is("$p1","[12,8]","stringify tested");
 
 done_testing();

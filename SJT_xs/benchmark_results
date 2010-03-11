@@ -1,8 +1,0 @@
-            (warning: too few iterations for a reliable count)
-          s/iter  SJT_XS     tye   dchld    A::P SJT_asm C++_STL
-SJT_XS      24.1      --    -35%    -41%    -96%    -97%   -100%
-tye         15.6     54%      --     -9%    -94%    -96%   -100%
-dchld       14.1     70%     10%      --    -93%    -96%   -100%
-A::P       0.924   2506%   1589%   1429%      --    -34%    -94%
-SJT_asm    0.606   3874%   2475%   2231%     52%      --    -91%
-C++_STL 5.40e-02  44493%  28796%  26056%   1611%   1022%      --
