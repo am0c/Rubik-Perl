@@ -155,7 +155,7 @@ sub identity {
     my $e = CM::Permutation->new(1..$self->n);
     first {
         $_ == $e;
-    } @{ $self->operation_table->[0] };
+    } @{ $self->elements };
 }
 
 # TODO: use http://search.cpan.org/~bobtfish/MooseX-Role-WithOverloading-0.05/lib/MooseX/Role/WithOverloading.pm

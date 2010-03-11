@@ -2,9 +2,12 @@ package CM::Tuple;
 use Moose;
 use strict;
 use warnings;
+use Math::BigInt qw/blcm/;
+use List::AllUtils qw/reduce/;
 use overload
-"*"  => \&multiply,
-"==" => \&equal,
+"*"  => 'multiply',
+'==' => 'equal',
+'**' => 'power',
 '""' => 'stringify'; 
 
 
@@ -64,6 +67,11 @@ sub multiply {
 	);
 };
 
+sub power {
+	my ($self,$n) = @_;
+	reduce { $a * $b }  ( ($self) x ($n) );
+}
+
 sub equal {
 	my ($op1,$op2) = @_;
 	return
@@ -74,6 +82,11 @@ sub equal {
 sub stringify {
 	my ($self) = @_;
 	return sprintf("[%s,%s]",$self->first,$self->second);
+}
+
+sub order {
+	my ($self) = @_;
+	return blcm($self->first->order,$self->second->order);
 }
 
 

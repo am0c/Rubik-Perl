@@ -434,7 +434,7 @@ sub identity {
     my $e = CM::Permutation->new(1..$self->n);
     first {
         $_ == $e;
-    } @{ $self->operation_table->[0] };
+    } @{ $self->elements };
 }
 
 
