@@ -88,12 +88,11 @@ You can also see a coloured Cayley table(the labels of the permutations are asso
 
 =end html
 
-=cut
 
 
-=begin
 
 This is the Cayley graph of D_5:
+
 
 =begin html
 
@@ -101,7 +100,9 @@ This is the Cayley graph of D_5:
 
 =end html
 
+
 =cut
+
 
 
 # Rgen and Sgen are the canonical generators of this group
