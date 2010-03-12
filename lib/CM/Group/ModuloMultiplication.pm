@@ -76,14 +76,16 @@ sub operation {
     return $element;
 }
 
-sub compute_elements {
+sub _compute_elements {
     my ($self) = @_;
-    $self->tlabel(0); # start labels from 0
-    
-    for (0..-1+$self->n) {
-        print "adding element $_\n";
-        $self->add_to_elements(CM::ModuleInt->new($_));
-    };
+	sub {
+		$self->tlabel(0); # start labels from 0
+
+		for (0..-1+$self->n) {
+			print "adding element $_\n";
+			$self->add_to_elements(CM::ModuleInt->new($_));
+		};
+	}
 }
 
 sub _builder_order {

@@ -3,7 +3,7 @@ use CM::Group::Dihedral;
 
 my $g = CM::Group::Dihedral->new({n=>5});
 
-$g->compute_elements();
+$g->compute_elements()->();
 
 $g->compute;
 

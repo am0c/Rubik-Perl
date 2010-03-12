@@ -55,16 +55,18 @@ sub _builder_order {
 
 
 # TODO: must fix this with method modifiers - overrides method from Sym.pm
-sub compute_elements {
+sub _compute_elements {
     my ($self) = @_;
-    my $label = 0;
-    my @permutations;
-    my $p = new Algorithm::Permute([1..$self->n]);
-    while (my @new_perm = $p->next) {
-        my $new_one = CM::Permutation->new(@new_perm);
-        next unless $new_one->even_odd == 0; # only even permutations
-        $self->add_to_elements($new_one);
-    };
+	sub {
+		my $label = 0;
+		my @permutations;
+		my $p = new Algorithm::Permute([1..$self->n]);
+		while (my @new_perm = $p->next) {
+			my $new_one = CM::Permutation->new(@new_perm);
+			next unless $new_one->even_odd == 0; # only even permutations
+			$self->add_to_elements($new_one);
+		};
+	}
 }
 
 

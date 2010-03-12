@@ -3,7 +3,7 @@ use Moose::Util q/apply_all_roles/;
 use MooseX::Role::Parameterized;
 use Acme::AsciiArt2HtmlTable;
 use Math::Polynomial;
-use List::AllUtils qw/all first zip/;
+use List::AllUtils qw/all first zip uniq/;
 use Carp;
 use GraphViz;
 use Text::Table;
@@ -11,10 +11,11 @@ use CM::Tuple;
 use strict;
 use warnings;
 requires '_builder_order';
-requires 'compute_elements';
+requires '_compute_elements';
 requires 'operation'; # wrapper function over operation of elements , REM : whenever I do  * in a group method
                       # I should replace that with  $self->operation($arg1,$arg2)
 parameter 'element_type' => ( isa   => 'Str' );
+
 
 
 =head1 NAME
@@ -64,6 +65,12 @@ role {
 
     my %args = @_;
     my $consumer = $args{consumer};
+
+	has compute_elements => (
+		isa	=> 'CodeRef',
+		is	=> 'rw',
+        builder => '_compute_elements',
+	);
 
     my $T = $p->element_type;
 
@@ -273,7 +280,7 @@ role {
 
         return $self if $self->computed;
 
-        $self->compute_elements();
+        $self->compute_elements()->();
 
         print "number of elements".scalar(@{$self->elements})."\n";
 
@@ -305,6 +312,36 @@ role {
         $self->computed(1);
 
         return $self; # to be able to chain
+    };
+
+
+    # this will return a commutator group
+	# (create a new group with the same type of elements as $self and just compute all the commutators
+	# put them in the group, mock up the compute_elements code ref and that's about it)
+    method commutator => sub {
+	    my ($self) = @_;
+		my $com_group = $self->meta->name->new({n=>$self->n});
+
+		my @elements=
+	    uniq
+	    map {
+		    my $p = $_;
+		    map {
+				$p->com($_); #com does not always exist as a method for the object
+		    } @{$self->elements};
+	    } @{$self->elements};
+
+		my $i=0;
+		map { $_->label(++$i); } @elements;
+
+		print scalar(@elements);
+
+		$com_group->elements(\@elements);
+		$com_group->compute_elements(sub{
+		print "aaaaa";	
+		});
+
+		return $com_group;
     };
 
     method stringify => sub {

@@ -17,7 +17,7 @@ my $d = CM::Group::Dihedral->new({n=> 4});# D_4
 my $p = CM::Group::Product->new({n=>1,groupG=>$g,groupH=>$d});  # S_3 x D_4
 
 
-$p->compute_elements;
+$p->compute_elements->();
 
 
 ok($d->identity == CM::Permutation->new(1,2,3,4) , 'identity verified for dihedral group');
@@ -28,7 +28,7 @@ ok(~~@{$p->elements}== (~~@{$g->elements})*(~~@{$d->elements}),'number of elemen
 
 my $p1 =CM::Group::Product->new({n=>1,groupG=>$p,groupH=>$d});# S_3 x D_4 x D_4
 
-$p1->compute_elements;
+$p1->compute_elements->();
 
 
 ok(~~@{$p1->elements}== (~~@{$p->elements})*(~~@{$d->elements}),'number of elements checked 2'); # |S_3 x D_4 x D_4|=|S_3|*|D_4|^2= 384

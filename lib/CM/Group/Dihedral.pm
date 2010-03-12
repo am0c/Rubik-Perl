@@ -120,27 +120,29 @@ sub Sgen {
     # through the first point of the polygon
 }
 
-sub compute_elements {
+sub _compute_elements {
     my ($self) = @_;
-    my $n    = $self->n;
-    my $half = $n / 2;
-    $self->tlabel(1);# reset initial label for elements
+	sub {
+		my $n    = $self->n;
+		my $half = $n / 2;
+		$self->tlabel(1);# reset initial label for elements
 
-    my @rotated;
+		my @rotated;
 
-    my $I = CM::Permutation->new(1..$n);
+		my $I = CM::Permutation->new(1..$n);
 
-    my ($R,$S) = ($self->Rgen,$self->Sgen);
-    
-    
-    for(1..$n) {
-        $self->add_to_elements($I);
-        push @rotated,$I;
-        $I = $I * $R;
-    };
+		my ($R,$S) = ($self->Rgen,$self->Sgen);
 
-    my @reflected = 
-        map { $self->add_to_elements($S * $_) } @rotated;
+
+		for(1..$n) {
+			$self->add_to_elements($I);
+			push @rotated,$I;
+			$I = $I * $R;
+		};
+
+		my @reflected = 
+		map { $self->add_to_elements($S * $_) } @rotated;
+	}
 }
 
 

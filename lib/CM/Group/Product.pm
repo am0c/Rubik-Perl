@@ -37,23 +37,25 @@ sub _builder_order {
 }
 
 
-sub compute_elements {
+sub _compute_elements {
 	my ($self) = @_;
-	my @elements;
+	sub {
+		my @elements;
 
-	$self->groupG->compute_elements unless @{$self->groupG->elements};
-	$self->groupH->compute_elements unless @{$self->groupH->elements};
+		$self->groupG->compute_elements->() unless @{$self->groupG->elements};
+		$self->groupH->compute_elements->() unless @{$self->groupH->elements};
 
-	for my $g (@{$self->groupG->elements}) {
-		for my $h (@{$self->groupH->elements}) {
-			$self->add_to_elements(
-				CM::Tuple->new({
-						first =>$g,
-						second=>$h,
-				})
-			);
+		for my $g (@{$self->groupG->elements}) {
+			for my $h (@{$self->groupH->elements}) {
+				$self->add_to_elements(
+					CM::Tuple->new({
+							first =>$g,
+							second=>$h,
+						})
+				);
+			};
 		};
-	};
+	}
 };
 
 sub identity {

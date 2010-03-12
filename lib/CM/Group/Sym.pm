@@ -234,15 +234,17 @@ sub BUILD {
 
 
 # generate all permutations of the set {1..n}
-sub compute_elements {# should be a standard method name for all groups
-    my ($self) = @_;
-    my $label = 0;
-    my @permutations;
-    my $p = new Algorithm::Permute([1..$self->n]);
-    while (my @new_perm = $p->next) {
-        my $new_one = CM::Permutation->new(@new_perm);
-        $self->add_to_elements($new_one);
-    };
+sub _compute_elements {# should be a standard method name for all groups
+	my ($self) = @_;
+	sub {
+		my $label = 0;
+		my @permutations;
+		my $p = new Algorithm::Permute([1..$self->n]);
+		while (my @new_perm = $p->next) {
+			my $new_one = CM::Permutation->new(@new_perm);
+			$self->add_to_elements($new_one);
+		};
+	}
 }
 
 

@@ -66,7 +66,7 @@ ok( CM::Group::Sym->new({n=>7})->order() % p(1,5,4,3,6,2,7)->order == 0 , 'apply
 
 # reduce used to make a repeated conjunction
 my $g5 = CM::Group::Sym->new({n=>5});
-$g5->compute_elements();
+$g5->compute_elements()->();
 ok( (
         reduce {
             $a && $b;
