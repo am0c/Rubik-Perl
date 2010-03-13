@@ -1,33 +1,36 @@
 package CM::Morphism;
+use strict;
+use warnings;
 use Moose;
 
 
 # this will be a group homomorphism which we'll prove 
 # step by step to be an epimorphism or a monomorphism
-has f => {
+has f => (
 	isa      => 'CodeRef',
 	is       => 'rw',
 	required => 1,
-};
+);
 
 
-has domain => {
-	isa	=> 'CM::Group',
-	is	=> 'rw',
+# can I write regexes instead of isas ? 
+
+has domain => (
+	isa      => 'CM::Group',
+	is       => 'rw',
 	required => 1,
-};
+);
 
 
 
-has codomain => {
-	isa	=> 'CM::Group',
-	is	=> 'rw',
+has codomain => (
+	isa      => 'CM::Group',
+	is       => 'rw',
 	required => 1,
-};
+);
 
 
 # prove that this is indeed a morphism
-
 sub prove {
 	my ($self) = @_;
 	my $f = $self->f;
@@ -36,7 +39,9 @@ sub prove {
 		all {
 			my $y = $_;
 
-			$f->($x,$y) == $f->($x) * $f->($y);
+			# * means the group operations here not multiplication..
+			$f->( $x   *       $y ) ==
+			$f->( $x ) * $f->( $y );
 
 		} @{$self->codomain->elements}
 	} @{$self->domain->elements};
@@ -49,7 +54,8 @@ sub prove {
 sub kernel {
 	my ($self) = @_;
 	grep {
-		$self->f->($_) == $self->codomain->identity;
+		$self->f->($_) == 
+		$self->codomain->identity;
 	} @{$self->domain->elements};
 }
 
@@ -60,10 +66,4 @@ sub image {
 	} @{$self->domain->elements};
 }
 
-
-
-
-
-
-
-
+1;

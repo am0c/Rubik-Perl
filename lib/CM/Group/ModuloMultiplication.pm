@@ -8,6 +8,9 @@ use overload    "*" => \&multiply,
                 '""'=> \&stringify,
                 '=='=> \&equal;
 
+
+# TODO: add ModuloAddition.pm
+
 =head1 NAME
 
 CM::Group::ModuloMultiplicationGroup
