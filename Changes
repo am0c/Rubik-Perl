@@ -5,6 +5,8 @@ Revision history for Perl extension CM::Permutation.
 	- Added tuple elements
 	- Added tests for tuple and product group
 	- Added some nice POD
+	- Added factor group and commutator group
+	- Added morphism class
 0.4   Wed Feb 24 13:37:00 2010
         - Added Dihedral group
         - Added ModuleMultiplicativeGroup
