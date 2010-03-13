@@ -304,8 +304,7 @@ role {
                 ${*ij} = $self->operation(${*i},${*j});
 
                 croak "result is undefined"
-                unless defined(${*ij});
-
+                unless defined(${*ij}); 
                 ${*ij}->label($self->perm2label(${*ij}));
             }
         };
@@ -395,6 +394,43 @@ role {
         $table->load( @for_table );
         return "$table";
     };
+
+
+	# implemented the factor group, computed elements
+	# should choose appropriate representants
+	method factor => sub { # G/N
+		# the problem is choosing the right representatives for the equivalence classes
+		my ($G,$N) = @_;
+		my @all	= @{$G->elements};
+		my @classes;
+
+		while(@all) {
+			# take first element, build a coset, take that coset out , repeat..
+			my @new = map { $all[0] * $_  } @{$N->elements};# a new class
+
+			push @classes,\@new;
+			
+			
+			my @alln; # alln = all - new
+			
+			for my $a (@all) {
+				my $found;
+				for my $n (@new) {
+					if($a == $n) {
+						$found=1;
+						last;
+					};
+				};
+				push @alln,$a if !$found;
+			};
+			
+			@all = @alln;
+		};
+		# here we should have all classes of equivalence we need
+		# which are the actual elements of the factor group
+
+		return \@classes;
+	};
     
 #    method group_product => sub {
 #	    my ($G,$H) = @_;
@@ -402,7 +438,6 @@ role {
 #    };
 
     #cartesian product of 2 groups
-    #   #http://en.wikipedia.org/wiki/Direct_product
 };
 
 1;

@@ -343,14 +343,12 @@ sub apply {
     shift @p;# the front 0
 
 
-    @ret = map { $set[$_-1] }  @p; # -1 to be in @set indexes
+    @ret = map { $set[$_-1] }  @p; # -1 to get index like @set indexes
 
     @ret = (@ret , @set[max(@p)..-1+@set]);
 
 
-    # put the non-permuted part back in the result, we don't want to upset noone
-
-
+    # put the non-permuted part back in the result
     return @ret;
 }
 

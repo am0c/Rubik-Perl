@@ -6,6 +6,7 @@ use warnings;
 with 'CM::Group' => { element_type => 'CM::Tuple'  };
 
 
+#   #http://en.wikipedia.org/wiki/Direct_product
 has groupG => (
 	isa => 'CM::Group',
 	is => 'rw',
