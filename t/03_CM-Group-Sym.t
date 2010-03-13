@@ -230,7 +230,7 @@ qq{6 -> 1 2 3
             ok(~~@$class == $expected, "conjugacy class @type has $expected number of elements");
 
         };
-        my @normal_subgroups = $g->normal_subgroups; # to uncomment this when tests for normal subgroups will be written)
+        my @normal_subgroups = $g->normal_subgroups;
 
         for my $H ( @normal_subgroups ) {
             my $res = 1;
@@ -244,6 +244,7 @@ qq{6 -> 1 2 3
                 $res &= $H->{"$_"} 
                     for @right_coset;
                 $label  = join ';',@left_coset;
+				# have checked if left_coset and right_coset basically contain the same elements
             };
             ok($res,"normal subgroup [[$label]]");
         };

@@ -309,10 +309,47 @@ role {
                 ${*ij}->label($self->perm2label(${*ij}));
             }
         };
-        $self->computed(1);
+        $self->computed(1); # mark it as being computed
 
         return $self; # to be able to chain
     };
+
+	# checks to see if a group is abelian or not
+	method abelian => sub {
+		my ($self) = @_;
+		# double not because we're not interested in the actual element, instead
+		# we just want to know if there is at least one breaking commutativity
+
+		my ($a,$b);
+
+		for my $a (@{$self->elements}) {
+			for my $b (@{$self->elements}) {
+				if($a*$b!=$b*$a) {
+					print "$a\n$b\n";
+					exit;
+				};
+			}
+		};
+		1;
+	};
+
+	method normal => sub {
+		my ($self) = @_;
+		# basically just checks if each right coset is equal to the right coset
+		my $H;
+		my $res = 1;
+		for my $x ( @{ $self->elements } ) {
+			my @left_coset  = map { $x * $_ } @{$self->elements};
+			my @right_coset = map { $_ * $x } @{$self->elements};
+			my $H;
+			$H->{"$_"} = 1
+			for @left_coset;
+			$res &= $H->{"$_"} 
+			for @right_coset;
+			# have checked if left_coset and right_coset basically contain the same elements
+		};
+		return $res;
+	};
 
 
     # this will return a commutator group
@@ -323,23 +360,25 @@ role {
 		my $com_group = $self->meta->name->new({n=>$self->n});
 
 		my @elements=
-	    uniq
+		uniq
 	    map {
 		    my $p = $_;
 		    map {
-				$p->com($_); #com does not always exist as a method for the object
+				$p->com($_); 
+				#com does not always exist(as per implementation) as a method for the object(need to check if it has it defined)
+				#maybe the role CM::Group can check if there's a ->com for elements before composing
 		    } @{$self->elements};
 	    } @{$self->elements};
 
-		my $i=0;
-		map { $_->label(++$i); } @elements;
 
-		print scalar(@elements);
+		$com_group->add_to_elements($_)
+		for @elements;
 
-		$com_group->elements(\@elements);
-		$com_group->compute_elements(sub{
-		print "aaaaa";	
-		});
+		$com_group->order(~~@elements); # another ideea would've been to make _build_order like _compute_elements
+										# and replace that here
+
+		#$com_group->elements(\@elements);
+		$com_group->compute_elements(sub{});
 
 		return $com_group;
     };
