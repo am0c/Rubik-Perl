@@ -2,6 +2,17 @@ package CM::Morphism;
 use strict;
 use warnings;
 use Moose;
+use Moose::Util::TypeConstraints;
+
+
+type 'Group'
+	=> where {
+		#print "$_\n" for @{$_::ISA};
+		$_->does('CM::Group'); # $_ does the role CM::Group
+		#$_->isa('CM::Group::Sym');
+		#/^CM::Group/ && print "YAYYYY";
+	};
+
 
 
 # this will be a group homomorphism which we'll prove 
@@ -16,7 +27,7 @@ has f => (
 # can I write regexes instead of isas ? 
 
 has domain => (
-	isa      => 'CM::Group',
+	isa      => 'Group',
 	is       => 'rw',
 	required => 1,
 );
@@ -24,7 +35,7 @@ has domain => (
 
 
 has codomain => (
-	isa      => 'CM::Group',
+	isa      => 'Group',
 	is       => 'rw',
 	required => 1,
 );
@@ -53,17 +64,37 @@ sub prove {
 
 sub kernel {
 	my ($self) = @_;
+	
+	my $group = $self->domain->meta->name->new({n=>1});
+	$group->compute_elements(sub{});
+
+	my @elements = 
 	grep {
 		$self->f->($_) == 
 		$self->codomain->identity;
 	} @{$self->domain->elements};
+
+	$group->elements(\@elements);
+
+
+	return $group;
 }
 
 sub image {
 	my ($self) = @_;
+
+	my $group = $self->codomain->meta->name->new({n=>1});
+	$group->compute_elements(sub{});
+
+	my @elements = 
 	map {
 		$self->f->($_);
 	} @{$self->domain->elements};
+
+
+	$group->elements(\@elements);
+
+	return $group;
 }
 
 1;

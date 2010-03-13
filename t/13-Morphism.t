@@ -7,24 +7,20 @@ use warnings;
 my $G = CM::Group::Sym->new({n=>4});
 $G->compute_elements()->();
 
-my $H = CM::Group::Sym->new({n=>2});
-$H->elements([
-	CM::Permutation->new(1,2,3,4),
-	CM::Permutation->new(2,3,1,4),
-	CM::Permutation->new(3,1,2,4)
-]);
-
-
-
-
-
 my $f = CM::Morphism->new({
 		f        => sub {
 			my ($x) = @_;
+			return $x;
 		},
 		domain   => $G,
-		codomain => $H,
+		codomain => $G,
 });
 
+my $kerf = $f->kernel;
+my $Gdiv_kerf = $G->factor($kerf);
+
+printf "%s\n",@{$kerf->elements};
+
+# goal is to say    $G->factor($f->kernel) =~  $f->image
 
 done_testing;
