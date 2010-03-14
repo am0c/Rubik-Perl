@@ -17,11 +17,13 @@ my $f = CM::Morphism->new({
 });
 
 my $kerf = $f->kernel;
+my $imf  = $f->image;
 
 my $Gdiv_kerf = $G->factor($kerf);
 
-printf "%s\n",@{$kerf->elements};
+ok( ~~@{$Gdiv_kerf} == ~~@{$imf->elements} , 
+	"first isomorphism theorem respected in cardinality");
 
-# goal is to say    $G->factor($f->kernel) =~  $f->image
+
 
 done_testing;

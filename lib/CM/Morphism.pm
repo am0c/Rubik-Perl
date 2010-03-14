@@ -3,14 +3,12 @@ use strict;
 use warnings;
 use Moose;
 use Moose::Util::TypeConstraints;
+use List::AllUtils qw/uniq/;
 
 
 type 'Group'
 	=> where {
-		#print "$_\n" for @{$_::ISA};
 		$_->does('CM::Group'); # $_ does the role CM::Group
-		#$_->isa('CM::Group::Sym');
-		#/^CM::Group/ && print "YAYYYY";
 	};
 
 
@@ -67,6 +65,7 @@ sub kernel {
 	$group->compute_elements(sub{});
 
 	my @elements = 
+	uniq
 	grep {
 		$self->f->($_) == 
 		$self->codomain->identity;
@@ -85,6 +84,7 @@ sub image {
 	$group->compute_elements(sub{});
 
 	my @elements = 
+	uniq
 	map {
 		$self->f->($_);
 	} @{$self->domain->elements};
