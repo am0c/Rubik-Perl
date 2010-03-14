@@ -401,6 +401,10 @@ role {
 	method factor => sub { # G/N
 		# the problem is choosing the right representatives for the equivalence classes
 		my ($G,$N) = @_;
+
+		#confess 'can only factor with group that\'s normal' unless $N->normal;
+		my $group = $self->meta->name->new({n=>$self->n});
+
 		my @all	= @{$G->elements};
 		my @classes;
 
@@ -426,6 +430,9 @@ role {
 			
 			@all = @alln;
 		};
+
+
+
 		# here we should have all classes of equivalence we need
 		# which are the actual elements of the factor group
 

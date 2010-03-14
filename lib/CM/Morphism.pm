@@ -59,9 +59,7 @@ sub prove {
 }
 
 
-# however , the kernel and the image are groups themselves so we should create a subgroup of domain
-# and one of codomain and equip them with the elements and return them
-
+# the kernel and the image are groups themselves so we should create a subgroup of domain and codomain
 sub kernel {
 	my ($self) = @_;
 	

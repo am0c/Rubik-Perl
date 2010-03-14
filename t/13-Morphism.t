@@ -17,6 +17,7 @@ my $f = CM::Morphism->new({
 });
 
 my $kerf = $f->kernel;
+
 my $Gdiv_kerf = $G->factor($kerf);
 
 printf "%s\n",@{$kerf->elements};
