@@ -600,6 +600,14 @@ sub dimino {
 }
 
 
+# elements that fix $x
+sub stabilizer {
+	my ($self,$x) = @_;
+
+	grep 
+	{ $_->perm->[$x] == $x  } 
+	@{$self->elements};
+}
 
 
 =head1 cayley_digraph($path,$generators_arrayref)

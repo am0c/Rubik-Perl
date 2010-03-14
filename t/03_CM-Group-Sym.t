@@ -193,8 +193,11 @@ qq{6 -> 1 2 3
 
 
 
+
     my @center = $g->center;
     if($n==4) {
+		
+		ok( $g->stabilizer(3) == 6 , "there are 6 elements in Stab(3)");
 
 #        say "Center of S_4 is -> ".join(")(",@center);
         my $y = p(1,2,3,4);
