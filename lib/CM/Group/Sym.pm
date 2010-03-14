@@ -602,10 +602,17 @@ sub dimino {
 
 # elements that fix $x
 sub stabilizer {
-	my ($self,$x) = @_;
+	my ($self,@fixed) = @_;
 
 	grep 
-	{ $_->perm->[$x] == $x  } 
+	{ 
+		my $elem = $_;
+		reduce { $a & $b }
+		(1,
+			map { $elem->perm->[$_] == $_}
+			(@fixed)
+		);
+	} 
 	@{$self->elements};
 }
 

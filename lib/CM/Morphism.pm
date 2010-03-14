@@ -5,6 +5,7 @@ use Moose;
 use Moose::Util::TypeConstraints;
 use List::AllUtils qw/all uniq/;
 
+use overload '*' => 'composition';
 
 type 'Group'
 	=> where {
@@ -96,6 +97,39 @@ sub image {
 	$group->elements(\@elements);
 
 	return $group;
+}
+
+
+# compose f o g = h <=> f(g(x)) = h(x)
+#
+#           f
+#      G  -----   H
+#        \        |
+#         \       |  
+#          \      |
+#           \     |
+#      f o g \    |  g
+#             \   |
+#              \  |
+#               \ |
+#                 N
+
+sub composition {
+	my ($f,$g) = @_;
+
+	return CM::Morphism->new({
+			f        =>
+			sub { 
+				my ($x) = @_;
+				return $f->f->( 
+					$g->f->( 
+						$x
+					)
+				);
+			},
+			domain   => $g->domain,
+			codomain => $f->codomain,
+	});
 }
 
 1;
