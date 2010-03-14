@@ -25,5 +25,7 @@ ok( ~~@{$Gdiv_kerf} == ~~@{$imf->elements} ,
 	"first isomorphism theorem respected in cardinality");
 
 
+ok($f->prove,"proved morphism f");
+
 
 done_testing;

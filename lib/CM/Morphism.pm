@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Moose;
 use Moose::Util::TypeConstraints;
-use List::AllUtils qw/uniq/;
+use List::AllUtils qw/all uniq/;
 
 
 type 'Group'
@@ -43,6 +43,9 @@ has codomain => (
 sub prove {
 	my ($self) = @_;
 	my $f = $self->f;
+
+	confess "undefined" if @{$self->domain->elements}==0;
+
 	all {
 		my $x = $_;
 		all {
