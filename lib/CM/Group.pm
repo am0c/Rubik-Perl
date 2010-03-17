@@ -333,13 +333,13 @@ role {
 	};
 
 	method normal => sub {
-		my ($self) = @_;
+		my ($G,$N) = @_;
 		# basically just checks if each right coset is equal to the right coset
 		my $H;
 		my $res = 1;
-		for my $x ( @{ $self->elements } ) {
-			my @left_coset  = map { $x * $_ } @{$self->elements};
-			my @right_coset = map { $_ * $x } @{$self->elements};
+		for my $x ( @{ $G->elements } ) {
+			my @left_coset  = map { $x * $_ } @{$N->elements};
+			my @right_coset = map { $_ * $x } @{$N->elements};
 			my $H;
 			$H->{"$_"} = 1
 			for @left_coset;
@@ -403,7 +403,7 @@ role {
 		# the problem is choosing the right representatives for the equivalence classes
 		my ($G,$N) = @_;
 
-		#confess 'can only factor with group that\'s normal' unless $N->normal;
+		#confess 'can only factor with group that\'s normal' unless $N->normal($G);
 		my $group = $G->meta->name->new({n=>$G->n});
 
 		my @all	= @{$G->elements};

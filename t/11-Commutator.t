@@ -13,7 +13,7 @@ ok(@{$g->elements}==12,'twelve elements');
 
 $g->compute;
 
-ok($g->normal==1,'commutator subgroup is normal');
+ok($p->normal($g)==1,'commutator subgroup is normal');
 
 #print $g;
 
