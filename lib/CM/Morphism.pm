@@ -45,7 +45,8 @@ sub prove {
 	my ($self) = @_;
 	my $f = $self->f;
 
-	confess "undefined" if @{$self->domain->elements}==0;
+	confess "elements of domain must be computed( use compute_elements on domain )" if @{$self->domain->elements}==0;
+	confess "elements of codomain must be computed( use compute_elements on codomain )" if @{$self->domain->elements}==0;
 
 	all {
 		my $x = $_;
@@ -56,7 +57,7 @@ sub prove {
 			$f->( $x   *       $y ) ==
 			$f->( $x ) * $f->( $y );
 
-		} @{$self->codomain->elements}
+		} @{$self->domain->elements}
 	} @{$self->domain->elements};
 }
 
@@ -121,11 +122,11 @@ sub composition {
 			f        =>
 			sub { 
 				my ($x) = @_;
-				return $f->f->( 
-					$g->f->( 
-						$x
-					)
-				);
+				return	$f->f->( 
+							$g->f->( 
+								$x
+							)
+						);
 			},
 			domain   => $g->domain,
 			codomain => $f->codomain,

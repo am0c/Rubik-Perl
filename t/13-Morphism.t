@@ -1,11 +1,14 @@
 use CM::Morphism;
 use CM::Group::Sym;
+use CM::Group::ModuloAddition;
 use Test::More;
 use strict;
 use warnings;
 
 my $G = CM::Group::Sym->new({n=>4});
 $G->compute_elements()->();
+
+goto SKIP_TO_HZ;
 
 
 my $z = $G->elements->[5];# some random permutation
@@ -57,7 +60,28 @@ ok($j->prove,"proved morphism j(that is f o h)");
 
 
 
+# proving there is a morphism so that    (Z_4,+) ~ <(2,3,4,1)>
+#                                        $Z      ~ $H
+SKIP_TO_HZ:
 
+my $Hgen = CM::Permutation->new(2,3,4,1);
+
+my $Z = CM::Group::ModuloAddition->new({n=> 4}); # Z_4
+my $H = $G->dimino($Hgen);
+$Z->compute_elements->();
+
+
+my $m = CM::Morphism->new({
+		f        => sub {
+			my ($x) = @_;
+			print $x->object; exit;
+			return $Hgen ** ("$x");
+		},
+		domain   => $Z,
+		codomain => $H,
+});
+
+ok($m->prove,'Z_4 and <(2,3,4,1)> are isomorphic');
 
 
 

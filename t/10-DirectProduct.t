@@ -30,10 +30,6 @@ ok($d->identity == CM::Permutation->new(1,2,3,4) , 'identity verified for dihedr
 ok(~~@{$p->elements}== (~~@{$g->elements})*(~~@{$d->elements}),'number of elements checked'); 
 
 
-
-
-
-
 $p1->compute_elements->();
 
 
