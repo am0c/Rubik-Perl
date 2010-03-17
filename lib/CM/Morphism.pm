@@ -54,8 +54,8 @@ sub prove {
 			my $y = $_;
 
 			# * means the group operations here not multiplication..
-			$f->( $x   *       $y ) ==
-			$f->( $x ) * $f->( $y );
+			$f->($self->domain->operation(       $x  , $y		) ) ==
+				 $self->codomain->operation($f->($x) , $f->($y)	  );
 
 		} @{$self->domain->elements}
 	} @{$self->domain->elements};

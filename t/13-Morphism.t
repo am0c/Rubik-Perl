@@ -68,13 +68,19 @@ my $Hgen = CM::Permutation->new(2,3,4,1);
 
 my $Z = CM::Group::ModuloAddition->new({n=> 4}); # Z_4
 my $H = $G->dimino($Hgen);
-$Z->compute_elements->();
+
+
+ok(@{$H->elements}==4,"H has 4 elements");
+#$Z->compute_elements->();
+$Z->compute();
 
 
 my $m = CM::Morphism->new({
 		f        => sub {
 			my ($x) = @_;
-			print $x->object; exit;
+			#use Data::Dumper;
+			#print Dumper $x;
+			#print "$x"; exit;
 			return $Hgen ** ("$x");
 		},
 		domain   => $Z,
