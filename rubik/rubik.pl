@@ -6,10 +6,12 @@
 # simulation of Rubik's cube using OpenGL
 
 package main;
-use OpenGL;
 use Carp;
 use Rubik::View;
 use Rubik::Model;
+
+use SDL;
+use SDL::App;
 
 my $view = Rubik::View->new();
 $view->Init;
@@ -53,11 +55,21 @@ my $iter=0;
 #$model->scramble; # make a random series of moves to scramble the cube
 #       - add tests
 
-while(1) {
+$|=1;
+my $event = SDL::Event->new;
+#my $SDLAPP = SDL::App->new(-title => "Opengl App", -width => 1024,  -height => 768, -gl => 1);
+while (1){
     ++$iter;
     #glRotatef(2,0,1,0); # rotate it while the moves are carried out
 
+	while(SDL::Events::poll_event($event)) {
+		print "Aaaaaaaaaaaa";
+		#if ( $type == SDL_KEYUP ) {
+			#print "Aaaaaaaaa";
+		#};
+	};
     $view->DrawFrame();
+	SDL::Events::pump_events();
 
     $view->spin( $view->spin + $turnspeed );# need to take in account something where divisibility is not needed
     if(  $view->spin % $turnangle == 0) {
@@ -67,6 +79,7 @@ while(1) {
         $view->currentmove($faces[$iface]);
         print "Doing move $faces[$iface]\n";
     };
+	#$SDLAPP->sync;
 }
 
 

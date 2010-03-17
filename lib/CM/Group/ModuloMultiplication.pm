@@ -6,6 +6,7 @@ use Moose;
 #use MooseX::Aliases;
 use overload    "*" => \&multiply,
                 '""'=> \&stringify,
+                '+'=> \&addition,
                 '=='=> \&equal;
 
 
@@ -43,6 +44,12 @@ sub multiply {
     my ($right,$left) = @_;
     return CM::ModuleInt->new($right->object * $left->object);
 }
+
+sub addition {
+    my ($right,$left) = @_;
+    return CM::ModuleInt->new($right->object + $left->object);
+}
+
 
 sub equal {
     my ($right,$left) = @_;
