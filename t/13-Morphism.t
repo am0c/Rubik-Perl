@@ -56,4 +56,9 @@ ok($h->prove,"proved morphism h");
 ok($j->prove,"proved morphism j(that is f o h)");
 
 
+
+
+
+
+
 done_testing;
