@@ -56,7 +56,7 @@ my $iter=0;
 #       - add tests
 
 $|=1;
-my $event = SDL::Event->new;
+#my $event = SDL::Event->new;
 #my $SDLAPP = SDL::App->new(-title => "Opengl App", -width => 1024,  -height => 768, -gl => 1);
 while (1){
     ++$iter;
@@ -79,7 +79,7 @@ while (1){
         $view->currentmove($faces[$iface]);
         print "Doing move $faces[$iface]\n";
     };
-	#$SDLAPP->sync;
+#	$SDLAPP->sync;
 }
 
 
