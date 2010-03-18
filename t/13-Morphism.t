@@ -5,6 +5,11 @@ use Test::More;
 use strict;
 use warnings;
 
+# there are of course big finite groups and infinite groups
+# and all the code here won't work on those, but for the small ones
+# we can write these tests.
+
+
 my $G = CM::Group::Sym->new({n=>4});
 $G->compute_elements()->();
 
