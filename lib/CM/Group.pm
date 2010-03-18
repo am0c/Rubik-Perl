@@ -140,7 +140,7 @@ role {
 
     };
 
-    method perm2label => sub {
+    method elem2label => sub {
         my ($self,$perm) = @_;
         my $found = first { 
             $_ == $perm;
@@ -252,9 +252,9 @@ role {
 
         $self->rearrange; # rearrange elements so identity sits on first diagonal so we can see the symmetries properly
 
-        my $table = "$self";
+        my $table = $self->stringify;
 
-        print "$table\n";
+		#print "$table\n";
         
         # the identity element needs to be on the first diagonal if we're going to make any sense out of this
 
@@ -305,7 +305,8 @@ role {
 
                 croak "result is undefined"
                 unless defined(${*ij}); 
-                ${*ij}->label($self->perm2label(${*ij}));
+                ${*ij}->label($self->elem2label(${*ij}));
+				#print "result label:".${*ij}->label()."\n";
             }
         };
         $self->computed(1); # mark it as being computed

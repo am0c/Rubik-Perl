@@ -72,11 +72,13 @@ sub power {
 	reduce { $a * $b }  ( ($self) x ($n) );
 }
 
+
+# just fixed bug in equal routine
 sub equal {
 	my ($op1,$op2) = @_;
 	return
 	$op1->first  == $op2->first &&
-	$op2->second == $op2->second;
+	$op1->second == $op2->second;
 };
 
 sub stringify {

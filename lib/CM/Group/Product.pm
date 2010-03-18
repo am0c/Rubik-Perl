@@ -48,12 +48,12 @@ sub _compute_elements {
 
 		for my $g (@{$self->groupG->elements}) {
 			for my $h (@{$self->groupH->elements}) {
-				$self->add_to_elements(
-					CM::Tuple->new({
+				my $new_t = 					CM::Tuple->new({
 							first =>$g,
 							second=>$h,
-						})
-				);
+						});
+				$self->add_to_elements($new_t);
+				#print "label:".$new_t->label."\n";
 			};
 		};
 	}
