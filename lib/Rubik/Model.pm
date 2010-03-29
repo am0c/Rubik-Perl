@@ -89,6 +89,7 @@ has cubies => (
     isa => 'Any',
     is  => 'rw',
     default => sub {
+		# init cubies positions and all that stuff
         my ($self) = @_;
         my $C=[];
         my $d = $self->distance; # distance between centers of cubies
@@ -179,7 +180,10 @@ sub scramble {
 #     Up          |1   |2    |3   |
 #                 |    |     |    |
 #                 .----|-----|----.
-
+#
+#
+#
+#(yes, that arrow for up is ugly)
 
 
 # returns if facelets @many should be on the same face
@@ -188,8 +192,8 @@ sub should_be_same_face {
 	confess "at least 2 arguments needed" unless @many >= 2;
 	reduce { $a && $b }
 	map {
-		$self->should_be_belongs_to($many[$_   ] ) eq
-		$self->should_bebelongs_to($many[$_+1 ] );
+		$self->should_belong_to($many[$_   ] ) eq
+		$self->should_belong_to($many[$_+1 ] );
 	} (0..@many-2);
 }
 
@@ -403,6 +407,84 @@ sub stringify {
 sub BUILD {
     my ($self) = @_;
     $self->view->model($self);
+}
+
+
+
+# maybe should replace the following functions with hardcoded vals
+# make_2D_aref get_face [FURBLD]face
+
+sub make_2D_aref {
+	# make 2D 3x3 array
+	my ($self,@numbers) = @_;
+	[
+		[ $numbers[0..2] ],
+		[ $numbers[3..5] ],
+		[ $numbers[6..8] ],
+	];
+}
+
+# get the numbers of facelets to return in a 3x3 array
+sub get_face {
+	my ($self,@numbers) = @_;
+	$self->make_2D_aref(
+		map { $self->state->perm->[$_] } @numbers
+	);
+}
+
+sub Fface {
+	my ($self) = @_;
+	$self->get_face(
+		7,8,9,
+		4,5,6,
+		1,2,3
+	);
+}
+
+sub Rface {
+	my ($self) = @_;
+	$self->get_face(
+		34,35,36,
+		31,32,33,
+		28,29,30
+	);
+}
+
+sub Bface {
+	my ($self) = @_;
+	$self->get_face(
+		45,44,43,
+		42,41,40,
+		39,38,37,
+	);
+}
+
+sub Lface {
+	my ($self) = @_;
+	$self->get_face(
+		54,53,52,
+		51,50,49,
+		48,47,46,
+	);
+}
+
+
+sub Uface {
+	my ($self) = @_;
+	$self->get_face(
+		21,24,27,
+		20,23,26,
+		19,22,25,
+	);
+}
+
+sub Dface {
+	my ($self) = @_;
+	$self->get_face(
+		12,15,18,
+		11,14,17,
+		10,13,16,
+	);
 }
 
 

@@ -1,6 +1,5 @@
 use strict;
 use warnings;
-use Array::PatternMatcher;
 use Rubik::Model;
 use Rubik::View;
 use Test::More;
@@ -25,6 +24,7 @@ my $array_cross =
 ];
 
 sub at_least_cross {
+	# checks to see if there is at least a cross on that face
 	my ($arr2D) = @_;
 	my $str = join(',',map { @$_ }(@$arr2D));
 	my $num = '\d+'; # number
@@ -37,7 +37,10 @@ sub at_least_cross {
 	return $model->same_face(@captures);
 };
 
-
-
 ok(!at_least_cross($array_not_cross),"arrary is not cross");
 ok(at_least_cross($array_cross),"arrary is cross");
+
+
+
+
+

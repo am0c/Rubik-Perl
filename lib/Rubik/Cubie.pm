@@ -118,6 +118,7 @@ this cube will help with understanding what's going on in the code, the numbers 
          GL_QUADS,
          sub {
              for(my $i=0;$i<6;$i++){
+				 # the 6 facelets of a cubie are coloured based on the property
                  glColor3f(@{$self->colours->[$i]});
 
 
