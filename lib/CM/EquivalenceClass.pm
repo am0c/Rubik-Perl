@@ -6,6 +6,9 @@ use overload '==' => 'equal';
 
 
 
+# TODO: this is in initial phase of implementation(there's a lot of stuff to fill in here).
+
+
 # implementation problems
 # -----------------------
 #
@@ -44,6 +47,7 @@ sub equal {
 	
 	return 1 if $x->representant == $y->representant;
 	
+        # * means intersection for Set::Scalar
 	return (
 			Set::Scalar->new(@{$x->elements}) * 
 			Set::Scalar->new(@{$y->elements})

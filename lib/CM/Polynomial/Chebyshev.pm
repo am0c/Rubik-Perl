@@ -5,6 +5,13 @@ use Moose;
 extends 'Math::Polynomial';
 use Data::Dumper;
 
+
+=head1 DESCRIPTION
+
+Given cos(x) the Chebyshev polynomials offer a way of quickly finding cos(nx)
+
+=cut
+
  
 sub new {
 	my ($self,$n) = @_;

@@ -15,6 +15,13 @@ extends 'Math::Polynomial';
 
 
 
+=head1 DESCRIPTION
+
+The cyclotomic polynomials have as roots the powers of the nth root of unity.
+
+=cut
+
+
 
 
 my @mu;
