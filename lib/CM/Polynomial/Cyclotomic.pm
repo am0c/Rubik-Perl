@@ -49,6 +49,8 @@ sub new {
 
 
 
+# generate the nth cycltomic polynomial and return it as a Math::Polynomial object
+
 sub gen_pol {
 	my ($n) = @_;
 
