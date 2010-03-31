@@ -5,7 +5,7 @@ use Moose;
 extends 'Math::Polynomial';
 use Data::Dumper;
 
-
+ 
 sub new {
 	my ($self,$n) = @_;
 
