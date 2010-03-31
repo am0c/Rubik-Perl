@@ -5,7 +5,7 @@ use Moose;
 use Math::Polynomial;
 use Math::Factor::XS qw( factors);
 use Math::Prime::XS  qw( is_prime);
-use Math::BigInt;
+use Math::BigFloat;
 use List::AllUtils qw/reduce first/;
 use File::Slurp qw/slurp/;
 use Cwd;
@@ -58,8 +58,17 @@ sub new {
 sub gen_pol {
 	my ($n) = @_;
 
+
 	###############################################################
-	# CASE I   n is a prime
+	# CASE I n is 1
+	
+	return Math::Polynomial->new(-1,1)
+	if $n == 1;
+
+
+
+	###############################################################
+	# CASE II   n is a prime
 	# \Theta_n = 1 + X + X^2 + ... + X^(p-1)     for p a prime
 	return Math::Polynomial->new( (1) x $n ) 
 	if is_prime($n);
@@ -67,38 +76,44 @@ sub gen_pol {
 
 
 	###############################################################
-	# CASE II  n is a power of a prime
+	# CASE III  n is a power of a prime
 	#
 	# there is a relation of the \Theta_p^m(X) = \Theta_p(X^p)
 	# through the Frobenius morphism  X |----------> X^p
 	# this can be proved and gives an easy way of computing the p^m th cyclotomic polynomial
 
+
 	my @factors = factors($n);
 
-	my $first_pdiv = first { is_prime($_) } @factors; # first prime divisor of $n
+	my $p = first { is_prime($_) } @factors; # first prime divisor of $n
 	# an unfortunate function name..
-	my $log = Math::BigInt::blog($n,$first_pdiv);
+	my $log = Math::BigFloat->new($n)->blog($p);
+
+
+	#print "$log";
 
 	#this can also be done with (1,(p-1) zeros , 1 , (p-1) zeros, 1, <--- this should happen about m times)
 	#
-	return Math::Polynomial->new( (1) x $log )->nest(
+	return Math::Polynomial->new( (1) x $p )->nest(
 		Math::Polynomial->new( 
-			(0) x ($first_pdiv) , 1
+			(0) x ($p**($log-1)) , 1
 		)
 	)
 	if $log == int($log); # if $n is the power of a prime
 
+	#print "after\n";
 
 	
 	###############################################################
-	# CASE III using Möbius inversion
+	# CASE IV general case
 	#
 	# in the general case the cyclotomic polynomial can be computed using Mobius inversion
 
 	my $r = Math::Polynomial->new(1);
 
-	for my $d ( @factors ) {
+	for my $d ( 1, @factors ) {
 		next if $d == $n;
+		#print "d=$d\n";
 
 		$r *= gen_pol($d);
 	};
@@ -106,8 +121,27 @@ sub gen_pol {
 	return 
 
 	Math::Polynomial->new(-1,(0) x ($n - 1) , 1)
+
 	/
+
 	$r;
+
+
+
+
+	# using Möbius inversion (not yet tested)
+
+	#return
+	#reduce { $a * $b }
+	#(
+		#map {
+
+			#print "$_\n";
+			#Math::Polynomial->new(1,(0) x ($_-1),1) ** 
+			#$mu[$n/$_];
+		#} @factors
+	#);
+
 }
 
 
