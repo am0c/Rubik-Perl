@@ -48,6 +48,8 @@ has colours => (
     },
 );
 
+
+# this contains indexes of the points that make up each face of the cubie
 has faces => (
     isa => 'ArrayRef[ArrayRef[Int]]',
     is  =>'rw',
