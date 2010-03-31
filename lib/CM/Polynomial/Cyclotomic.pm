@@ -6,10 +6,11 @@ use Math::Polynomial;
 use Math::Factor::XS qw( factors);
 use Math::Prime::XS  qw( is_prime);
 use Math::BigFloat;
-use List::AllUtils qw/reduce first/;
+use List::AllUtils qw/reduce first part/;
 use File::Slurp qw/slurp/;
 use Cwd;
 use Path::Class qw/file/;
+use Data::Dumper;
 extends 'Math::Polynomial';
 
 
@@ -18,7 +19,7 @@ extends 'Math::Polynomial';
 
 my @mu;
 
-# the file contains the precomputed Möbius function mu(x) up to 10^5 we won't need more
+# the file contains the precomputed Möbius function mu(x) up to 10^5 (should be enough)
 # table located right here ---> http://www.research.att.com/njas/sequences/A008683
 
 
@@ -28,7 +29,7 @@ my $mobdata = file($dir,'Möbius.data');
 
 #print $mobdata;
 
-@mu = split(/,/,"$mobdata");
+@mu = split(/,/,slurp("$mobdata"));
 
 # cache by n, \Theta_n is the nth cyclotomic polynomial
 # the first cyclotomic polynomial is X-1
@@ -36,13 +37,6 @@ my $mobdata = file($dir,'Möbius.data');
 
 
 my @cache = (Math::Polynomial->new(-1,+1)); 
-
-
-
-
-
-
-
 
 
 sub new {
@@ -109,7 +103,7 @@ sub gen_pol {
 	#
 	# in the general case the cyclotomic polynomial can be computed using Mobius inversion
 
-	my $r = Math::Polynomial->new(1);
+   my $r = Math::Polynomial->new(1);
 
 	for my $d ( 1, @factors ) {
 		next if $d == $n;
@@ -129,18 +123,31 @@ sub gen_pol {
 
 
 
-	# using Möbius inversion (not yet tested)
+# using Möbius inversion (not yet tested) for the general case
 
-	#return
-	#reduce { $a * $b }
-	#(
-		#map {
+#ignore the factors with mu 0 , because the result polynomials will be 1 in the formula
+#then partition the values left into 2 buckets which will become the numerator and denominator
+#respectively , then multiply all in each bucket separately and now we have just 2 polynomials which are
+#denom and numerat of a fraction , divide and that's all
 
-			#print "$_\n";
-			#Math::Polynomial->new(1,(0) x ($_-1),1) ** 
-			#$mu[$n/$_];
-		#} @factors
-	#);
+
+# NOTE: doesn't work for n > 9
+
+#	reduce { $a / $b }
+#	map {
+#
+#		reduce { $a * $b } 
+#		map {
+#			Math::Polynomial->new(1,(0) x ($_-1),1)
+#		} @$_;
+#	}
+#	part {
+#		1 + $mu[$_]
+#	} 
+#	grep {
+#		$mu[$_] != 0;
+#	}
+#	@factors;
 
 }
 

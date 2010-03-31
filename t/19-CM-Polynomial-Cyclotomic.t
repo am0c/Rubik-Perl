@@ -9,9 +9,8 @@ use feature ':5.10';
 
 
 
-################################################################
-#
-# just for testing purposes implementing euler totient function
+##############################################################################################
+# just for testing purposes implementing Euler totient function(also known as Euler indicator)
 
 sub phi {
 	my ($n) = @_;
