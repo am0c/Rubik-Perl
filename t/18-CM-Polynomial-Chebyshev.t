@@ -14,6 +14,8 @@ for(1..20){
     #if you do the change of variable X |----> cos(x) on T_n which is the nth Chebyshev polynomial
     #(x is constant while X is indeterminate)
     #then the evaluation of the polynomial at x is exactly cos(nx)
+    #
+    #IOW,   cos(nx) = T_n(cos(x))
 
     my $p =  CM::Polynomial::Chebyshev->new($_);
     my $v = $p->evaluate(cos($x));

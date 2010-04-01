@@ -9,6 +9,7 @@ use Data::Dumper;
 =head1 DESCRIPTION
 
 Given cos(x) the Chebyshev polynomials offer a way of quickly finding cos(nx)
+(check tests for more details on this).
 
 =cut
 
