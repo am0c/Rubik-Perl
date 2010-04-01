@@ -22,6 +22,7 @@ has '_repl' => (
       
       my $r = Devel::REPL->new();
       $r->load_plugin($_) for qw(History LexEnv MultiLine::PPI);
+      # TODO: find a way for completion to work with Devel::REPL, tried the listed plugins, and they didn't work
       $r->eval('
 
 
