@@ -4,7 +4,7 @@ Outcome:		none
 Goal:			none
 Plan:			none
 ETA:			none
-Expectations:	none
+Expectations:	        none
 
 
 
@@ -13,3 +13,9 @@ In writing this module I am not interested in anything of a practical nature or 
 in real-work, not interested in this being useful to anyone in anything, I'm obviously not doing 
 it for any sort of outcome of any type therefore this will be done for the sake of it. :)
 
+
+
+shell.sh
+--------
+
+a practical shell application which loads all the modules for CM::Permutation
