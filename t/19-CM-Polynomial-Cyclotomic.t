@@ -56,9 +56,8 @@ for(1..30) {
         ok(
             (
                 all {
-                    #print ref($_)."\n";
-                    #print Dumper($_)."\n";
-
+                    #apparently poly_roots returns Math::Complex objects when the roots
+                    #are complex and scalars when they are real so we need to do this check
 
                     my @reim =  
                                     ref($_)
