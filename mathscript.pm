@@ -21,38 +21,38 @@ has '_repl' => (
   default => sub { 
       
       my $r = Devel::REPL->new();
-      $r->load_plugin($_) for qw(History LexEnv MultiLine::PPI);
       # TODO: find a way for completion to work with Devel::REPL, tried the listed plugins, and they didn't work
+      $r->load_plugin($_) for qw(History LexEnv MultiLine::PPI CompletionDriver::Keywords CompletionDriver::Methods);
       $r->eval('
 
           sub help {
-          print "
+          "
 
-          mathshell is a shell for the modules in the CM::Permutation distribution
+                  mathshell is a shell for the modules in the CM::Permutation distribution
 
-          permutations:
-          ------------
+                  permutations:
+                  ------------
 
-          cycle  - permutation cycle
-          perm   - permutation
+                  cycle  - permutation cycle
+                  perm   - permutation
 
-          polynomials:
-          -----------
+                  polynomials:
+                  -----------
 
-          pcyclo - nth cyclotomic polynomial
-          pcheby - nth chebyshev polynomial
+                  pcyclo - nth cyclotomic polynomial
+                  pcheby - nth chebyshev polynomial
 
-          groups:
-          ------
+                  groups:
+                  ------
 
-          gsym   - S_n
-          galt   - A_n
-          gdih   - D_2n
-          gadd   - (Z_n,+)
-          gmul   - (Z_n,*)
-          gx     - group product
+                  gsym   - S_n
+                  galt   - A_n
+                  gdih   - D_2n
+                  gadd   - (Z_n,+)
+                  gmul   - (Z_n,*)
+                  gx     - group product
 
-          Ex:  gsym({n=>3})->compute()
+                  Ex:  gsym({n=>3})->compute()
 
           ";
           }
@@ -72,31 +72,33 @@ has '_repl' => (
 
 
           sub pcheby {
-          return CM::Polynomial::Cyclotomic->new(@_);
+          return CM::Polynomial::Chebyshev->new(@_);
           };
 
           sub gsym {
-          return CM::Group::Sym->new(@_);
+          return CM::Group::Sym->new({n=>$_[0]});
           };
 
           sub galt {
-          return CM::Group::Altern->new(@_);
+          return CM::Group::Altern->new({n=>$_[0]});
           };
 
+
+          # to be removed when * implemented for groups
           sub gx {
-          return CM::Group::Product->new(@_);
+          return CM::Group::Product->new({n=>1,groupG=>$_[0],groupH=>$_[1]});
           };
 
           sub gadd {
-          return CM::Group::ModuloAddition->new(@_);
+          return CM::Group::ModuloAddition->new({n=>$_[0]});
           };
 
           sub gmul {
-          return CM::Group::ModuloMultiplication->new(@_);
+          return CM::Group::ModuloMultiplication->new({n=>$_[0]});
           };
 
           sub gdih {
-          return CM::Group::Dihedral->new(@_);
+          return CM::Group::Dihedral->new({n=>$_[0]});
           };
 
           sub q {
