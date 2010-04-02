@@ -24,39 +24,49 @@ has '_repl' => (
       # TODO: find a way for completion to work with Devel::REPL, tried the listed plugins, and they didn't work
       $r->load_plugin($_) for qw(History LexEnv );#MultiLine::PPI CompletionDriver::Keywords CompletionDriver::Methods);
       $r->eval('
+          use Math::Polynomial::Solve qw(poly_roots);
 
           sub help {
           "
 
                   mathshell is a shell for the modules in the CM::Permutation distribution
+                  all the operations implemented on these objects are available(check their pod/source for details)
 
                   permutations:
                   ------------
 
-                  cycle  - permutation cycle
-                  perm   - permutation
+                  cycle         - permutation cycle
+                  perm          - permutation
 
                   polynomials:
                   -----------
 
-                  pcyclo - nth cyclotomic polynomial
-                  pcheby - nth chebyshev polynomial
+                  pcyclo        - nth cyclotomic polynomial
+                  pcheby        - nth chebyshev polynomial
+                  pgen          - generates a polynomial given the coefficients
+                  roots         - gets all the complex roots of a polynomial
 
                   groups:
                   ------
 
-                  gsym   - S_n
-                  galt   - A_n
-                  gdih   - D_2n
-                  gadd   - (Z_n,+)
-                  gmul   - (Z_n,*)
-                  gx     - group product
+                  gsym          - S_n
+                  galt          - A_n
+                  gdih          - D_2n
+                  gadd          - (Z_n,+)
+                  gmul          - (Z_n,*)
+                  gx            - group product
+                  elements      - elements of the group
 
-                  Ex:  gsym(3)->compute()
+                  Ex:  
+                  gsym(3)->compute()
+                  pgen(3,2,1)
+                  3 + 2X + X^2
 
           ";
           }
 
+          ###################################################################
+          ### PERMUTATIONS
 
           sub perm {
           return CM::Permutation->new(@_);
@@ -66,6 +76,9 @@ has '_repl' => (
           return CM::Permutation::Cycle->new(@_);
           };
 
+          ###################################################################
+          ### POLYNOMIALS
+
           sub pcyclo {
           return CM::Polynomial::Cyclotomic->new(@_);
           };
@@ -74,6 +87,21 @@ has '_repl' => (
           sub pcheby {
           return CM::Polynomial::Chebyshev->new(@_);
           };
+
+          sub pgen {
+          return Math::Polynomial->new(@_);
+          }
+
+          sub roots {
+              my $p = $_[0];
+              return join(
+                  "\n",
+                  poly_roots($p->coefficients)
+              );
+          }
+
+          ###################################################################
+          ### GROUPS
 
           sub gsym {
           return CM::Group::Sym->new({n=>$_[0]});
@@ -103,6 +131,14 @@ has '_repl' => (
 
           sub q {
           };
+
+          sub elements  {
+              my $s = shift;
+              $s->compute_elements->();
+              print join("\n",@{$s->elements});
+              print "\n";
+          }
+
 
 
           ');
