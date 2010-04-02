@@ -3,9 +3,10 @@ use warnings;
 use Test::More;
 use CM::Polynomial::Chebyshev;
 use Math::Polynomial;
+use constant PI    => 4 * atan2(1, 1);
 
 
-my $x = 3.14 / 4;
+my $x = PI / 4;
 
 for(1..20){
     

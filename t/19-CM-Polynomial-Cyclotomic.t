@@ -77,6 +77,9 @@ for(1..30) {
 
 
 
+my $p = CM::Polynomial::Cyclotomic->new(5)*CM::Polynomial::Cyclotomic->new(7);
+print "$p\n";
+
 
 
 

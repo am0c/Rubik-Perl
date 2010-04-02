@@ -22,7 +22,7 @@ has '_repl' => (
       
       my $r = Devel::REPL->new();
       # TODO: find a way for completion to work with Devel::REPL, tried the listed plugins, and they didn't work
-      $r->load_plugin($_) for qw(History LexEnv MultiLine::PPI CompletionDriver::Keywords CompletionDriver::Methods);
+      $r->load_plugin($_) for qw(History LexEnv );#MultiLine::PPI CompletionDriver::Keywords CompletionDriver::Methods);
       $r->eval('
 
           sub help {
@@ -52,7 +52,7 @@ has '_repl' => (
                   gmul   - (Z_n,*)
                   gx     - group product
 
-                  Ex:  gsym({n=>3})->compute()
+                  Ex:  gsym(3)->compute()
 
           ";
           }

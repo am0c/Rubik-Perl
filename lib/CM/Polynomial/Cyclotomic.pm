@@ -31,8 +31,8 @@ my @mu;
 
 
 # just make getting the data file portable
-my $dir = Path::Class::File->new(__FILE__)->dir;
-my $mobdata = file($dir,'Möbius.data');
+my $dir = Path::Class::File->new(__FILE__)->dir;#dirrectory of the current file
+my $mobdata = file($dir,'Möbius.data');#concatenate
 
 #print $mobdata;
 
@@ -112,22 +112,22 @@ sub gen_pol {
 	#
 	# in the general case the cyclotomic polynomial can be computed using Mobius inversion
 
-   my $r = Math::Polynomial->new(1);
+        my $r = Math::Polynomial->new(1);
 
-	for my $d ( 1, @factors ) {
-		next if $d == $n;
-		#print "d=$d\n";
+        for my $d ( 1, @factors ) {
+            next if $d == $n;
+            #print "d=$d\n";
 
-		$r *= gen_pol($d);
-	};
+            $r *= gen_pol($d);
+        };
 
-	return 
+        return 
 
-	Math::Polynomial->new(-1,(0) x ($n - 1) , 1)
+        Math::Polynomial->new(-1,(0) x ($n - 1) , 1)
 
-	/
+        /
 
-	$r;
+        $r;
 
 
 
