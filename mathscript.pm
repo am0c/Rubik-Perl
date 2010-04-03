@@ -12,6 +12,9 @@ use CM::Group::ModuloMultiplication;
 use CM::Group::Product;
 use CM::Polynomial::Chebyshev;
 use CM::Polynomial::Cyclotomic;
+#use CM::Polynomial::Discriminant;
+use CM::Polynomial::Irreducible;
+
 use CM::Permutation::Cycle_Algorithm;
 use Moose;
 use Devel::REPL;
@@ -27,6 +30,7 @@ has '_repl' => (
       $r->eval('
           use Math::Polynomial::Solve qw(poly_roots);
 
+          #discriminant  - compute discriminant
           sub help {
           "
 
@@ -47,6 +51,8 @@ has '_repl' => (
                   pcheby        - nth chebyshev polynomial
                   pgen          - generates a polynomial given the coefficients
                   roots         - gets all the complex roots of a polynomial
+                  eisenstein    - eisenstein test
+                  perron        - perron     test
 
                   groups:
                   ------
@@ -91,17 +97,17 @@ has '_repl' => (
           ### POLYNOMIALS
 
           sub pcyclo {
-          return CM::Polynomial::Cyclotomic->new(@_);
+              return CM::Polynomial::Cyclotomic->new(@_);
           };
 
 
           sub pcheby {
-          return CM::Polynomial::Chebyshev->new(@_);
+              return CM::Polynomial::Chebyshev->new(@_);
           };
 
           sub pgen {
-          return Math::Polynomial->new(@_);
-          }
+              return Math::Polynomial->new(@_);
+          };
 
           sub roots {
               my $p = $_[0];
@@ -109,7 +115,19 @@ has '_repl' => (
                   "\n",
                   poly_roots($p->coefficients)
               );
-          }
+          };
+
+          sub eisenstein {
+              my $p = shift;
+              my $w = CM::Polynomial::Irreducible->new($p->coefficients);
+              return $w->eisenstein;
+          };
+
+          sub perron {
+              my $p = shift;
+              my $w = CM::Polynomial::Irreducible->new($p->coefficients);
+              return $w->perron;
+          };
 
           ###################################################################
           ### GROUPS
@@ -148,7 +166,7 @@ has '_repl' => (
               $s->compute_elements->();
               print join("\n",@{$s->elements});
               print "\n";
-          }
+          };
 
 
 
