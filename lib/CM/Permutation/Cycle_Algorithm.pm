@@ -4,6 +4,7 @@ use List::AllUtils qw/first/;
 use CM::Permutation::Cycle;
 extends 'CM::Permutation';
 
+use overload '""' => 'str_decomposed'; # "" and == are used by uniq from List::AllUtils in the tests
 =pod
 
 =head1 NAME

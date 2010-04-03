@@ -12,6 +12,7 @@ use CM::Group::ModuloMultiplication;
 use CM::Group::Product;
 use CM::Polynomial::Chebyshev;
 use CM::Polynomial::Cyclotomic;
+use CM::Permutation::Cycle_Algorithm;
 use Moose;
 use Devel::REPL;
 use namespace::clean -except => [ qw(meta) ];
@@ -37,6 +38,7 @@ has '_repl' => (
 
                   cycle         - permutation cycle
                   perm          - permutation
+                  decomp        - decompose a permutation into cycles
 
                   polynomials:
                   -----------
@@ -75,6 +77,15 @@ has '_repl' => (
           sub cycle {
           return CM::Permutation::Cycle->new(@_);
           };
+          
+          sub decomp {
+              my $arg = shift;
+              my @a = @{$arg->perm};
+              shift @a;
+              my $alg = CM::Permutation::Cycle_Algorithm->new(@a);
+              $alg->run;
+              return $alg;
+          }
 
           ###################################################################
           ### POLYNOMIALS
