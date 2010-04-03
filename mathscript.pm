@@ -1,3 +1,8 @@
+package Disc;
+use Moose;
+extends 'Math::Polynomial';
+with 'CM::Polynomial::Discriminant';
+
 package mathscript;
 use lib './lib';
 use strict;
@@ -12,7 +17,6 @@ use CM::Group::ModuloMultiplication;
 use CM::Group::Product;
 use CM::Polynomial::Chebyshev;
 use CM::Polynomial::Cyclotomic;
-#use CM::Polynomial::Discriminant;
 use CM::Polynomial::Irreducible;
 
 use CM::Permutation::Cycle_Algorithm;
@@ -30,7 +34,6 @@ has '_repl' => (
       $r->eval('
           use Math::Polynomial::Solve qw(poly_roots);
 
-          #discriminant  - compute discriminant
           sub help {
           "
 
@@ -53,6 +56,7 @@ has '_repl' => (
                   roots         - gets all the complex roots of a polynomial
                   eisenstein    - eisenstein test
                   perron        - perron     test
+                  discriminant  - compute discriminant
 
                   groups:
                   ------
@@ -166,6 +170,11 @@ has '_repl' => (
               $s->compute_elements->();
               print join("\n",@{$s->elements});
               print "\n";
+          };
+
+          sub discriminant {
+              my $d = shift;
+              return Disc->new($d->coefficients)->discriminant;
           };
 
 
