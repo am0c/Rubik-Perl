@@ -40,7 +40,7 @@ has codomain => (
 );
 
 
-# prove that this is indeed a morphism
+# prove that this is indeed a homomorphism
 sub prove {
 	my ($self) = @_;
 	my $f = $self->f;
