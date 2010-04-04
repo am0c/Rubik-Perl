@@ -46,6 +46,7 @@ has '_repl' => (
                   cycle         - permutation cycle
                   perm          - permutation
                   decomp        - decompose a permutation into cycles
+                  randpermn     - returns an array with the numbers fro 1..n permuted in a random way
 
                   polynomials:
                   -----------
@@ -176,6 +177,15 @@ has '_repl' => (
               my $d = shift;
               return Disc->new($d->coefficients)->discriminant;
           };
+
+          sub randperm {
+              my $r = ~~@_;
+              map {  splice(@_,rand($r--),1);  } 1..$r;
+          }
+
+          sub randpermn {
+              randperm(1..$_[0]);
+          }
 
 
 
