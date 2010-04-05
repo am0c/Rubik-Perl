@@ -470,14 +470,6 @@ or like this
 =end html
 
 
-=begin html
-
-<p><center><img src="images/acommb.PNG" /></center></p>
-
-=end html
-
-
-
 =head1 Some differences between brides and permutations
 
 However, braids are more general than permutations. The twists that are the analog of transpositions(in symmetric groups)
