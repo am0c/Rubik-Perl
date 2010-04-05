@@ -404,6 +404,50 @@ At the moment the following are implemented(any feature that is currently listed
 
 =back
 
+There's also a draw() method so if you want to visualize permutations as braids you can.
+
+For example permutation (9,6,4,8,5,3,7,10,1,2) can be representated as a braid like this:
+
+=begin html
+
+<p><center><img src="images/a.PNG" /></center></p>
+
+=end html
+
+and permutation (6,10,2,9,6,1,7,8,4,5) is like this 
+
+=begin html
+
+<p><center><img src="images/b.PNG" /></center></p>
+
+=end html
+
+Then you can also compute a*b
+
+=begin html
+
+<p><center><img src="images/atimesb.PNG" /></center></p>
+
+=end html
+
+And also a*b*a^-1
+
+=begin html
+
+<p><center><img src="images/aconjb.PNG" /></center></p>
+
+=end html
+
+And also [a,b] which is a*b*a^-1*b^-1
+ 
+=begin html
+
+<p><center><img src="images/acommb.PNG" /></center></p>
+
+=end html
+
+However, braids are more general than permutations. The twists that are the analog of transpositions(in symmetric groups)
+for braids have infinite order since you can twist 2 strands as many times you want.
 
 =head1 AUTHOR
 
