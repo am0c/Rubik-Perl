@@ -449,6 +449,10 @@ And also [a,b] which is a*b*a^-1*b^-1
 However, braids are more general than permutations. The twists that are the analog of transpositions(in symmetric groups)
 for braids have infinite order since you can twist 2 strands as many times you want.
 
+=head1 ACKNOWLEDGMENTS
+
+Thanks for the colour ramp routine goes to BrowserUk @perlmonks
+
 =head1 AUTHOR
 
 Stefan Petrea, C<< <stefan.petrea at gmail.com> >>
