@@ -404,6 +404,8 @@ At the moment the following are implemented(any feature that is currently listed
 
 =back
 
+=head1 Permutations in relation to braids
+
 There's also a draw() method so if you want to visualize permutations as braids you can.
 
 For example permutation (9,6,4,8,5,3,7,10,1,2) can be representated as a braid like this:
@@ -445,6 +447,38 @@ And also [a,b] which is a*b*a^-1*b^-1
 <p><center><img src="images/acommb.PNG" /></center></p>
 
 =end html
+
+=head1 Viewing cycles
+
+Cycles have the following shape (except they can have some fixed points inside them)
+
+[1,2,3,4,5]
+
+=begin html
+
+<p><center><img src="images/cycle1.PNG" /></center></p>
+
+=end html
+
+or like this
+
+
+=begin html
+
+<p><center><img src="images/cycle2.PNG" /></center></p>
+
+=end html
+
+
+=begin html
+
+<p><center><img src="images/acommb.PNG" /></center></p>
+
+=end html
+
+
+
+=head1 Some differences between brides and permutations
 
 However, braids are more general than permutations. The twists that are the analog of transpositions(in symmetric groups)
 for braids have infinite order since you can twist 2 strands as many times you want.
