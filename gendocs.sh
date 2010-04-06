@@ -2,4 +2,4 @@
 rm ./html/*
 mkdir html || find -name *.pm | perl -ne 'chomp $_;   $new = $_; $new =~ s/\.pm/.html/;  $new =~ s/^.*\///; $new="html/$new"; `perl ./pod2html.pl $_ > $new`;   print "$new\n"'
 
-cp -r images/ html/images
+cp -r images/ html/
