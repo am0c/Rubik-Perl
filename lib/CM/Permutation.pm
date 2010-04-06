@@ -489,6 +489,16 @@ To understand better how transpositions and cycles interact let's take a look at
 =end html
 
 
+Let's have an example of this with the cycles [2,3,4] , [5,6,7,8] and the transposition [4,5] :
+
+    $ decomp(cycle(2,3,4)*cycle(5,6,7,8))
+    (1)*(3,4,2)*(6,7,8,5)
+    $ decomp(cycle(2,3,4)*cycle(5,6,7,8)*cycle(4,5))
+    (1)*(3,4,6,7,8,5,2)
+
+
+The notation
+
 =head1 ACKNOWLEDGMENTS
 
 Thanks for the colour ramp routine goes to BrowserUk @perlmonks
