@@ -476,6 +476,20 @@ However, braids are more general than permutations. The twists that are the anal
 for braids have infinite order since you can twist 2 strands as many times you want.
 Another difference is that for a transposition x we have x = x^-1, but with braids that isn't true since you have the first strand above the second for x and for x^-1 you have the second over the first so you can un-twist the braid using x^-1.
 
+
+
+=head1 Transpositions and cycles
+
+To understand better how transpositions interace let's take a look at the following diagram which shows the effects
+of multiplying a permutation formed of two cycles with a transposition containing members from each of the cycles:
+
+=begin html
+
+<p><center><img src="images/cycle_glue.png" /></center></p>
+
+=end html
+
+
 =head1 ACKNOWLEDGMENTS
 
 Thanks for the colour ramp routine goes to BrowserUk @perlmonks
