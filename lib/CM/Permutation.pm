@@ -489,15 +489,15 @@ To understand better how transpositions and cycles interact let's take a look at
 =end html
 
 
-Let's have an example of this with the cycles [2,3,4] , [5,6,7,8] and the transposition [4,5] :
+Let's have an example of this with the cycles [1,2,3,4] , [5,6,7,8] and the transposition [3,7] :
 
-    $ decomp(cycle(2,3,4)*cycle(5,6,7,8))
-    (1)*(3,4,2)*(6,7,8,5)
-    $ decomp(cycle(2,3,4)*cycle(5,6,7,8)*cycle(4,5))
-    (1)*(3,4,6,7,8,5,2)
+    ./shell.sh
 
 
-The notation
+    $ decomp(cycle(1,2,3,4)*cycle(5,6,7,8))
+    (2,3,4,1)*(6,7,8,5)
+    $ decomp(cycle(1,2,3,4)*cycle(5,6,7,8)*cycle(3,7))
+    (2,3,8,5,6,7,4,1)
 
 =head1 ACKNOWLEDGMENTS
 
