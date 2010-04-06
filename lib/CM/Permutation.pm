@@ -480,8 +480,7 @@ Another difference is that for a transposition x we have x = x^-1, but with brai
 
 =head1 Transpositions and cycles
 
-To understand better how transpositions interace let's take a look at the following diagram which shows the effects
-of multiplying a permutation formed of two cycles with a transposition containing members from each of the cycles:
+To understand better how transpositions and cycles interact let's take a look at the following diagram which shows the effects of multiplying a permutation formed of two cycles with a transposition containing members from each of the cycles:
 
 =begin html
 
