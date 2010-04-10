@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<svg height="500" width="500" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<line id="1-10-0" style="fill: rgb(0,0,255); fill-opacity: 1.0; stroke: rgb(0,0,255); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="10" x2="10" y1="0" y2="10" />
+	<ellipse cx="10" cy="10" id="2-10-10" rx="1" ry="1" style="fill: none; fill-opacity: 1.0; stroke: rgb(0,0,255); stroke-opacity: 1.0; stroke-width: 4" />
+	<line id="3-10-10" style="fill: rgb(0,0,255); fill-opacity: 1.0; stroke: rgb(0,0,255); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="10" x2="20" y1="10" y2="20" />
+	<ellipse cx="20" cy="20" id="4-20-20" rx="1" ry="1" style="fill: none; fill-opacity: 1.0; stroke: rgb(0,0,255); stroke-opacity: 1.0; stroke-width: 4" />
+	<line id="5-20-20" style="fill: rgb(0,0,255); fill-opacity: 1.0; stroke: rgb(0,0,255); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="20" x2="20" y1="20" y2="30" />
+	<line id="6-20-30" style="fill: rgb(0,0,255); fill-opacity: 1.0; stroke: rgb(0,0,255); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="20" x2="20" y1="30" y2="40" />
+	<line id="7-20-40" style="fill: rgb(0,0,255); fill-opacity: 1.0; stroke: rgb(0,0,255); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="20" x2="20" y1="40" y2="50" />
+	<line id="8-20-50" style="fill: rgb(0,0,255); fill-opacity: 1.0; stroke: rgb(0,0,255); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="20" x2="20" y1="50" y2="60" />
+	<line id="9-20-60" style="fill: rgb(0,0,255); fill-opacity: 1.0; stroke: rgb(0,0,255); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="20" x2="20" y1="60" y2="70" />
+	<line id="10-20-70" style="fill: rgb(0,0,255); fill-opacity: 1.0; stroke: rgb(0,0,255); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="20" x2="20" y1="70" y2="80" />
+	<line id="11-20-0" style="fill: rgb(0,255,255); fill-opacity: 1.0; stroke: rgb(0,255,255); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="20" x2="20" y1="0" y2="10" />
+	<ellipse cx="20" cy="10" id="12-20-10" rx="1" ry="1" style="fill: none; fill-opacity: 1.0; stroke: rgb(0,255,255); stroke-opacity: 1.0; stroke-width: 4" />
+	<line id="13-20-10" style="fill: rgb(0,255,255); fill-opacity: 1.0; stroke: rgb(0,255,255); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="20" x2="30" y1="10" y2="20" />
+	<line id="14-30-20" style="fill: rgb(0,255,255); fill-opacity: 1.0; stroke: rgb(0,255,255); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="30" x2="40" y1="20" y2="30" />
+	<line id="15-40-30" style="fill: rgb(0,255,255); fill-opacity: 1.0; stroke: rgb(0,255,255); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="40" x2="50" y1="30" y2="40" />
+	<ellipse cx="50" cy="40" id="16-50-40" rx="1" ry="1" style="fill: none; fill-opacity: 1.0; stroke: rgb(0,255,255); stroke-opacity: 1.0; stroke-width: 4" />
+	<line id="17-50-40" style="fill: rgb(0,255,255); fill-opacity: 1.0; stroke: rgb(0,255,255); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="50" x2="50" y1="40" y2="50" />
+	<line id="18-50-50" style="fill: rgb(0,255,255); fill-opacity: 1.0; stroke: rgb(0,255,255); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="50" x2="50" y1="50" y2="60" />
+	<line id="19-50-60" style="fill: rgb(0,255,255); fill-opacity: 1.0; stroke: rgb(0,255,255); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="50" x2="50" y1="60" y2="70" />
+	<line id="20-50-70" style="fill: rgb(0,255,255); fill-opacity: 1.0; stroke: rgb(0,255,255); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="50" x2="50" y1="70" y2="80" />
+	<line id="21-30-0" style="fill: rgb(0,255,0); fill-opacity: 1.0; stroke: rgb(0,255,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="30" x2="30" y1="0" y2="10" />
+	<line id="22-30-10" style="fill: rgb(0,255,0); fill-opacity: 1.0; stroke: rgb(0,255,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="30" x2="30" y1="10" y2="20" />
+	<line id="23-30-20" style="fill: rgb(0,255,0); fill-opacity: 1.0; stroke: rgb(0,255,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="30" x2="30" y1="20" y2="30" />
+	<line id="24-30-30" style="fill: rgb(0,255,0); fill-opacity: 1.0; stroke: rgb(0,255,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="30" x2="30" y1="30" y2="40" />
+	<line id="25-30-40" style="fill: rgb(0,255,0); fill-opacity: 1.0; stroke: rgb(0,255,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="30" x2="30" y1="40" y2="50" />
+	<line id="26-30-50" style="fill: rgb(0,255,0); fill-opacity: 1.0; stroke: rgb(0,255,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="30" x2="30" y1="50" y2="60" />
+	<line id="27-30-60" style="fill: rgb(0,255,0); fill-opacity: 1.0; stroke: rgb(0,255,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="30" x2="30" y1="60" y2="70" />
+	<line id="28-30-70" style="fill: rgb(0,255,0); fill-opacity: 1.0; stroke: rgb(0,255,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="30" x2="30" y1="70" y2="80" />
+	<line id="29-40-0" style="fill: rgb(255,255,0); fill-opacity: 1.0; stroke: rgb(255,255,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="40" x2="40" y1="0" y2="10" />
+	<line id="30-40-10" style="fill: rgb(255,255,0); fill-opacity: 1.0; stroke: rgb(255,255,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="40" x2="40" y1="10" y2="20" />
+	<line id="31-40-20" style="fill: rgb(255,255,0); fill-opacity: 1.0; stroke: rgb(255,255,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="40" x2="40" y1="20" y2="30" />
+	<line id="32-40-30" style="fill: rgb(255,255,0); fill-opacity: 1.0; stroke: rgb(255,255,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="40" x2="40" y1="30" y2="40" />
+	<line id="33-40-40" style="fill: rgb(255,255,0); fill-opacity: 1.0; stroke: rgb(255,255,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="40" x2="40" y1="40" y2="50" />
+	<line id="34-40-50" style="fill: rgb(255,255,0); fill-opacity: 1.0; stroke: rgb(255,255,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="40" x2="40" y1="50" y2="60" />
+	<line id="35-40-60" style="fill: rgb(255,255,0); fill-opacity: 1.0; stroke: rgb(255,255,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="40" x2="40" y1="60" y2="70" />
+	<line id="36-40-70" style="fill: rgb(255,255,0); fill-opacity: 1.0; stroke: rgb(255,255,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="40" x2="40" y1="70" y2="80" />
+	<line id="37-50-0" style="fill: rgb(255,0,0); fill-opacity: 1.0; stroke: rgb(255,0,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="50" x2="50" y1="0" y2="10" />
+	<ellipse cx="50" cy="10" id="38-50-10" rx="1" ry="1" style="fill: none; fill-opacity: 1.0; stroke: rgb(255,0,0); stroke-opacity: 1.0; stroke-width: 4" />
+	<line id="39-50-10" style="fill: rgb(255,0,0); fill-opacity: 1.0; stroke: rgb(255,0,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="50" x2="40" y1="10" y2="20" />
+	<line id="40-40-20" style="fill: rgb(255,0,0); fill-opacity: 1.0; stroke: rgb(255,0,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="40" x2="30" y1="20" y2="30" />
+	<line id="41-30-30" style="fill: rgb(255,0,0); fill-opacity: 1.0; stroke: rgb(255,0,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="30" x2="20" y1="30" y2="40" />
+	<line id="42-20-40" style="fill: rgb(255,0,0); fill-opacity: 1.0; stroke: rgb(255,0,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="20" x2="10" y1="40" y2="50" />
+	<ellipse cx="10" cy="50" id="43-10-50" rx="1" ry="1" style="fill: none; fill-opacity: 1.0; stroke: rgb(255,0,0); stroke-opacity: 1.0; stroke-width: 4" />
+	<line id="44-10-50" style="fill: rgb(255,0,0); fill-opacity: 1.0; stroke: rgb(255,0,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="10" x2="10" y1="50" y2="60" />
+	<line id="45-10-60" style="fill: rgb(255,0,0); fill-opacity: 1.0; stroke: rgb(255,0,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="10" x2="10" y1="60" y2="70" />
+	<line id="46-10-70" style="fill: rgb(255,0,0); fill-opacity: 1.0; stroke: rgb(255,0,0); stroke-opacity: 1.0; stroke-width: 4; stroke-linecap: square" x1="10" x2="10" y1="70" y2="80" /><!-- 
+	Generated using the Perl SVG Module V2.49
+	by Ronan Oger
+	Info: http://www.roitsystems.com/
+ -->
+</svg>

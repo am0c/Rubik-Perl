@@ -526,6 +526,104 @@ At the moment the following are implemented(any feature that is currently listed
 
 =back
 
+=head1 Permutations in relation to braids
+
+There's also a draw() method so if you want to visualize permutations as braids you can.
+
+For example permutation (9,6,4,8,5,3,7,10,1,2) can be representated as a braid like this:
+
+=begin html
+
+<p><center><img src="images/a.PNG" /></center></p>
+
+=end html
+
+and permutation (6,10,2,9,6,1,7,8,4,5) is like this 
+
+=begin html
+
+<p><center><img src="images/b.PNG" /></center></p>
+
+=end html
+
+Then you can also compute a*b
+
+=begin html
+
+<p><center><img src="images/atimesb.PNG" /></center></p>
+
+=end html
+
+And also a*b*a^-1
+
+=begin html
+
+<p><center><img src="images/aconjb.PNG" /></center></p>
+
+=end html
+
+And also [a,b] which is a*b*a^-1*b^-1
+ 
+=begin html
+
+<p><center><img src="images/acommb.PNG" /></center></p>
+
+=end html
+
+=head1 Viewing cycles
+
+Cycles have the following shape (except they can have some fixed points inside them)
+
+[1,2,3,4,5]
+
+=begin html
+
+<p><center><img src="images/cycle1.PNG" /></center></p>
+
+=end html
+
+or like this
+
+
+=begin html
+
+<p><center><img src="images/cycle2.PNG" /></center></p>
+
+=end html
+
+
+=head1 Some differences between brides and permutations
+
+However, braids are more general than permutations. The twists that are the analog of transpositions(in symmetric groups)
+for braids have infinite order since you can twist 2 strands as many times you want.
+Another difference is that for a transposition x we have x = x^-1, but with braids that isn't true since you have the first strand above the second for x and for x^-1 you have the second over the first so you can un-twist the braid using x^-1.
+
+
+
+=head1 Transpositions and cycles
+
+To understand better how transpositions and cycles interact let's take a look at the following diagram which shows the effects of multiplying a permutation formed of two cycles with a transposition containing members from each of the cycles:
+
+=begin html
+
+<p><center><img src="images/cycle_glue.png" /></center></p>
+
+=end html
+
+
+Let's have an example of this with the cycles [1,2,3,4] , [5,6,7,8] and the transposition [3,7] :
+
+    ./shell.sh
+
+
+    $ decomp(cycle(1,2,3,4)*cycle(5,6,7,8))
+    (2,3,4,1)*(6,7,8,5)
+    $ decomp(cycle(1,2,3,4)*cycle(5,6,7,8)*cycle(3,7))
+    (2,3,8,5,6,7,4,1)
+
+=head1 ACKNOWLEDGMENTS
+
+Thanks for the colour ramp routine goes to BrowserUk @perlmonks
 
 =head1 AUTHOR
 
