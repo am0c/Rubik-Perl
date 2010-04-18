@@ -616,6 +616,47 @@ sub stabilizer {
 	@{$self->elements};
 }
 
+#
+# TODO:(very low priority because this is already done efficiently for perm groups)
+#
+# ----------------------------------------------------------------------------------
+# implement the following algorithm for computing power of an element in a group
+#  
+#    INPUT:
+#			element to raise	-> x
+#			order of group		-> n
+#			power to raise		-> p
+#
+#	 PROCESS:
+#			g = id_G
+#			w = x^2 # caching x^2
+#			if(p%2)
+#				g := xg
+#				p--
+#			else
+#				g := wg
+#				p-=2
+#
+#
+# ----------------------------------------------------------------------------------
+# computing the order of an element
+# (need to check handbook of computational group theory)
+#
+#	INPUT:
+#			element         	-> x
+#			order of group		-> n
+#
+#			for p is a divisor of n
+#				if(n==p)
+#					return n # there is no divisor ...
+#				if(power(x,p)==id_G)
+#					return recurse(x,n/p) # so   p  |  |x|   so we need to search in n/p
+#			return n # if no other divisor is found
+
+
+
+
+
 
 =head1 cayley_digraph($path,$generators_arrayref)
 
