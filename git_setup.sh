@@ -1,3 +1,4 @@
+# set up git branches locally
 git checkout -t origin/dimino_fixes dimino_fixes
 #git branch -t origin/HEAD         
 git checkout -t origin/new_perm_algo_SJT            
