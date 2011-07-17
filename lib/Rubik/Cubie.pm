@@ -124,7 +124,7 @@ this cube will help with understanding what's going on in the code, the numbers 
 
                  for(my $j=0;$j<4;$j++){
                      my $k=$self->faces->[$i]->[$j];
-                     glVertex3d(@{$v[$k]});
+                     glVertex3f(@{$v[$k]});
                  }
 
              }

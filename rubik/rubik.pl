@@ -10,9 +10,13 @@ package main;
 use Carp;
 use Rubik::View;
 use Rubik::Model;
+use SDL::Event;
+use SDL::Events;
+use Time::HiRes qw(usleep);
+
 
 use SDL;
-use SDL::App;
+#use SDL::App;
 
 my $view = Rubik::View->new();
 $view->Init;
@@ -63,6 +67,7 @@ while (1){
     ++$iter;
     #glRotatef(2,0,1,0); # rotate it while the moves are carried out
 
+    usleep(1000);
 	while(SDL::Events::poll_event($event)) {
 		print "Aaaaaaaaaaaa";
 		#if ( $type == SDL_KEYUP ) {
@@ -74,12 +79,17 @@ while (1){
 
     $view->spin( $view->spin + $turnspeed );# need to take in account something where divisibility is not needed
     if(  $view->spin % $turnangle == 0) {
+        sleep(2);
         $view->spin(0);
         $model->move($faces[$iface]);
         $iface = ($iface + 1) % @faces;
         $view->currentmove($faces[$iface]);
         print "Doing move $faces[$iface]\n";
+        $view->DrawFrame();
+        SDL::Events::pump_events();
+        sleep(2);
     };
+
 	#$SDLAPP->sync;
 }
 

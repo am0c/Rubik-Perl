@@ -56,13 +56,13 @@ has spin     => (
 has width  => (
     isa => 'Int',
     is  =>'rw',
-    default => 400
+    default => 1024
 );
 
 has height  => (
     isa => 'Int',
     is  =>'rw',
-    default=> 400
+    default=> 900
 );
 
 has model => (
@@ -95,7 +95,7 @@ sub Reshape {
 
     # I think gluLookAt doesn't work at all here and there's supposed to be only one projection, and that should be
     # GL_MODELVIEW , but it doesn't really work ...
-    gluLookAt(120,100,100,
+    gluLookAt(120,120,100,
               0  ,  0,  0,
               -1 , -1, -1,
           );
@@ -104,14 +104,14 @@ sub Reshape {
 
 sub Init {
     my ($self) = @_;
-    glpOpenWindow(width => $self->width, height => $self->height,
-        attributes => [GLX_RGBA,GLX_DOUBLEBUFFER]);
+    glpOpenWindow(width => $self->width, height => $self->height,attributes => [GLX_RGBA,GLX_DOUBLEBUFFER]);
     glClearColor(0,0,0,1);
     glShadeModel (GL_FLAT);
     $self->Reshape();
     glDisable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHT1);
+    glEnable(GL_NORMALIZE);
     glLoadIdentity();
 
 # Thu 18 Feb 2010 06:01:19 PM EST
