@@ -1,14 +1,4 @@
 #! /usr/bin/perl -w
-#
-# This code was created by Jeff Molofee '99 
-# Ported to Perl by Cora Hussey '02
-#
-# If this was helpful, let me know.
-# Visit me at www.cs.ucla.edu/~chussey
-#
-# Requires OpenGL module in addition to OpenGL
-#   (visit www.cpan.org or "perl -MCPAN -e 'install OpenGL'")
-#
 
 use OpenGL qw(:all);    # Use the OpenGL module
 use strict;             # Use strict typechecking
@@ -145,9 +135,9 @@ sub DrawGLScene {
     glTranslatef(-1.5, -3.0, -16.0); 
 
     #say $rquad;
-    glRotatef($rquad,0,1,,0);
-    $rtri  = $rtri  + 15.0; 
-    $rquad = $rquad + 1.0; 
+    #glRotatef($rquad,0,1,,0);
+    #$rtri  = $rtri  + 15.0; 
+    #$rquad = $rquad + 4.0; 
 
 
     DrawCube;
