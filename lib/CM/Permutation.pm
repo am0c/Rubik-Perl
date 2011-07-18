@@ -48,7 +48,7 @@ has group => (
     isa => 'Any',
     is  => 'rw',
     default => undef,
-    weak_ref=> 1,
+    #weak_ref=> 1,
 );
 
 sub BUILDARGS {
@@ -246,7 +246,10 @@ sub multiply {
         @ret;
     } (1..$max);
 
-    return CM::Permutation->new(@p);
+    my $result = CM::Permutation->new(@p);
+    $result->group($right->{group});
+
+    return $result;
 }
 
 sub get_cycles {
@@ -302,14 +305,25 @@ sub mul_as {
 #
 sub conj {
     my ($b,$a) = @_;
-    ($a**-1)*$b*$a;
+    my $result = ($a**-1)*$b*$a;
+    $result->group($a->{group});
+    return $result;
 }
 
 
 # commutator
 sub com {
     my ($a,$b) = @_;
-    ($a**-1)*($b**-1)*$a*$b;
+
+    confess 'a doesn\'t belong to any group ?'
+        unless defined($a->{group});
+
+    confess 'b doesn\'t belong to any group ?'
+        unless defined($b->{group});
+
+    my $result = ($a**-1)*($b**-1)*$a*$b;
+    $result->group($a->{group});
+    return $result;
 }
 
 
@@ -319,17 +333,29 @@ sub conjugate {
     my ($a,$b) = @_;# $a is actually $self
     confess 'a undefined' unless $a;
     confess 'b undefined' unless $b;
-    confess 'no group for a' unless $a->group;
-    confess 'no group for b' unless $b->group;
+    confess 'no group for a' unless defined $a->{group};
+    confess 'no group for b' unless defined $b->{group};
     #confess "element doesn't have a group" unless $a->group ;
 #    say Dumper $a->group;
 #    say Dumper $b->group;
 #    exit;
     my $i = 0;
-    return first {
-#        say $i++;
-        $_*$a*($_**-1) == $b
-    } @{$a->group->elements};
+
+    print "hereeee\n";
+
+    my @elems = @{$a->group->elements};
+    my $result = first {
+        print "before lhs\n";
+        my $lhs = $_*$a*($_**-1);
+        print "after  lhs\n";
+        $lhs == $b
+    } @elems;
+    print "after first ran\n";
+    if(defined($result)) {
+        $result->group($a->{group});
+    };
+
+    return $result;
 }
 
 
