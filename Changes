@@ -1,6 +1,9 @@
 Revision history for Perl extension CM::Permutation.
 
-0.42  (not known yet)
+0.9  Mon Jul 18 06:12:47 EEST 2011
+        - Switched to GLUT API from OpenGL.pm instead of the GL API, main reason was trouble with the upgrade of OpenGL package from CPAN to 0.64 
+            (faces of the cubies weren't showing up because of the upgrade, switching to GLUT fixed that)
+ 
       	- Added product group
 		- Added tuple elements
 		- Added tests for tuple and product group
