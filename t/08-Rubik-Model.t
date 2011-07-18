@@ -1,8 +1,12 @@
 use strict;
 use warnings;
+use Test::More;
+BEGIN{ 
+    eval "use OpenGL";
+    plan skip_all => "OpenGL required for testing Rubik::Model" if $@;
+};
 use Rubik::Model;
 use Rubik::View;
-use Test::More;
 
 
 my $view = Rubik::View->new();
