@@ -20,11 +20,18 @@ vertices and current rotation angle and current move and the width/height of the
 
 # what face is currently rotated
 has currentmove => (
-        isa=> 'Str',
-        # is => 'rw', #because it's syntax suggar for reader => "attrname" , writer => 'attrname' and I'm not using that because I made my own
-        default=> '',
-        writer=> 'set_currentmove',
-        reader=> 'get_currentmove',
+        isa     => 'Str',
+        # is    => 'rw', #because it's syntax suggar for reader => "attrname" , writer => 'attrname' and I'm not using that because I made my own
+        default => '',
+        writer  => 'set_currentmove',
+        reader  => 'get_currentmove',
+);
+
+has CustomDrawCode => (
+    isa     => 'CodeRef',
+    is      => 'rw',
+    default => sub { sub{}  },
+    lazy    => 1,
 );
 
 
@@ -208,6 +215,8 @@ sub DrawFrame {
     glTranslatef(-1.5, -3.0, -16.0); 
     glRotatef(50,0,0,0);
     glRotatef(-45,0,1,0);
+
+    $self->CustomDrawCode->();
 
     $self->rotate_face;
 

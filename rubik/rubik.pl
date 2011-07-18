@@ -72,8 +72,52 @@ $|=1;
 
 
 
+#my $event = SDL::Event->new;
+#my $iter;
+#my $SDLAPP = SDL::App->new(-title => "Opengl App", -width => 1024,  -height => 768, -gl => 1);
+#while (1){
+    #++$iter;
+    #glRotatef(2,0,1,0); # rotate it while the moves are carried out
+
+    #usleep(1000);
+    #while(SDL::Events::poll_event($event)) {
+        #print "Aaaaaaaaaaaa";
+        #if ( $type == SDL_KEYUP ) {
+            #print "Aaaaaaaaa";
+        #};
+    #};
+    #$view->DrawFrame();
+    #SDL::Events::pump_events();
+
+    #$view->spin( $view->spin + $turnspeed );need to take in account something where divisibility is not needed
+    #if(  $view->spin % $turnangle == 0) {
+        #sleep(2);
+        #$view->spin(0);
+        #$model->move($faces[$iface]);
+        #$iface = ($iface + 1) % @faces;
+        #$view->currentmove($faces[$iface]);
+        #print "Doing move $faces[$iface]\n";
+        #$view->DrawFrame();
+        #SDL::Events::pump_events();
+        #sleep(2);
+    #};
+
+    #$SDLAPP->sync;
+#}
 
 
-
+$view->CustomDrawCode(
+    sub {
+        #glRotatef(2,0,1,0); # rotate it while the moves are carried out
+        $view->spin( $view->spin + $turnspeed );#need to take in account something where divisibility is not needed
+        if(  $view->spin % $turnangle == 0) {
+            $view->spin(0);
+            $model->move($faces[$iface]);
+            $iface = ($iface + 1) % @faces;
+            $view->currentmove($faces[$iface]);
+            print "Doing move $faces[$iface]\n";
+        };
+    }
+);
 
 $view->Init;
