@@ -5,14 +5,14 @@
 # simulation of Rubik's cube using OpenGL
 #
 use Carp;
-use Game::View;
+use Rubik::View;
 use Rubik::Model;
 use SDL::Event;
 use SDL::Events;
 use Time::HiRes qw(usleep);
 
 
-my $view = Game::View->new();
+my $view = Rubik::View->new();
 my $model= Rubik::Model->new({view=>$view});
 
 
