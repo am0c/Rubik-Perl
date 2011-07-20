@@ -1,12 +1,9 @@
 #!/usr/local/bin/perl
-
 # Thu 18 Feb 2010 06:14:49 PM EST
 # Stefan Petrea 
 #
 # simulation of Rubik's cube using OpenGL
 #
-
-package main;
 use Carp;
 use Rubik::View;
 use Rubik::Model;
@@ -61,7 +58,7 @@ $|=1;
 
 $view->CustomDrawCode(
     sub {
-    usleep(10_000);
+    usleep(2000);
         #glRotatef(2,0,1,0); # rotate it while the moves are carried out
         $view->spin( $view->spin + $turnspeed );#need to take in account something where divisibility is not needed
         if(  $view->spin % $turnangle == 0) {

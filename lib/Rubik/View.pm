@@ -18,6 +18,10 @@ vertices and current rotation angle and current move and the width/height of the
 =cut
 
 
+
+use constant ESCAPE => 37;
+
+
 # what face is currently rotated
 has currentmove => (
         isa     => 'Str',
@@ -32,6 +36,12 @@ has CustomDrawCode => (
     is      => 'rw',
     default => sub { sub{}  },
     lazy    => 1,
+);
+
+has glWindow => (
+    isa     => 'Any',
+    is      => 'rw',
+    default => undef,
 );
 
 
@@ -155,9 +165,6 @@ sub ReSizeGLScene {
 
 sub Init {
     my ($self) = @_;
-
-    my $window;
-
 # --- Main program ---
 
 # Initialize GLUT state
@@ -177,7 +184,7 @@ sub Init {
     glutInitWindowPosition(0, 0);  
 
 # Open the window  
-    $window = glutCreateWindow("Jeff Molofee's GL Code Tutorial ... NeHe '99");  
+    $self->glWindow(glutCreateWindow("[Perl] Rubik's cube"));
 
 # Register the function to do all our OpenGL drawing.
 
@@ -185,7 +192,7 @@ sub Init {
     glutDisplayFunc($draw_frame_ref);  
 
 # Go fullscreen.  This is as soon as possible. 
-    glutFullScreen;
+    #glutFullScreen;
 
 # Even if there are no events, redraw our gl scene.
     glutIdleFunc($draw_frame_ref);
@@ -194,13 +201,50 @@ sub Init {
     glutReshapeFunc(\&ReSizeGLScene);
 
 # Register the function called when the keyboard is pressed.
-    glutKeyboardFunc(\&keyPressed);
+    #glutKeyboardFunc(\&KeyboardCallback);
+    glutKeyboardFunc($self->KeyboardCallback);
 
 # Initialize our window.
     $self->InitGL($self->width, $self->height);
 
 
     glutMainLoop;  
+}
+
+
+sub KeyboardCallback {
+    my ($self) = @_;
+    return 
+        sub {
+            # Shift the unsigned char key, and the x,y placement off @_, in
+            # that order.
+            my ($key, $x, $y) = @_;
+
+            # Avoid thrashing this procedure
+            # Note standard Perl does not support usleep
+            # For finer resolution sleep than seconds, try:
+            #    'select undef, undef, undef, 0.1;'
+            # to sleep for (at least) 0.1 seconds
+            sleep(100);
+
+            # If f key pressed, undo fullscreen and resize to 640x480
+            if ($key == ord('f')) {
+
+                # Use reshape window, which undoes fullscreen
+                glutReshapeWindow(640, 480);
+            }
+
+            # If escape is pressed, kill everything.
+            if ($key == ESCAPE) 
+            { 
+                # Shut down our window 
+                glutDestroyWindow($self->glWindow); 
+
+                # Exit the program...normal termination.
+                exit(0);                   
+            };
+        };
+
 }
 
 sub DrawFrame {
@@ -211,7 +255,7 @@ sub DrawFrame {
 
 
     say "rendered!";
-    glTranslatef(-1.5, -3.0, -16.0); 
+    glTranslatef(1, -2.0, -20.0); 
     glRotatef(50,0,0,0);
     glRotatef(-45,0,1,0);
 
