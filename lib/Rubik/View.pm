@@ -17,8 +17,6 @@ vertices and current rotation angle and current move and the width/height of the
 
 =cut
 
-
-
 use constant ESCAPE => 37;
 
 

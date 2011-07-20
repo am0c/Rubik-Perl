@@ -42,6 +42,7 @@ $|=1;
 
 
 
+my @move_buffer;
 
 
 $view->CustomDrawCode(
@@ -58,5 +59,33 @@ $view->CustomDrawCode(
         };
     }
 );
+
+$view->KeyboardCallback(
+    sub {
+        my ($self) = @_;
+        # Shift the unsigned char key, and the x,y placement off @_, in
+        # that order.
+        my ($key, $x, $y) = @_;
+
+
+        if(upper(chr($key)) =~ /^[FURBLD]$/) {
+            push @move_buffer,upper(chr($key));
+        };
+
+        #if ($key == ord('f')) {
+
+            ## Use reshape window, which undoes fullscreen
+            #glutReshapeWindow(640, 480);
+        #}
+
+        if ($key == ESCAPE) 
+        { 
+            # Shut down our window 
+            glutDestroyWindow($self->glWindow); 
+            exit(0);                   
+        };
+    }
+);
+
 
 $view->Init;
