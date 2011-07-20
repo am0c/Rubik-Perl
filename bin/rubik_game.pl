@@ -10,6 +10,7 @@ use Rubik::Model;
 use SDL::Event;
 use SDL::Events;
 use Time::HiRes qw(usleep);
+use List::AllUtils qw/any/;
 
 
 my $view = Rubik::View->new();
@@ -41,22 +42,42 @@ my $iter=0;
 $|=1;
 
 
-
-my @move_buffer;
+my @move_buffer  ;
+my $move_lock = 0;
+my $move_current = 0;
 
 
 $view->CustomDrawCode(
     sub {
-    usleep(2000);
-        #glRotatef(2,0,1,0); # rotate it while the moves are carried out
-        $view->spin( $view->spin + $turnspeed );#need to take in account something where divisibility is not needed
-        if(  $view->spin % $turnangle == 0) {
-            $view->spin(0);
-            $model->move($faces[$iface]);
-            $iface = ($iface + 1) % @faces;
-            $view->currentmove($faces[$iface]);
-            #print "Doing move $faces[$iface]\n";
+        return unless @move_buffer;
+
+        usleep(2000);
+
+
+        #TODO: bug for this draw code getting keys from buffer
+        if( $view->spin == 0 ) {
+
+            if(!$move_lock) {
+                $move_current = shift @move_buffer;
+            };
+            $move_lock  = 1;
+            #start move
         };
+
+        $view->spin( $view->spin + $turnspeed );#need to take in account something where divisibility is not needed
+
+        if(  $view->spin == $turnangle ) {
+            #end move
+
+            print "current move=$move_current";
+            $view->spin(0);
+            $model->move(      $move_current);
+            $view->currentmove($move_current);
+            #print "Doing move $faces[$iface]\n";
+
+            $move_lock = 0;
+        };
+
     }
 );
 
@@ -68,8 +89,11 @@ $view->KeyboardCallback(
         my ($key, $x, $y) = @_;
 
 
-        if(upper(chr($key)) =~ /^[FURBLD]$/) {
-            push @move_buffer,upper(chr($key));
+        my @allowed_moves = map { ord $_ } qw/F U R B L D/;
+
+        if( any { $key == $_ } @allowed_moves ) {
+            print "$key\n";
+            push @move_buffer,uc(chr($key));
         };
 
         #if ($key == ord('f')) {
