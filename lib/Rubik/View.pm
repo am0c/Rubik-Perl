@@ -254,7 +254,7 @@ sub DrawFrame {
     glLoadIdentity;
 
 
-    say "rendered!";
+    #say "rendered!";
     glTranslatef(1, -2.0, -20.0); 
     glRotatef(50,0,0,0);
     glRotatef(-45,0,1,0);
@@ -295,7 +295,7 @@ sub rotate_face {
                     push @to_rotate,[$x,$y,$z];
                     next;
                 };
-                say $self->model;
+                #say $self->model;
                 $self->model->cubies->[$x]->[$y]->[$z]->Draw();
             }
         }
