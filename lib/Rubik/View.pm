@@ -38,11 +38,21 @@ has CustomDrawCode => (
     lazy    => 1,
 );
 
+has KeyboardCallback => (
+    isa     => 'CodeRef',
+    is      => 'rw',
+    default => sub { sub{  }  },
+);
+
 has glWindow => (
     isa     => 'Any',
     is      => 'rw',
     default => undef,
 );
+
+
+
+
 
 
 # reimplementing getter/setter here
@@ -188,21 +198,22 @@ sub Init {
 
 # Register the function to do all our OpenGL drawing.
 
-    my $draw_frame_ref = sub { $self->DrawFrame };
-    glutDisplayFunc($draw_frame_ref);  
+    my $draw_frame_subref = sub { $self->DrawFrame(@_) };
+
+    glutDisplayFunc($draw_frame_subref);  
 
 # Go fullscreen.  This is as soon as possible. 
     #glutFullScreen;
 
 # Even if there are no events, redraw our gl scene.
-    glutIdleFunc($draw_frame_ref);
+    glutIdleFunc($draw_frame_subref);
 
 # Register the function called when our window is resized. 
     glutReshapeFunc(\&ReSizeGLScene);
 
 # Register the function called when the keyboard is pressed.
     #glutKeyboardFunc(\&KeyboardCallback);
-    glutKeyboardFunc($self->KeyboardCallback);
+    glutKeyboardFunc(sub { $self->KeyboardCallback->(@_); } );
 
 # Initialize our window.
     $self->InitGL($self->width, $self->height);
@@ -212,40 +223,6 @@ sub Init {
 }
 
 
-sub KeyboardCallback {
-    my ($self) = @_;
-    return 
-        sub {
-            # Shift the unsigned char key, and the x,y placement off @_, in
-            # that order.
-            my ($key, $x, $y) = @_;
-
-            # Avoid thrashing this procedure
-            # Note standard Perl does not support usleep
-            # For finer resolution sleep than seconds, try:
-            #    'select undef, undef, undef, 0.1;'
-            # to sleep for (at least) 0.1 seconds
-            sleep(100);
-
-            # If f key pressed, undo fullscreen and resize to 640x480
-            if ($key == ord('f')) {
-
-                # Use reshape window, which undoes fullscreen
-                glutReshapeWindow(640, 480);
-            }
-
-            # If escape is pressed, kill everything.
-            if ($key == ESCAPE) 
-            { 
-                # Shut down our window 
-                glutDestroyWindow($self->glWindow); 
-
-                # Exit the program...normal termination.
-                exit(0);                   
-            };
-        };
-
-}
 
 sub DrawFrame {
     my ($self,$sub) = @_;# sub is the sub called for drawing the frame

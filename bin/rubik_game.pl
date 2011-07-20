@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/bin/perl -I./lib
 # Thu 18 Feb 2010 06:14:49 PM EST
 # Stefan Petrea 
 #
@@ -39,7 +39,6 @@ my $iter=0;
 #       - add tests
 
 $|=1;
-
 
 
 

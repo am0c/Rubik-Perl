@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/bin/perl -I./lib
 # Thu 18 Feb 2010 06:14:49 PM EST
 # Stefan Petrea 
 #
@@ -14,23 +14,6 @@ use Time::HiRes qw(usleep);
 
 my $view = Rubik::View->new();
 my $model= Rubik::Model->new({view=>$view});
-
-# the following attributes exist
-# $view->model
-# $model->view
-# they're needed for interoperability between the objects
-
-
-sub for_test {
-    # first parameter will be the smallest number on that face and the corners
-    # will be depicted in different colours for debugging purposes
-    my ($n) = @_;
-    $model->setColor($n+6,[1,.5,1]);
-    $model->setColor($n+8,[0,0,1]);
-    $model->setColor($n+2,[0,1,1]);
-    $model->setColor($n+0,[1,1,1]);
-}
-
 
 # all of the turns are 90 degrees
 my @faces = qw/Fi U D/; # cyclic moves list
@@ -70,5 +53,42 @@ $view->CustomDrawCode(
         };
     }
 );
+
+
+$view->KeyboardCallback(
+    sub {
+        my ($self) = @_;
+        # Shift the unsigned char key, and the x,y placement off @_, in
+        # that order.
+        my ($key, $x, $y) = @_;
+
+        # Avoid thrashing this procedure
+        # Note standard Perl does not support usleep
+        # For finer resolution sleep than seconds, try:
+        #    'select undef, undef, undef, 0.1;'
+        # to sleep for (at least) 0.1 seconds
+        sleep(100);
+
+        # If f key pressed, undo fullscreen and resize to 640x480
+        if ($key == ord('f')) {
+
+            # Use reshape window, which undoes fullscreen
+            glutReshapeWindow(640, 480);
+        }
+
+        # If escape is pressed, kill everything.
+        if ($key == ESCAPE) 
+        { 
+            # Shut down our window 
+            glutDestroyWindow($self->glWindow); 
+
+            # Exit the program...normal termination.
+            exit(0);                   
+        };
+    }
+);
+
+
+
 
 $view->Init;
