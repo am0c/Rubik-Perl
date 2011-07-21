@@ -1,8 +1,6 @@
 #!/usr/bin/perl -I./lib
-# Thu 18 Feb 2010 06:14:49 PM EST
-# Stefan Petrea 
 #
-# simulation of Rubik's cube using OpenGL
+# rubik's cube game
 #
 use Data::Dumper;
 use Carp;
@@ -19,26 +17,12 @@ my $model= Rubik::Model->new({view=>$view});
 
 
 
-# all of the turns are 90 degrees
-my @faces = qw/Fi U D/; # cyclic moves list
 my $turnspeed = 2;
 my $turnangle = 90;
-my $iface=0; # face iterator
 
 confess "turn speed must be an integer"            if(  $turnspeed != int($turnspeed));
 confess "turn speed must divide $turnangle"    unless(  $turnangle % $turnspeed == 0);
 
-$view->currentmove( $faces[$iface] ); # start with this face
-
-
-print "ORDER:".($model->rubik->F * $model->rubik->R)->order."\n"; # order is 105
-
-my $iter=0;
-
-
-
-#$model->scramble; # make a random series of moves to scramble the cube
-#       - add tests
 
 $|=1;
 
@@ -70,11 +54,14 @@ $view->CustomDrawCode(
         if(  $view->spin == $turnangle ) {
             #end move
 
-
             shift @move_buffer; 
+            if(@move_buffer) {
+                $move_current = $move_buffer[0];
+            };
 
             print "current move=$move_current";
             $view->spin(0);
+
 
             $model->move(        $move_current );
             $view->currentmove(  $move_current );
@@ -103,7 +90,6 @@ $view->KeyboardCallback(
             print "$key\n";
             push @move_buffer, uc(chr($key));
         };
-        $view->CustomDrawCode;
     }
 );
 
