@@ -4,6 +4,7 @@
 #
 # simulation of Rubik's cube using OpenGL
 #
+use Data::Dumper;
 use Carp;
 use Rubik::View;
 use Rubik::Model;
@@ -56,25 +57,29 @@ $view->CustomDrawCode(
 
         #TODO: bug for this draw code getting keys from buffer
         if( $view->spin == 0 ) {
-
             if(!$move_lock) {
-                $move_current = shift @move_buffer;
+                $move_current = $move_buffer[0];
+                $move_lock  = 1;
             };
-            $move_lock  = 1;
-            #start move
         };
 
-        $view->spin( $view->spin + $turnspeed );#need to take in account something where divisibility is not needed
+        if($move_lock) {
+            $view->spin( $view->spin + $turnspeed );#need to take in account something where divisibility is not needed
+        };
 
         if(  $view->spin == $turnangle ) {
             #end move
 
+
+            shift @move_buffer; 
+
             print "current move=$move_current";
             $view->spin(0);
-            $model->move(      $move_current);
-            $view->currentmove($move_current);
-            #print "Doing move $faces[$iface]\n";
 
+            $model->move(        $move_current );
+            $view->currentmove(  $move_current );
+
+            $move_current = undef;
             $move_lock = 0;
         };
 
@@ -89,25 +94,16 @@ $view->KeyboardCallback(
         my ($key, $x, $y) = @_;
 
 
-        my @allowed_moves = map { ord $_ } qw/F U R B L D/;
+        my @allowed_moves = map { ord $_ } split //,"furbld";
+
+        print Dumper \@allowed_moves;
+        print Dumper \$key;
 
         if( any { $key == $_ } @allowed_moves ) {
             print "$key\n";
-            push @move_buffer,uc(chr($key));
+            push @move_buffer, uc(chr($key));
         };
-
-        #if ($key == ord('f')) {
-
-            ## Use reshape window, which undoes fullscreen
-            #glutReshapeWindow(640, 480);
-        #}
-
-        if ($key == ESCAPE) 
-        { 
-            # Shut down our window 
-            glutDestroyWindow($self->glWindow); 
-            exit(0);                   
-        };
+        $view->CustomDrawCode;
     }
 );
 

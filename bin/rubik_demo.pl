@@ -41,7 +41,7 @@ $|=1;
 
 $view->CustomDrawCode(
     sub {
-    usleep(2000);
+        usleep(2000);
         #glRotatef(2,0,1,0); # rotate it while the moves are carried out
         $view->spin( $view->spin + $turnspeed );#need to take in account something where divisibility is not needed
         if(  $view->spin % $turnangle == 0) {

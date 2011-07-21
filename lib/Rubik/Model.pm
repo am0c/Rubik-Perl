@@ -383,7 +383,11 @@ sub move {
     # permute the faces of the cubies so as to give the illusion that the rotation really persisted
 
     my ($self,$move) = @_;
-    confess 'only moves are F,B,U,D,R,L and their inverses' unless $self->valid($move);
+    if( !$self->valid($move) ) {
+        warn "got $move";
+        warn 'only moves are F,B,U,D,R,L and their inverses';
+        return undef;
+    };
     
 
     my $pmove = $self->rubik->$move;# permutation associated with this move

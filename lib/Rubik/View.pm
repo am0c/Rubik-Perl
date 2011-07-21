@@ -247,6 +247,8 @@ sub rotate_face {
 
     my $face = $self->currentmove;
 
+    return unless $face;
+
     my @p = (0,1,2); # coordinates inside @C
 
     my @to_rotate;
