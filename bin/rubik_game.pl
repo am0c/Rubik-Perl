@@ -6,8 +6,6 @@ use Data::Dumper;
 use Carp;
 use Rubik::View;
 use Rubik::Model;
-use SDL::Event;
-use SDL::Events;
 use Time::HiRes qw(usleep);
 use List::AllUtils qw/any/;
 use feature ':5.10';
