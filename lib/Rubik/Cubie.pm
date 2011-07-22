@@ -114,7 +114,7 @@ this cube will help with understanding what's going on in the code, the numbers 
     );
 
 
-     $self->view->Draw(
+     $self->view->DrawObject(
          GL_QUADS,
          sub {
              for(my $i=0;$i<6;$i++){

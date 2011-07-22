@@ -98,9 +98,16 @@ has model => (
     required => 0,
 );
 
+has drawcount => (
+    isa => 'Int',
+    is  => 'rw',
+    default => 0,
+);
 
-sub Draw {
+
+sub DrawObject {
     my ($self,$type,$sub) = @_; # type is what we want to draw, GL_QUAD , GL_POLYGON etc..
+
     glBegin($type);
     $sub->();
     glEnd();
@@ -241,13 +248,21 @@ sub DrawFrame {
     glutSwapBuffers;
 }
 
+=head2 rotate_face() 
+
+This method recevies as parameter the face to rotate, and draws all the cubies but puts 
+the cubies to be rotate aside, and afterwards it draws those also at the rotated angle $self->spin.
+
+=cut
+
 
 sub rotate_face {
     my($self) = @_;
 
     my $face = $self->currentmove;
+    say $face;
 
-    return unless $face;
+    #return unless $face;
 
     my @p = (0,1,2); # coordinates inside @C
 
@@ -273,6 +288,7 @@ sub rotate_face {
                     next;
                 };
                 #say $self->model;
+
                 $self->model->cubies->[$x]->[$y]->[$z]->Draw();
             }
         }
@@ -296,7 +312,11 @@ sub rotate_face {
     #my @dbg = @{$rot_vec->{$face}};
     #print "spin = ".$view->spin." rotvector: @dbg \n";
     #glRotatef(90,0,1,0);
-    glRotatef( ( $self->model->sense <=> 0 ) * $self->spin, @{$rot_vec->{$face}}); # the sense is established each time you set a currentmove
+
+
+    if($face) {
+        glRotatef( ( $self->model->sense <=> 0 ) * $self->spin, @{$rot_vec->{$face}}); # the sense is established each time you set a currentmove
+    };
 
     for my $pair (@to_rotate) {
         my ($x,$y,$z) = @$pair;

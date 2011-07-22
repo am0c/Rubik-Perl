@@ -10,6 +10,7 @@ use SDL::Event;
 use SDL::Events;
 use Time::HiRes qw(usleep);
 use List::AllUtils qw/any/;
+use feature ':5.10';
 
 
 my $view = Rubik::View->new();
@@ -17,7 +18,7 @@ my $model= Rubik::Model->new({view=>$view});
 
 
 
-my $turnspeed = 2;
+my $turnspeed = 3;
 my $turnangle = 90;
 
 confess "turn speed must be an integer"            if(  $turnspeed != int($turnspeed));
@@ -27,47 +28,36 @@ confess "turn speed must divide $turnangle"    unless(  $turnangle % $turnspeed 
 $|=1;
 
 
-my @move_buffer  ;
+my @move_buffer;
 my $move_lock = 0;
 my $move_current = 0;
 
 
 $view->CustomDrawCode(
     sub {
-        return unless @move_buffer;
-
         usleep(2000);
 
-
-        #TODO: bug for this draw code getting keys from buffer
-        if( $view->spin == 0 ) {
-            if(!$move_lock) {
-                $move_current = $move_buffer[0];
-                $move_lock  = 1;
+        if($view->spin == 0) {
+            if(@move_buffer > 0) {
+                $move_lock = 1;
+                my $new_move = shift @move_buffer;
+                $view->currentmove($new_move);
+                #taking view out of the state $view->spin==0, on next execution of this sub it will
+                #go on the else{} branch
+                $view->spin( $view->spin + $turnspeed );
             };
-        };
-
-        if($move_lock) {
-            $view->spin( $view->spin + $turnspeed );#need to take in account something where divisibility is not needed
-        };
-
-        if(  $view->spin == $turnangle ) {
-            #end move
-
-            shift @move_buffer; 
-            if(@move_buffer) {
-                $move_current = $move_buffer[0];
-            };
-
-            print "current move=$move_current";
+        } elsif($view->spin == $turnangle) {
+            #$model->move permutes the visible faces of the cubies w.r.t. the new configuration
+            #after the rotation
+            $model->move($view->currentmove);
             $view->spin(0);
-
-
-            $model->move(        $move_current );
-            $view->currentmove(  $move_current );
-
-            $move_current = undef;
             $move_lock = 0;
+        } else {
+            if($move_lock){
+                say "increase spin!";
+                say "spin=".$view->spin;
+                $view->spin( $view->spin + $turnspeed );
+            };
         };
 
     }
@@ -83,11 +73,11 @@ $view->KeyboardCallback(
 
         my @allowed_moves = map { ord $_ } split //,"furbld";
 
-        print Dumper \@allowed_moves;
-        print Dumper \$key;
+        #print Dumper \@allowed_moves;
+        #print Dumper \$key;
 
         if( any { $key == $_ } @allowed_moves ) {
-            print "$key\n";
+            #print "$key\n";
             push @move_buffer, uc(chr($key));
         };
     }
